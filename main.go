@@ -11,6 +11,7 @@ import (
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/config"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server"
+	"github.com/SSSBoOm/SE_PROJECT_BACKEND/usecase"
 )
 
 func main() {
@@ -24,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var usecase *domain.Usecase
+	usecase := initUseCase(configEnv)
 	var repository *domain.Repository
 
 	signals := make(chan os.Signal, 1)
@@ -45,4 +46,13 @@ func main() {
 	}
 	fmt.Println("db was successful")
 	fmt.Println("Server was successful shutdown")
+}
+
+func initUseCase(config *domain.ConfigEnv) *domain.Usecase {
+	googleUsecase := usecase.NewGoogleUsecase(config)
+	authUsecase := usecase.NewAuthUsecase(googleUsecase)
+	return &domain.Usecase{
+		AuthUsecase:   authUsecase,
+		GoogleUsecase: googleUsecase,
+	}
 }

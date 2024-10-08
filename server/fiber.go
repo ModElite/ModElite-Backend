@@ -4,24 +4,25 @@ import (
 	"log"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
+	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/controller"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 type FiberServer struct {
 	app        *fiber.App
-	cfg        *domain.ConfigEnv
+	config     *domain.ConfigEnv
 	usecase    *domain.Usecase
 	repository *domain.Repository
 }
 
 func NewFiberServer(
-	cfg *domain.ConfigEnv,
+	config *domain.ConfigEnv,
 	usecase *domain.Usecase,
 	repository *domain.Repository,
 ) *FiberServer {
 	return &FiberServer{
-		cfg:        cfg,
+		config:     config,
 		usecase:    usecase,
 		repository: repository,
 	}
@@ -41,7 +42,8 @@ func (s *FiberServer) Start() {
 
 	s.app = app
 	s.Route()
-	if err := app.Listen(":" + string(s.cfg.BACKEND_PORT)); err != nil {
+
+	if err := app.Listen(":" + string(s.config.BACKEND_PORT)); err != nil {
 		log.Fatal("Server is not running")
 	}
 }
@@ -56,4 +58,7 @@ func (s *FiberServer) Route() {
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
+
+	authController := controller.NewAuthController(s.config, s.usecase.AuthUsecase, s.usecase.GoogleUsecase)
+	app.Get("/auth/google/url", authController.GetUrl)
 }
