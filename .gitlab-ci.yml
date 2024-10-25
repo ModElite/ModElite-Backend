@@ -1,7 +1,7 @@
 stages:
   - build
 
-image: golang:1.22-alpine
+image: golang:1.23.1
 
 build:
   stage: build
