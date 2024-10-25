@@ -10,8 +10,10 @@ import (
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/db"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/config"
+	"github.com/SSSBoOm/SE_PROJECT_BACKEND/repository"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/usecase"
+	"github.com/jmoiron/sqlx"
 )
 
 func main() {
@@ -25,8 +27,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	usecase := initUseCase(configEnv)
-	var repository *domain.Repository
+	repository := initRepository(postgres)
+	usecase := initUseCase(configEnv, repository)
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
@@ -48,11 +50,23 @@ func main() {
 	fmt.Println("Server was successful shutdown")
 }
 
-func initUseCase(config *domain.ConfigEnv) *domain.Usecase {
+func initRepository(
+	db *sqlx.DB,
+) *domain.Repository {
+	return &domain.Repository{
+		UserRepository:    repository.NewUserRepository(db),
+		SessionRepository: repository.NewSessionRepository(db),
+	}
+}
+
+func initUseCase(config *domain.ConfigEnv, repo *domain.Repository) *domain.Usecase {
+	userUsecase := usecase.NewUserUsecase(repo.UserRepository)
+	sessionUsecase := usecase.NewSessionUsecase(repo.SessionRepository)
 	googleUsecase := usecase.NewGoogleUsecase(config)
-	authUsecase := usecase.NewAuthUsecase(googleUsecase)
+	authUsecase := usecase.NewAuthUsecase(googleUsecase, userUsecase, sessionUsecase)
 	return &domain.Usecase{
 		AuthUsecase:   authUsecase,
 		GoogleUsecase: googleUsecase,
+		UserUsecase:   userUsecase,
 	}
 }

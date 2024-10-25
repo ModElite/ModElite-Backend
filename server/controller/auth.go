@@ -36,7 +36,7 @@ func (auth *authController) SignInWithGoogle(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Cookie(cookie)
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Success"})
+	return ctx.Redirect("http://localhost:3000")
 }
 
 func (auth *authController) SignOut(ctx *fiber.Ctx) error {

@@ -8,14 +8,20 @@ import (
 )
 
 type authUsecase struct {
-	googleUsecase domain.GoogleUsecase
+	googleUsecase  domain.GoogleUsecase
+	userUsecase    domain.UserUsecase
+	sessionUsecase domain.SessionUsecase
 }
 
 func NewAuthUsecase(
 	googleUsecase domain.GoogleUsecase,
+	userUsecase domain.UserUsecase,
+	sessionUsecase domain.SessionUsecase,
 ) domain.AuthUsecase {
 	return &authUsecase{
-		googleUsecase: googleUsecase,
+		googleUsecase:  googleUsecase,
+		userUsecase:    userUsecase,
+		sessionUsecase: sessionUsecase,
 	}
 }
 
@@ -24,29 +30,26 @@ func (u *authUsecase) SignInWithGoogle(c *fiber.Ctx) (*fiber.Cookie, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	profile, err := u.googleUsecase.GetProfile(token.AccessToken)
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Print(profile)
+	user, err := u.userUsecase.GetByEmail(profile.EMAIL)
+	if err != nil {
+		return nil, err
+	}
+	if user == nil {
+		user, err = u.userUsecase.CreateFromGoogle(profile.NAME, profile.EMAIL, profile.ID)
+		if err != nil {
+			return nil, err
+		}
+	}
 
-	// user, err := u.userUsecase.FindByEmail(profile.EMAIL)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// if user == nil {
-	// 	user, err = u.userUsecase.CreateFromGoogle(profile.NAME, profile.EMAIL, profile.PICTURE)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// }
-
-	// cookie, err := u.sessionUsecase.Create(user.ID, c.IP())
-	// if err != nil {
-	// 	return nil, fmt.Errorf("cannot create session to sign in with google %w", err)
-	// }
-	// return cookie, nil
-
-	return nil, fmt.Errorf("not implemented")
+	cookie, err := u.sessionUsecase.Create(user.ID, c.IP(), c.Get("User-Agent"))
+	if err != nil {
+		return nil, fmt.Errorf("cannot create session to sign in with google %w", err)
+	}
+	return cookie, nil
 }
