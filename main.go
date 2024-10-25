@@ -65,8 +65,9 @@ func initUseCase(config *domain.ConfigEnv, repo *domain.Repository) *domain.Usec
 	googleUsecase := usecase.NewGoogleUsecase(config)
 	authUsecase := usecase.NewAuthUsecase(googleUsecase, userUsecase, sessionUsecase)
 	return &domain.Usecase{
-		AuthUsecase:   authUsecase,
-		GoogleUsecase: googleUsecase,
-		UserUsecase:   userUsecase,
+		AuthUsecase:    authUsecase,
+		GoogleUsecase:  googleUsecase,
+		UserUsecase:    userUsecase,
+		SessionUsecase: sessionUsecase,
 	}
 }

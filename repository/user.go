@@ -30,6 +30,18 @@ func (r *userRepository) Create(user *domain.User) error {
 	return nil
 }
 
+func (r *userRepository) Get(id string) (*domain.User, error) {
+	user := domain.User{}
+	err := r.db.Get(&user, `SELECT * FROM users WHERE id = $1`, id)
+
+	if err == sql.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
+		return nil, fmt.Errorf("cannot query to get user by id: %w", err)
+	}
+	return &user, nil
+}
+
 func (r *userRepository) GetByEmail(email string) (*domain.User, error) {
 	user := domain.User{}
 	err := r.db.Get(&user, `SELECT * FROM users WHERE email = $1`, email)

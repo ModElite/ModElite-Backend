@@ -54,18 +54,17 @@ func (s *FiberServer) Close() error {
 }
 
 func (s *FiberServer) Route() {
-	middlewareAuth := middleware.NewAuthMiddleware()
+	middlewareAuth := middleware.NewAuthMiddleware(s.usecase.SessionUsecase)
 
-	app := s.app.Group("/api").Use(middlewareAuth)
-
-
+	app := s.app.Group("/api")
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
 
-	authController := controller.NewAuthController(s.config, s.usecase.AuthUsecase, s.usecase.GoogleUsecase)
-	app.Get("/auth/google", authController.GetUrl)
-	app.Get("/auth/google/callback", authController.SignInWithGoogle)
-
+	auth := app.Group("/auth")
+	authController := controller.NewAuthController(s.config, s.usecase.AuthUsecase, s.usecase.GoogleUsecase, s.usecase.UserUsecase)
+	auth.Get("/me", middlewareAuth, authController.Me)
+	auth.Get("/google", authController.GetUrl)
+	auth.Get("/google/callback", authController.SignInWithGoogle)
 }

@@ -27,8 +27,8 @@ func (r *sessionRepository) Create(session *domain.Session) error {
 }
 
 func (r *sessionRepository) GetByID(id string) (*domain.Session, error) {
-	var session domain.Session
-	err := r.db.Get(&session, `SELECT * FROM session WHERE id = $1`, id)
+	session := domain.Session{}
+	err := r.db.Get(&session, `SELECT * FROM session WHERE id = $1 LIMIT 1`, id)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {

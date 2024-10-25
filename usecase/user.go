@@ -46,6 +46,14 @@ func (u *userUsecase) CreateFromGoogle(name string, email string, google_id stri
 	return user, nil
 }
 
+func (u *userUsecase) Get(id string) (*domain.User, error) {
+	user, err := u.userRepository.Get(id)
+	if err != nil {
+		return nil, fmt.Errorf("cannot get user by id %s", id)
+	}
+	return user, nil
+}
+
 func (u *userUsecase) GetByEmail(email string) (*domain.User, error) {
 	user, err := u.userRepository.GetByEmail(email)
 	if err != nil {

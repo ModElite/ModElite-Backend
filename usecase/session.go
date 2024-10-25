@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
+	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/constant"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
@@ -31,7 +32,7 @@ func (su *sessionUsecase) Create(userId string, ipAddress string, userAgent stri
 		return nil, err
 	}
 	cookie := &fiber.Cookie{
-		Name:     "session",
+		Name:     constant.SESSION_COOKIE_NAME,
 		Value:    session.ID,
 		Expires:  time.Now().Add(time.Hour * 24 * 3),
 		HTTPOnly: true,

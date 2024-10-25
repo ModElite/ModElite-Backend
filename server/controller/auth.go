@@ -1,9 +1,8 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
+	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/constant"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -11,28 +10,64 @@ type authController struct {
 	config        *domain.ConfigEnv
 	authUsecase   domain.AuthUsecase
 	googleUsecase domain.GoogleUsecase
+	userUsecase   domain.UserUsecase
 }
 
-func NewAuthController(config *domain.ConfigEnv, authUsecase domain.AuthUsecase, googleUsecase domain.GoogleUsecase) *authController {
+func NewAuthController(
+	config *domain.ConfigEnv,
+	authUsecase domain.AuthUsecase,
+	googleUsecase domain.GoogleUsecase,
+	userUsecase domain.UserUsecase,
+) *authController {
 	return &authController{
 		config:        config,
 		authUsecase:   authUsecase,
 		googleUsecase: googleUsecase,
+		userUsecase:   userUsecase,
 	}
+}
+
+func (auth *authController) Me(ctx *fiber.Ctx) error {
+	user, err := auth.userUsecase.Get(ctx.Locals(constant.USER_ID).(string))
+	if err != nil {
+		return ctx.Status(500).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+	} else if user == nil {
+		return ctx.Status(403).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_UNAUTHORIZED,
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		SUCCESS: true,
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		DATA:    user,
+	})
+
 }
 
 func (auth *authController) GetUrl(c *fiber.Ctx) error {
 	path := auth.googleUsecase.GoogleConfig()
 	url := path.AuthCodeURL("state")
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"url": url})
+	return c.Status(fiber.StatusOK).JSON(domain.Response{
+		SUCCESS: true,
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		DATA:    url,
+	})
 }
 
 func (auth *authController) SignInWithGoogle(ctx *fiber.Ctx) error {
 	cookie, err := auth.authUsecase.SignInWithGoogle(ctx)
 	if err != nil {
-		fmt.Println("SignIn :", err)
-		return ctx.Status(500).Send([]byte("Internal Server Error"))
+		return ctx.Status(500).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+
 	}
 
 	ctx.Cookie(cookie)
@@ -40,5 +75,8 @@ func (auth *authController) SignInWithGoogle(ctx *fiber.Ctx) error {
 }
 
 func (auth *authController) SignOut(ctx *fiber.Ctx) error {
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Success"})
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		SUCCESS: true,
+		MESSAGE: constant.MESSAGE_SUCCESS,
+	})
 }

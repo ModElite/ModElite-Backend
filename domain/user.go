@@ -24,12 +24,12 @@ type User struct {
 
 type UserRepository interface {
 	Create(*User) (err error)
+	Get(id string) (*User, error)
 	GetByEmail(email string) (*User, error)
 }
 
 type UserUsecase interface {
 	CreateFromGoogle(name string, email string, google_id string) (*User, error)
+	Get(id string) (*User, error)
 	GetByEmail(email string) (*User, error)
-	// Get(id string) (*User, error)
-	// GetBySessionId(id string) (*User, error)
 }
