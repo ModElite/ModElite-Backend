@@ -1,0 +1,10 @@
+stages:
+  - build
+
+image: golang:1.22-alpine
+
+build:
+  stage: build
+  script:
+    - go mod download
+    - go build
