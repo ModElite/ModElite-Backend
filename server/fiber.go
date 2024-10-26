@@ -74,4 +74,6 @@ func (s *FiberServer) Route() {
 	seller := app.Group("/seller")
 	sellerController := controller.NewSellerController(validator, s.usecase.SellerUsecase)
 	seller.Get("/", middlewareAuth, sellerController.GetAll)
+	seller.Get("/owner", middlewareAuth, sellerController.GetByOwner)
+	seller.Get("/:id", middlewareAuth, sellerController.GetByID)
 }

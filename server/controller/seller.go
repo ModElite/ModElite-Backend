@@ -33,3 +33,40 @@ func (c *sellerController) GetAll(ctx *fiber.Ctx) error {
 		DATA:    sellers,
 	})
 }
+
+func (c *sellerController) GetByOwner(ctx *fiber.Ctx) error {
+	userId := ctx.Locals(constant.USER_ID).(string)
+
+	sellers, err := c.sellerUsecase.GetByOwner(userId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: err.Error(),
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		SUCCESS: true,
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		DATA:    sellers,
+	})
+}
+
+func (c *sellerController) GetByID(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	userId := ctx.Locals(constant.USER_ID).(string)
+
+	seller, err := c.sellerUsecase.GetByID(id, userId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: err.Error(),
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		SUCCESS: true,
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		DATA:    seller,
+	})
+}

@@ -25,5 +25,7 @@ type SellerRepository interface {
 
 type SellerUsecase interface {
 	GetAll(userId string) (*[]Seller, error)
+	GetByOwner(userId string) (*[]Seller, error)
+	GetByID(id string, userId string) (*Seller, error)
 	Create(seller *Seller) error
 }
