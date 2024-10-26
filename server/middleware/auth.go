@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
@@ -19,10 +20,17 @@ func NewAuthMiddleware(sessionUsecase domain.SessionUsecase) fiber.Handler {
 		}
 		session, err := sessionUsecase.GetByID(ssid)
 		if session == nil || err != nil {
-			return ctx.Status(fiber.StatusUnauthorized).JSON(domain.Response{
-				SUCCESS: false,
-				MESSAGE: constant.MESSAGE_UNAUTHORIZED,
-			})
+			if err != sql.ErrConnDone {
+				return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+					SUCCESS: false,
+					MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+				})
+			} else {
+				return ctx.Status(fiber.StatusUnauthorized).JSON(domain.Response{
+					SUCCESS: false,
+					MESSAGE: constant.MESSAGE_UNAUTHORIZED,
+				})
+			}
 		} else if !time.Now().Before(session.EXPIRED_AT) {
 			ctx.Cookie(&fiber.Cookie{Name: constant.SESSION_COOKIE_NAME, Expires: time.Unix(0, 0)})
 			return ctx.Status(fiber.StatusUnauthorized).JSON(domain.Response{
