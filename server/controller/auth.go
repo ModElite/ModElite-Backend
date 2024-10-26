@@ -7,6 +7,7 @@ import (
 )
 
 type authController struct {
+	validator     domain.ValidatorUsecase
 	config        *domain.ConfigEnv
 	authUsecase   domain.AuthUsecase
 	googleUsecase domain.GoogleUsecase
@@ -14,12 +15,14 @@ type authController struct {
 }
 
 func NewAuthController(
+	validator domain.ValidatorUsecase,
 	config *domain.ConfigEnv,
 	authUsecase domain.AuthUsecase,
 	googleUsecase domain.GoogleUsecase,
 	userUsecase domain.UserUsecase,
 ) *authController {
 	return &authController{
+		validator:     validator,
 		config:        config,
 		authUsecase:   authUsecase,
 		googleUsecase: googleUsecase,
@@ -30,12 +33,12 @@ func NewAuthController(
 func (auth *authController) Me(ctx *fiber.Ctx) error {
 	user, err := auth.userUsecase.Get(ctx.Locals(constant.USER_ID).(string))
 	if err != nil {
-		return ctx.Status(500).JSON(domain.Response{
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
 		})
 	} else if user == nil {
-		return ctx.Status(403).JSON(domain.Response{
+		return ctx.Status(fiber.StatusForbidden).JSON(domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_UNAUTHORIZED,
 		})
@@ -63,7 +66,7 @@ func (auth *authController) GetUrl(c *fiber.Ctx) error {
 func (auth *authController) SignInWithGoogle(ctx *fiber.Ctx) error {
 	cookie, err := auth.authUsecase.SignInWithGoogle(ctx)
 	if err != nil {
-		return ctx.Status(500).JSON(domain.Response{
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
 		})
@@ -79,4 +82,19 @@ func (auth *authController) SignOut(ctx *fiber.Ctx) error {
 		SUCCESS: true,
 		MESSAGE: constant.MESSAGE_SUCCESS,
 	})
+}
+
+func (auth *authController) Logout(ctx *fiber.Ctx) error {
+	ssid := ctx.Cookies(constant.SESSION_COOKIE_NAME)
+
+	cookie, err := auth.authUsecase.Logout(ssid)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+	}
+
+	ctx.Cookie(cookie)
+	return ctx.Redirect("http://localhost:3000")
 }

@@ -19,6 +19,17 @@ func NewUserUsecase(userRepository domain.UserRepository) domain.UserUsecase {
 	}
 }
 
+func (u *userUsecase) CheckAdmin(id string) (bool, error) {
+	user, err := u.userRepository.Get(id)
+	if err != nil || user == nil {
+		return false, fmt.Errorf("cannot get user by id %s", id)
+	}
+	if user.ROLE != domain.AdminAccount {
+		return false, nil
+	}
+	return true, nil
+}
+
 func (u *userUsecase) CreateFromGoogle(name string, email string, google_id string) (*domain.User, error) {
 	FirstName := ""
 	LastName := ""

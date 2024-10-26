@@ -3,6 +3,7 @@ package domain
 type Repository struct {
 	UserRepository    UserRepository
 	SessionRepository SessionRepository
+	SellerRepository  SellerRepository
 }
 
 type Usecase struct {
@@ -10,4 +11,5 @@ type Usecase struct {
 	GoogleUsecase  GoogleUsecase
 	UserUsecase    UserUsecase
 	SessionUsecase SessionUsecase
+	SellerUsecase  SellerUsecase
 }

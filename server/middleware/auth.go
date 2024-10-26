@@ -19,7 +19,13 @@ func NewAuthMiddleware(sessionUsecase domain.SessionUsecase) fiber.Handler {
 			})
 		}
 		session, err := sessionUsecase.GetByID(ssid)
-		if session == nil || err != nil {
+		if session == nil {
+			ctx.Cookie(&fiber.Cookie{Name: constant.SESSION_COOKIE_NAME, Expires: time.Unix(0, 0)})
+			return ctx.Status(fiber.StatusUnauthorized).JSON(domain.Response{
+				SUCCESS: false,
+				MESSAGE: constant.MESSAGE_UNAUTHORIZED,
+			})
+		} else if err != nil {
 			if err != sql.ErrConnDone {
 				return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 					SUCCESS: false,

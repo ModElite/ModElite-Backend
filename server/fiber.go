@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
+	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/validator"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/controller"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/middleware"
 	"github.com/gofiber/fiber/v2"
@@ -54,6 +55,7 @@ func (s *FiberServer) Close() error {
 }
 
 func (s *FiberServer) Route() {
+	validator := validator.NewPayloadValidator()
 	middlewareAuth := middleware.NewAuthMiddleware(s.usecase.SessionUsecase)
 
 	app := s.app.Group("/api")
@@ -63,8 +65,13 @@ func (s *FiberServer) Route() {
 	})
 
 	auth := app.Group("/auth")
-	authController := controller.NewAuthController(s.config, s.usecase.AuthUsecase, s.usecase.GoogleUsecase, s.usecase.UserUsecase)
+	authController := controller.NewAuthController(validator, s.config, s.usecase.AuthUsecase, s.usecase.GoogleUsecase, s.usecase.UserUsecase)
 	auth.Get("/me", middlewareAuth, authController.Me)
 	auth.Get("/google", authController.GetUrl)
 	auth.Get("/google/callback", authController.SignInWithGoogle)
+	auth.Get("/logout", middlewareAuth, authController.Logout)
+
+	seller := app.Group("/seller")
+	sellerController := controller.NewSellerController(validator, s.usecase.SellerUsecase)
+	seller.Get("/", middlewareAuth, sellerController.GetAll)
 }

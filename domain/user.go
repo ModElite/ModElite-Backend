@@ -29,6 +29,7 @@ type UserRepository interface {
 }
 
 type UserUsecase interface {
+	CheckAdmin(id string) (bool, error)
 	CreateFromGoogle(name string, email string, google_id string) (*User, error)
 	Get(id string) (*User, error)
 	GetByEmail(email string) (*User, error)
