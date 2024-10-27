@@ -1,6 +1,8 @@
 package domain
 
-import "time"
+import (
+	"time"
+)
 
 type AccountType string
 
@@ -26,6 +28,7 @@ type UserRepository interface {
 	Create(*User) (err error)
 	Get(id string) (*User, error)
 	GetByEmail(email string) (*User, error)
+	Update(*User) (err error)
 }
 
 type UserUsecase interface {
@@ -33,4 +36,5 @@ type UserUsecase interface {
 	CreateFromGoogle(name string, email string, google_id string) (*User, error)
 	Get(id string) (*User, error)
 	GetByEmail(email string) (*User, error)
+	Update(userId string, userUpdate *User) (err error)
 }

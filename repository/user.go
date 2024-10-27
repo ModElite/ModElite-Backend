@@ -53,3 +53,14 @@ func (r *userRepository) GetByEmail(email string) (*domain.User, error) {
 	}
 	return &user, nil
 }
+
+func (r *userRepository) Update(user *domain.User) error {
+	_, err := r.db.NamedExec(
+		`UPDATE users SET email = :email, google_id = :google_id, first_name = :first_name, last_name = :last_name, phone = :phone, profile_url = :profile_url, updated_at = :updated_at WHERE id = :id`,
+		user,
+	)
+	if err != nil {
+		return fmt.Errorf("cannot query to update user: %w", err)
+	}
+	return nil
+}
