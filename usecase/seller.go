@@ -83,3 +83,28 @@ func (u *sellerUsecase) Create(data *domain.Seller) error {
 	}
 	return nil
 }
+
+func (u *sellerUsecase) Update(id string, data *domain.Seller, userId string) error {
+	seller, err := u.sellerRepo.GetByID(id)
+	if err != nil {
+		return fmt.Errorf(constant.MESSAGE_INTERNAL_SERVER_ERROR)
+	} else if seller == nil {
+		return fmt.Errorf(constant.MESSAGE_NOT_FOUND)
+	} else if seller.OWNER_ID != userId {
+		if Permission, err := u.userUsecase.CheckAdmin(userId); err != nil {
+			return err
+		} else if !Permission {
+			return fmt.Errorf(constant.MESSAGE_PERMISSION_DENIED)
+		}
+	}
+
+	seller.NAME = data.NAME
+	seller.DESCRIPTION = data.DESCRIPTION
+	seller.LOGO_URL = data.LOGO_URL
+	seller.LOCATION = data.LOCATION
+
+	if err = u.sellerRepo.Update(seller); err != nil {
+		return err
+	}
+	return nil
+}

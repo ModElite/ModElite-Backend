@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"time"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/jmoiron/sqlx"
@@ -47,7 +48,7 @@ func (r *sellerRepository) GetByOwnerID(ownerID string) (*[]domain.Seller, error
 }
 
 func (r *sellerRepository) Create(seller *domain.Seller) error {
-	_, err := r.db.NamedExec("INSERT INTO seller (id, name, description, logo_url, location, owner_id, is_verify) VALUES (:id, :name, :description, :logoUrl, :location, :ownerId, :isVerify)", seller)
+	_, err := r.db.NamedExec("INSERT INTO seller (id, name, description, logo_url, location, owner_id, is_verify) VALUES (:id, :name, :description, :logo_url, :location, :owner_id, :is_verify)", seller)
 	if err != nil {
 		return err
 	}
@@ -55,7 +56,8 @@ func (r *sellerRepository) Create(seller *domain.Seller) error {
 }
 
 func (r *sellerRepository) Update(seller *domain.Seller) error {
-	_, err := r.db.NamedExec("UPDATE seller SET name = :name, description = :description, logo_url = :logoUrl, location = :location, owner_id = :ownerId, is_verify = :isVerify, updated_at = :updatedAt WHERE id = :id", seller)
+	seller.UPDATED_AT = time.Now()
+	_, err := r.db.NamedExec("UPDATE seller SET name = :name, description = :description, logo_url = :logo_url, location = :location, owner_id = :owner_id, is_verify = :is_verify, updated_at = :updated_at WHERE id = :id", seller)
 	if err != nil {
 		return err
 	}

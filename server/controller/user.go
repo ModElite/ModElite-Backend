@@ -24,8 +24,7 @@ func NewUserController(
 
 func (u *userController) Update(ctx *fiber.Ctx) error {
 	var body payload.UpdateUserDTO
-	err := u.validator.ValidateBody(ctx, &body)
-	if err != nil {
+	if err := u.validator.ValidateBody(ctx, &body); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_INVALID_BODY,
@@ -33,7 +32,7 @@ func (u *userController) Update(ctx *fiber.Ctx) error {
 	}
 
 	userID := ctx.Locals(constant.USER_ID).(string)
-	if err = u.userUsecase.Update(userID, &domain.User{
+	if err := u.userUsecase.Update(userID, &domain.User{
 		FIRST_NAME:  body.FIRST_NAME,
 		LAST_NAME:   body.LAST_NAME,
 		PHONE:       body.PHONE,

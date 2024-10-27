@@ -28,4 +28,5 @@ type SellerUsecase interface {
 	GetByOwner(userId string) (*[]Seller, error)
 	GetByID(id string, userId string) (*Seller, error)
 	Create(seller *Seller) error
+	Update(id string, data *Seller, userId string) error
 }

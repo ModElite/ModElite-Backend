@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/jmoiron/sqlx"
@@ -55,6 +56,7 @@ func (r *userRepository) GetByEmail(email string) (*domain.User, error) {
 }
 
 func (r *userRepository) Update(user *domain.User) error {
+	user.UPDATED_AT = time.Now()
 	_, err := r.db.NamedExec(
 		`UPDATE users SET email = :email, google_id = :google_id, first_name = :first_name, last_name = :last_name, phone = :phone, profile_url = :profile_url, updated_at = :updated_at WHERE id = :id`,
 		user,

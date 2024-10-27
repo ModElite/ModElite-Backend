@@ -80,4 +80,6 @@ func (s *FiberServer) Route() {
 	seller.Get("/", middlewareAuth, sellerController.GetAll)
 	seller.Get("/owner", middlewareAuth, sellerController.GetByOwner)
 	seller.Get("/:id", middlewareAuth, sellerController.GetByID)
+	seller.Post("/", middlewareAuth, sellerController.Create)
+	seller.Patch("/", middlewareAuth, sellerController.Update)
 }
