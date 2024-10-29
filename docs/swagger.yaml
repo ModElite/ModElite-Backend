@@ -51,7 +51,7 @@ info:
   title: Sofware Engineering Project Backend API
   version: "1.0"
 paths:
-  /auth/google:
+  /api/auth/google:
     get:
       consumes:
       - application/json
@@ -66,7 +66,7 @@ paths:
       summary: Get google auth url
       tags:
       - Auth
-  /auth/google/callback:
+  /api/auth/google/callback:
     get:
       consumes:
       - application/json
@@ -81,7 +81,7 @@ paths:
       summary: Sign in with google
       tags:
       - Auth
-  /auth/logout:
+  /api/auth/logout:
     get:
       consumes:
       - application/json
@@ -96,7 +96,7 @@ paths:
       summary: Logout
       tags:
       - Auth
-  /auth/me:
+  /api/auth/me:
     get:
       consumes:
       - application/json
@@ -113,7 +113,7 @@ paths:
       summary: Get user profile
       tags:
       - Auth
-  /seller:
+  /api/product:
     get:
       produces:
       - application/json
@@ -122,8 +122,54 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.Response'
-      security:
-      - Bearer: []
+      summary: Get all products
+      tags:
+      - Product
+  /api/product/{id}:
+    get:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Get product by id
+      tags:
+      - Product
+  /api/product/seller/{id}:
+    get:
+      parameters:
+      - description: Seller ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Get products by seller id
+      tags:
+      - Product
+  /api/seller:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
       summary: Get all sellers
       tags:
       - Seller
@@ -171,7 +217,7 @@ paths:
       summary: Create seller
       tags:
       - Seller
-  /seller/{id}:
+  /api/seller/{id}:
     get:
       parameters:
       - description: Seller ID
@@ -186,12 +232,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.Response'
-      security:
-      - Bearer: []
       summary: Get seller by id
       tags:
       - Seller
-  /seller/owner:
+  /api/seller/owner:
     get:
       produces:
       - application/json
@@ -205,7 +249,7 @@ paths:
       summary: Get all sellers by owner
       tags:
       - Seller
-  /user:
+  /api/user:
     get:
       consumes:
       - application/json

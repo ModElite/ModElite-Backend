@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/google": {
+        "/api/auth/google": {
             "get": {
                 "description": "Get google auth url",
                 "consumes": [
@@ -38,7 +38,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/google/callback": {
+        "/api/auth/google/callback": {
             "get": {
                 "description": "Sign in with google",
                 "consumes": [
@@ -61,7 +61,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/logout": {
+        "/api/auth/logout": {
             "get": {
                 "description": "Logout",
                 "consumes": [
@@ -84,7 +84,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/me": {
+        "/api/auth/me": {
             "get": {
                 "security": [
                     {
@@ -112,13 +112,83 @@ const docTemplate = `{
                 }
             }
         },
-        "/seller": {
+        "/api/product": {
             "get": {
-                "security": [
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get all products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/product/seller/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get products by seller id",
+                "parameters": [
                     {
-                        "Bearer": []
+                        "type": "string",
+                        "description": "Seller ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/product/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get product by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/seller": {
+            "get": {
                 "produces": [
                     "application/json"
                 ],
@@ -208,7 +278,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/seller/owner": {
+        "/api/seller/owner": {
             "get": {
                 "security": [
                     {
@@ -232,13 +302,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/seller/{id}": {
+        "/api/seller/{id}": {
             "get": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -265,7 +330,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user": {
+        "/api/user": {
             "get": {
                 "security": [
                     {

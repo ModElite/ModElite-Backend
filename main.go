@@ -67,6 +67,7 @@ func initRepository(
 		UserRepository:    repository.NewUserRepository(db),
 		SessionRepository: repository.NewSessionRepository(db),
 		SellerRepository:  repository.NewSellerRepository(db),
+		ProductRepository: repository.NewProductRepository(db),
 	}
 }
 
@@ -76,11 +77,13 @@ func initUseCase(config *domain.ConfigEnv, repo *domain.Repository) *domain.Usec
 	googleUsecase := usecase.NewGoogleUsecase(config)
 	authUsecase := usecase.NewAuthUsecase(googleUsecase, userUsecase, sessionUsecase)
 	sellerUsecase := usecase.NewSellerUsecase(repo.SellerRepository, userUsecase)
+	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, sellerUsecase, userUsecase)
 	return &domain.Usecase{
 		AuthUsecase:    authUsecase,
 		GoogleUsecase:  googleUsecase,
 		UserUsecase:    userUsecase,
 		SessionUsecase: sessionUsecase,
 		SellerUsecase:  sellerUsecase,
+		ProductUsecase: productUsecase,
 	}
 }

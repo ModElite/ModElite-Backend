@@ -23,14 +23,7 @@ func NewSellerUsecase(
 	}
 }
 
-func (u *sellerUsecase) GetAll(userId string) (*[]domain.Seller, error) {
-	Permission, err := u.userUsecase.CheckAdmin(userId)
-	if err != nil {
-		return nil, err
-	} else if !Permission {
-		return nil, fmt.Errorf(constant.MESSAGE_PERMISSION_DENIED)
-	}
-
+func (u *sellerUsecase) GetAll() (*[]domain.Seller, error) {
 	sellers, err := u.sellerRepo.GetAll()
 	if err != nil {
 		return nil, err
@@ -46,22 +39,12 @@ func (u *sellerUsecase) GetByOwner(userId string) (*[]domain.Seller, error) {
 	return sellers, nil
 }
 
-func (u *sellerUsecase) GetByID(id string, userId string) (*domain.Seller, error) {
+func (u *sellerUsecase) GetByID(id string) (*domain.Seller, error) {
 	seller, err := u.sellerRepo.GetByID(id)
 	if err != nil {
 		return nil, err
-	}
-
-	if seller == nil {
+	} else if seller == nil {
 		return nil, fmt.Errorf(constant.MESSAGE_NOT_FOUND)
-	} else if seller.OWNER_ID == userId {
-		return seller, nil
-	}
-
-	if Permission, err := u.userUsecase.CheckAdmin(userId); err != nil {
-		return nil, err
-	} else if !Permission {
-		return nil, fmt.Errorf(constant.MESSAGE_PERMISSION_DENIED)
 	}
 	return seller, nil
 }

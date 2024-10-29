@@ -4,6 +4,7 @@ type Repository struct {
 	UserRepository    UserRepository
 	SessionRepository SessionRepository
 	SellerRepository  SellerRepository
+	ProductRepository ProductRepository
 }
 
 type Usecase struct {
@@ -12,4 +13,5 @@ type Usecase struct {
 	UserUsecase    UserUsecase
 	SessionUsecase SessionUsecase
 	SellerUsecase  SellerUsecase
+	ProductUsecase ProductUsecase
 }

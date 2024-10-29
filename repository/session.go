@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/jmoiron/sqlx"
@@ -21,7 +22,7 @@ func (r *sessionRepository) Create(session *domain.Session) error {
 	_, err := r.db.NamedExec(`INSERT INTO session (id, user_id, ip_address, user_agent, expired_at, created_at)`+
 		`VALUES (:id, :user_id, :ip_address, :user_agent, :expired_at, :created_at)`, session)
 	if err != nil {
-		return err
+		return fmt.Errorf("error creating session: %w", err)
 	}
 	return nil
 }
@@ -32,7 +33,7 @@ func (r *sessionRepository) GetByID(id string) (*domain.Session, error) {
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error getting session: %w", err)
 	}
 	return &session, nil
 }
@@ -40,7 +41,7 @@ func (r *sessionRepository) GetByID(id string) (*domain.Session, error) {
 func (r *sessionRepository) DeleteById(id string) error {
 	_, err := r.db.Exec(`DELETE FROM session WHERE id = $1`, id)
 	if err != nil {
-		return err
+		return fmt.Errorf("error deleting session: %w", err)
 	}
 	return nil
 }
