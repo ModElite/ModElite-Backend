@@ -24,7 +24,7 @@ func NewSellerController(validator domain.ValidatorUsecase, sellerUsecase domain
 // @Security Bearer
 // @Produce json
 // @Success 200 {object} domain.Response
-// @Router /seller [get]
+// @Router /api/seller [get]
 func (c *sellerController) GetAll(ctx *fiber.Ctx) error {
 	sellers, err := c.sellerUsecase.GetAll(ctx.Locals(constant.USER_ID).(string))
 	if err != nil {
@@ -46,7 +46,7 @@ func (c *sellerController) GetAll(ctx *fiber.Ctx) error {
 // @Security Bearer
 // @Produce json
 // @Success 200 {object} domain.Response
-// @Router /seller/owner [get]
+// @Router /api/seller/owner [get]
 func (c *sellerController) GetByOwner(ctx *fiber.Ctx) error {
 	userId := ctx.Locals(constant.USER_ID).(string)
 
@@ -71,7 +71,7 @@ func (c *sellerController) GetByOwner(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "Seller ID"
 // @Success 200 {object} domain.Response
-// @Router /seller/{id} [get]
+// @Router /api/seller/{id} [get]
 func (c *sellerController) GetByID(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	userId := ctx.Locals(constant.USER_ID).(string)
@@ -98,7 +98,7 @@ func (c *sellerController) GetByID(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param body body payload.CreateSellerDTO true "Create Seller"
 // @Success 201 {object} domain.Response
-// @Router /seller [post]
+// @Router /api/seller [post]
 func (c *sellerController) Create(ctx *fiber.Ctx) error {
 	var body payload.CreateSellerDTO
 	if err := c.validator.ValidateBody(ctx, &body); err != nil {
@@ -135,7 +135,7 @@ func (c *sellerController) Create(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param body body payload.UpdateSellerDTO true "Update Seller"
 // @Success 200 {object} domain.Response
-// @Router /seller [patch]
+// @Router /api/seller [patch]
 func (c *sellerController) Update(ctx *fiber.Ctx) error {
 	var body payload.UpdateSellerDTO
 	if err := c.validator.ValidateBody(ctx, &body); err != nil {
