@@ -7,6 +7,7 @@ import (
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/validator"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/controller"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/middleware"
+	"github.com/gofiber/contrib/swagger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -57,6 +58,12 @@ func (s *FiberServer) Close() error {
 func (s *FiberServer) Route() {
 	validator := validator.NewPayloadValidator()
 	middlewareAuth := middleware.NewAuthMiddleware(s.usecase.SessionUsecase)
+
+	s.app.Use(swagger.New(swagger.Config{
+		BasePath: "/",
+		FilePath: "./docs/swagger.json",
+		Path:     "/docs/swagger",
+	}))
 
 	app := s.app.Group("/api")
 

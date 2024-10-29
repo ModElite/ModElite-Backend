@@ -1,0 +1,233 @@
+basePath: /
+definitions:
+  domain.Response:
+    properties:
+      data: {}
+      error: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  payload.CreateSellerDTO:
+    properties:
+      description:
+        type: string
+      location:
+        type: string
+      logoUrl:
+        type: string
+      name:
+        type: string
+    required:
+    - description
+    - location
+    - logoUrl
+    - name
+    type: object
+  payload.UpdateSellerDTO:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      location:
+        type: string
+      logoUrl:
+        type: string
+      name:
+        type: string
+    required:
+    - description
+    - id
+    - location
+    - logoUrl
+    - name
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server celler server.
+  title: Sofware Engineering Project Backend API
+  version: "1.0"
+paths:
+  /auth/google:
+    get:
+      consumes:
+      - application/json
+      description: Get google auth url
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Get google auth url
+      tags:
+      - Auth
+  /auth/google/callback:
+    get:
+      consumes:
+      - application/json
+      description: Sign in with google
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Sign in with google
+      tags:
+      - Auth
+  /auth/logout:
+    get:
+      consumes:
+      - application/json
+      description: Logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Logout
+      tags:
+      - Auth
+  /auth/me:
+    get:
+      consumes:
+      - application/json
+      description: Get user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - Bearer: []
+      summary: Get user profile
+      tags:
+      - Auth
+  /seller:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - Bearer: []
+      summary: Get all sellers
+      tags:
+      - Seller
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Update Seller
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.UpdateSellerDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - Bearer: []
+      summary: Update seller
+      tags:
+      - Seller
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Create Seller
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.CreateSellerDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - Bearer: []
+      summary: Create seller
+      tags:
+      - Seller
+  /seller/{id}:
+    get:
+      parameters:
+      - description: Seller ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - Bearer: []
+      summary: Get seller by id
+      tags:
+      - Seller
+  /seller/owner:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - Bearer: []
+      summary: Get all sellers by owner
+      tags:
+      - Seller
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - Bearer: []
+      summary: Get user profile
+      tags:
+      - User
+schemes:
+- https
+- http
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

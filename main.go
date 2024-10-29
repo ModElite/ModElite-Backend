@@ -16,6 +16,16 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+//	@title			Sofware Engineering Project Backend API
+//	@version		1.0
+//	@description	This is a sample server celler server.
+
+// @schemes	https http
+// @host		localhost:8080
+// @BasePath	/
+// @securityDefinitions.apikey 	ApiKeyAuth
+// @in 													header
+// @name												Authorization
 func main() {
 	configEnv, err := config.GetEnv()
 	if err != nil {

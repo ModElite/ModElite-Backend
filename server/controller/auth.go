@@ -30,6 +30,14 @@ func NewAuthController(
 	}
 }
 
+// @Summary Get user profile
+// @Description Get user profile
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Security Bearer
+// @Success 200 {object} domain.Response
+// @Router /auth/me [get]
 func (auth *authController) Me(ctx *fiber.Ctx) error {
 	user, err := auth.userUsecase.Get(ctx.Locals(constant.USER_ID).(string))
 	if err != nil {
@@ -49,9 +57,15 @@ func (auth *authController) Me(ctx *fiber.Ctx) error {
 		MESSAGE: constant.MESSAGE_SUCCESS,
 		DATA:    user,
 	})
-
 }
 
+// @Summary Get google auth url
+// @Description Get google auth url
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} domain.Response
+// @Router /auth/google [get]
 func (auth *authController) GetUrl(c *fiber.Ctx) error {
 	path := auth.googleUsecase.GoogleConfig()
 	url := path.AuthCodeURL("state")
@@ -63,6 +77,13 @@ func (auth *authController) GetUrl(c *fiber.Ctx) error {
 	})
 }
 
+// @Summary Sign in with google
+// @Description Sign in with google
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} domain.Response
+// @Router /auth/google/callback [get]
 func (auth *authController) SignInWithGoogle(ctx *fiber.Ctx) error {
 	cookie, err := auth.authUsecase.SignInWithGoogle(ctx)
 	if err != nil {
@@ -77,13 +98,13 @@ func (auth *authController) SignInWithGoogle(ctx *fiber.Ctx) error {
 	return ctx.Redirect("http://localhost:3000")
 }
 
-func (auth *authController) SignOut(ctx *fiber.Ctx) error {
-	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
-		SUCCESS: true,
-		MESSAGE: constant.MESSAGE_SUCCESS,
-	})
-}
-
+// @Summary Logout
+// @Description Logout
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} domain.Response
+// @Router /auth/logout [get]
 func (auth *authController) Logout(ctx *fiber.Ctx) error {
 	ssid := ctx.Cookies(constant.SESSION_COOKIE_NAME)
 

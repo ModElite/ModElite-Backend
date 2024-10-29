@@ -22,6 +22,14 @@ func NewUserController(
 	}
 }
 
+// @Summary Get user profile
+// @Description Get user profile
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security Bearer
+// @Success 200 {object} domain.Response
+// @Router /user [get]
 func (u *userController) Update(ctx *fiber.Ctx) error {
 	var body payload.UpdateUserDTO
 	if err := u.validator.ValidateBody(ctx, &body); err != nil {

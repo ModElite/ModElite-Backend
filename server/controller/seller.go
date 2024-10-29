@@ -19,6 +19,12 @@ func NewSellerController(validator domain.ValidatorUsecase, sellerUsecase domain
 	}
 }
 
+// @Summary Get all sellers
+// @Tags Seller
+// @Security Bearer
+// @Produce json
+// @Success 200 {object} domain.Response
+// @Router /seller [get]
 func (c *sellerController) GetAll(ctx *fiber.Ctx) error {
 	sellers, err := c.sellerUsecase.GetAll(ctx.Locals(constant.USER_ID).(string))
 	if err != nil {
@@ -35,6 +41,12 @@ func (c *sellerController) GetAll(ctx *fiber.Ctx) error {
 	})
 }
 
+// @Summary Get all sellers by owner
+// @Tags Seller
+// @Security Bearer
+// @Produce json
+// @Success 200 {object} domain.Response
+// @Router /seller/owner [get]
 func (c *sellerController) GetByOwner(ctx *fiber.Ctx) error {
 	userId := ctx.Locals(constant.USER_ID).(string)
 
@@ -53,6 +65,13 @@ func (c *sellerController) GetByOwner(ctx *fiber.Ctx) error {
 	})
 }
 
+// @Summary Get seller by id
+// @Tags Seller
+// @Security Bearer
+// @Produce json
+// @Param id path string true "Seller ID"
+// @Success 200 {object} domain.Response
+// @Router /seller/{id} [get]
 func (c *sellerController) GetByID(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	userId := ctx.Locals(constant.USER_ID).(string)
@@ -72,6 +91,14 @@ func (c *sellerController) GetByID(ctx *fiber.Ctx) error {
 	})
 }
 
+// @Summary Create seller
+// @Tags Seller
+// @Security Bearer
+// @Accept json
+// @Produce json
+// @Param body body payload.CreateSellerDTO true "Create Seller"
+// @Success 201 {object} domain.Response
+// @Router /seller [post]
 func (c *sellerController) Create(ctx *fiber.Ctx) error {
 	var body payload.CreateSellerDTO
 	if err := c.validator.ValidateBody(ctx, &body); err != nil {
@@ -101,6 +128,14 @@ func (c *sellerController) Create(ctx *fiber.Ctx) error {
 	})
 }
 
+// @Summary Update seller
+// @Tags Seller
+// @Security Bearer
+// @Accept json
+// @Produce json
+// @Param body body payload.UpdateSellerDTO true "Update Seller"
+// @Success 200 {object} domain.Response
+// @Router /seller [patch]
 func (c *sellerController) Update(ctx *fiber.Ctx) error {
 	var body payload.UpdateSellerDTO
 	if err := c.validator.ValidateBody(ctx, &body); err != nil {
