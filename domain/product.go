@@ -11,14 +11,15 @@ const (
 )
 
 type Product struct {
-	ID          string    `json:"id" db:"id"`
-	SELLER_ID   string    `json:"sellerId" db:"seller_id"`
-	NAME        string    `json:"name" db:"name"`
-	DESCRIPTION string    `json:"description" db:"description"`
-	PRICE       float64   `json:"price" db:"price"`
-	STATUS      string    `json:"status" db:"status"`
-	CREATED_AT  time.Time `json:"createdAt" db:"created_at"`
-	UPDATED_AT  time.Time `json:"updatedAt" db:"updated_at"`
+	ID             string           `json:"id" db:"id"`
+	SELLER_ID      string           `json:"sellerId" db:"seller_id"`
+	NAME           string           `json:"name" db:"name"`
+	DESCRIPTION    string           `json:"description" db:"description"`
+	PRICE          float64          `json:"price" db:"price"`
+	STATUS         string           `json:"status" db:"status"`
+	PRODUCT_OPTION *[]ProductOption `json:"productOption" db:"product_option"`
+	CREATED_AT     time.Time        `json:"createdAt" db:"created_at"`
+	UPDATED_AT     time.Time        `json:"updatedAt" db:"updated_at"`
 }
 
 type ProductRepository interface {

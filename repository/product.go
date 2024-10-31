@@ -14,7 +14,9 @@ type productRepository struct {
 }
 
 func NewProductRepository(db *sqlx.DB) domain.ProductRepository {
-	return &productRepository{db}
+	return &productRepository{
+		db: db,
+	}
 }
 
 func (r *productRepository) GetAll() (*[]domain.Product, error) {
@@ -47,7 +49,7 @@ func (r *productRepository) GetBySellerID(SellerID string) (*[]domain.Product, e
 }
 
 func (r *productRepository) Create(product *domain.Product) error {
-	_, err := r.db.NamedExec("INSERT INTO product (id, seller_id, name, description, price) VALUES (:id, :seller_id, :name, :description, :price)", product)
+	_, err := r.db.NamedExec("INSERT INTO product (id, seller_id, name, description, price, status) VALUES (:id, :seller_id, :name, :feature, :description, :price, :status)", product)
 	if err != nil {
 		return fmt.Errorf("error creating product: %w", err)
 	}
@@ -56,7 +58,7 @@ func (r *productRepository) Create(product *domain.Product) error {
 
 func (r *productRepository) Update(product *domain.Product) error {
 	product.UPDATED_AT = time.Now()
-	_, err := r.db.NamedExec("UPDATE product SET name = :name, description = :description, price = :price, updated_at = :updated_at WHERE id = :id", product)
+	_, err := r.db.NamedExec("UPDATE product SET name = :name, description = :description, price = :price, status = :status, updated_at = :updated_at WHERE id = :id", product)
 	if err != nil {
 		return fmt.Errorf("error updating product: %w", err)
 	}

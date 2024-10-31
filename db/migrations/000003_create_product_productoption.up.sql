@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "product" (
   name VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
   price DOUBLE PRECISION NOT NULL,
-  status product_status NOT NULL DEFAULT 'ACTIVE',
+  "status" product_status NOT NULL DEFAULT 'ACTIVE',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_seller_product FOREIGN KEY (seller_id) REFERENCES "seller"(id)
@@ -23,4 +23,20 @@ CREATE TABLE IF NOT EXISTS "product_option" (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_seller_product_option FOREIGN KEY (product_id) REFERENCES "product"(id)
+);
+CREATE TABLE IF NOT EXISTS "size" (
+  id UUID PRIMARY KEY,
+  size VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS "product_size" (
+  id UUID PRIMARY KEY,
+  product_option_id UUID NOT NULL,
+  size_id UUID NOT NULL,
+  quantity INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_product_option_product_size FOREIGN KEY (product_option_id) REFERENCES "product_option"(id),
+  CONSTRAINT fk_size_product_size FOREIGN KEY (size_id) REFERENCES "size"(id)
 );

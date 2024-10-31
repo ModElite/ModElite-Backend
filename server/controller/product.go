@@ -33,7 +33,8 @@ func (p *productController) GetAll(ctx *fiber.Ctx) error {
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(&domain.Response{
 			SUCCESS: false,
-			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			// MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			MESSAGE: err.Error(),
 		})
 	}
 

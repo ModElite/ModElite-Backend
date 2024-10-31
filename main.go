@@ -64,26 +64,38 @@ func initRepository(
 	db *sqlx.DB,
 ) *domain.Repository {
 	return &domain.Repository{
-		UserRepository:    repository.NewUserRepository(db),
-		SessionRepository: repository.NewSessionRepository(db),
-		SellerRepository:  repository.NewSellerRepository(db),
-		ProductRepository: repository.NewProductRepository(db),
+		UserRepository:          repository.NewUserRepository(db),
+		SessionRepository:       repository.NewSessionRepository(db),
+		SellerRepository:        repository.NewSellerRepository(db),
+		ProductRepository:       repository.NewProductRepository(db),
+		ProductOptionRepository: repository.NewProductOptionRepository(db),
+		ProductSizeRepository:   repository.NewProductSizeRepository(db),
+		SizeRepository:          repository.NewSizeRepository(db),
 	}
 }
 
-func initUseCase(config *domain.ConfigEnv, repo *domain.Repository) *domain.Usecase {
+func initUseCase(
+	config *domain.ConfigEnv,
+	repo *domain.Repository,
+) *domain.Usecase {
+	googleUsecase := usecase.NewGoogleUsecase(config)
 	userUsecase := usecase.NewUserUsecase(repo.UserRepository)
 	sessionUsecase := usecase.NewSessionUsecase(repo.SessionRepository)
-	googleUsecase := usecase.NewGoogleUsecase(config)
 	authUsecase := usecase.NewAuthUsecase(googleUsecase, userUsecase, sessionUsecase)
 	sellerUsecase := usecase.NewSellerUsecase(repo.SellerRepository, userUsecase)
-	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, sellerUsecase, userUsecase)
+	productOptionUsecase := usecase.NewProductOptionUsecase(repo.ProductOptionRepository)
+	productSizeUsecase := usecase.NewProductSizeUsecase(repo.ProductSizeRepository)
+	sizeUsecase := usecase.NewSizeUsecase(repo.SizeRepository)
+	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, productOptionUsecase, productSizeUsecase, sizeUsecase)
 	return &domain.Usecase{
-		AuthUsecase:    authUsecase,
-		GoogleUsecase:  googleUsecase,
-		UserUsecase:    userUsecase,
-		SessionUsecase: sessionUsecase,
-		SellerUsecase:  sellerUsecase,
-		ProductUsecase: productUsecase,
+		AuthUsecase:          authUsecase,
+		GoogleUsecase:        googleUsecase,
+		UserUsecase:          userUsecase,
+		SessionUsecase:       sessionUsecase,
+		SellerUsecase:        sellerUsecase,
+		ProductUsecase:       productUsecase,
+		ProductOptionUsecase: productOptionUsecase,
+		ProductSizeUsecase:   productSizeUsecase,
+		SizeUsecase:          sizeUsecase,
 	}
 }

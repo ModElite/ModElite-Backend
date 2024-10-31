@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS "product_size";
+DROP TABLE IF EXISTS "size";
 DROP TABLE IF EXISTS "product_option";
 DROP TABLE IF EXISTS "product";
 DO $$ BEGIN DROP TYPE IF EXISTS product_status;
