@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS "product_option" (
   id UUID PRIMARY KEY,
   product_id UUID NOT NULL,
   label VARCHAR(255) NOT NULL,
-  quantity INT NOT NULL DEFAULT 0,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_seller_product_option FOREIGN KEY (product_id) REFERENCES "product"(id)
