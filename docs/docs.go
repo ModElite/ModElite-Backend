@@ -438,7 +438,7 @@ var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8080",
 	BasePath:         "/",
-	Schemes:          []string{"https", "http"},
+	Schemes:          []string{"http"},
 	Title:            "Sofware Engineering Project Backend API",
 	Description:      "This is a sample server celler server.",
 	InfoInstanceName: "swagger",

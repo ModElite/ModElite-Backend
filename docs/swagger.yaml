@@ -267,7 +267,6 @@ paths:
       tags:
       - User
 schemes:
-- https
 - http
 securityDefinitions:
   ApiKeyAuth:

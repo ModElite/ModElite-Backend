@@ -28,12 +28,11 @@ func NewProductController(validator domain.ValidatorUsecase,
 // @Produce json
 // @Success 200 {object} domain.Response
 // @Router /api/product [get]
-func (p *productController) GetAll(ctx *fiber.Ctx) error {
-	products, err := p.productUseCase.GetAll()
+func (p *productController) GetAllProductWithOptionsAndSizes(ctx *fiber.Ctx) error {
+	products, err := p.productUseCase.GetAllProductWithOptionsAndSizes()
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(&domain.Response{
 			SUCCESS: false,
-			// MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
 			MESSAGE: err.Error(),
 		})
 	}
@@ -64,7 +63,7 @@ func (p *productController) GetBySellerID(ctx *fiber.Ctx) error {
 		})
 	}
 
-	products, err := p.productUseCase.GetBySellerID(ctx.Params("id"))
+	products, err := p.productUseCase.GetProductsBySeller(ctx.Params("id"))
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(&domain.Response{
 			SUCCESS: false,
@@ -87,7 +86,7 @@ func (p *productController) GetBySellerID(ctx *fiber.Ctx) error {
 // @Success 200 {object} domain.Response
 // @Router /api/product/{id} [get]
 func (p *productController) GetByID(ctx *fiber.Ctx) error {
-	product, err := p.productUseCase.GetByID(ctx.Params("id"))
+	product, err := p.productUseCase.GetProductWithOptionsAndSizes(ctx.Params("id"))
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(&domain.Response{
 			SUCCESS: false,

@@ -20,7 +20,7 @@ import (
 //	@version		1.0
 //	@description	This is a sample server celler server.
 
-// @schemes	https http
+// @schemes	http
 // @host		localhost:8080
 // @BasePath	/
 // @securityDefinitions.apikey 	ApiKeyAuth
@@ -86,7 +86,7 @@ func initUseCase(
 	productOptionUsecase := usecase.NewProductOptionUsecase(repo.ProductOptionRepository)
 	productSizeUsecase := usecase.NewProductSizeUsecase(repo.ProductSizeRepository)
 	sizeUsecase := usecase.NewSizeUsecase(repo.SizeRepository)
-	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, productOptionUsecase, productSizeUsecase, sizeUsecase)
+	productUsecase := usecase.NewProductUsecase(repo.ProductRepository)
 	return &domain.Usecase{
 		AuthUsecase:          authUsecase,
 		GoogleUsecase:        googleUsecase,
