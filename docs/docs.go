@@ -28,6 +28,14 @@ const docTemplate = `{
                     "Auth"
                 ],
                 "summary": "Get google auth url",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Redirect url",
+                        "name": "redirectUrl",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

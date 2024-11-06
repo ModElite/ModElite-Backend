@@ -66,11 +66,13 @@ func (auth *authController) Me(ctx *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {object} domain.Response
 // @Router /api/auth/google [get]
-func (auth *authController) GetUrl(c *fiber.Ctx) error {
+// @Param redirectUrl query string false "Redirect url"
+func (auth *authController) GetUrl(ctx *fiber.Ctx) error {
 	path := auth.googleUsecase.GoogleConfig()
-	url := path.AuthCodeURL("state")
+	redirectUrl := ctx.Query("redirectUrl", auth.config.FRONTEND_URL)
+	url := path.AuthCodeURL(redirectUrl)
 
-	return c.Status(fiber.StatusOK).JSON(domain.Response{
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
 		SUCCESS: true,
 		MESSAGE: constant.MESSAGE_SUCCESS,
 		DATA:    url,
@@ -85,6 +87,7 @@ func (auth *authController) GetUrl(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Response
 // @Router /api/auth/google/callback [get]
 func (auth *authController) SignInWithGoogle(ctx *fiber.Ctx) error {
+	stateUrl := ctx.Query("state")
 	cookie, err := auth.authUsecase.SignInWithGoogle(ctx)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
@@ -95,7 +98,7 @@ func (auth *authController) SignInWithGoogle(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Cookie(cookie)
-	return ctx.Redirect("http://localhost:3000")
+	return ctx.Redirect(stateUrl)
 }
 
 // @Summary Logout

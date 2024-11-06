@@ -23,6 +23,7 @@ func GetEnv() (*domain.ConfigEnv, error) {
 	GOOGLE_CLIENT_ID := os.Getenv("GOOGLE_CLIENT_ID")
 	GOOGLE_CLIENT_SECRET := os.Getenv("GOOGLE_CLIENT_SECRET")
 	GOOGLE_REDIRECT := os.Getenv("GOOGLE_REDIRECT")
+	FRONTEND_URL := os.Getenv("FRONTEND_URL")
 
 	config := &domain.ConfigEnv{
 		BACKEND_PORT:         BACKEND_PORT,
@@ -30,6 +31,7 @@ func GetEnv() (*domain.ConfigEnv, error) {
 		GOOGLE_CLIENT_ID:     GOOGLE_CLIENT_ID,
 		GOOGLE_CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
 		GOOGLE_REDIRECT:      GOOGLE_REDIRECT,
+		FRONTEND_URL:         FRONTEND_URL,
 	}
 
 	validate := validator.New()

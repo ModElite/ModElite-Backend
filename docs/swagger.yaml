@@ -105,6 +105,11 @@ paths:
       consumes:
       - application/json
       description: Get google auth url
+      parameters:
+      - description: Redirect url
+        in: query
+        name: redirectUrl
+        type: string
       produces:
       - application/json
       responses:
