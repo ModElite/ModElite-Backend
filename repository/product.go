@@ -58,6 +58,7 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Produc
 				DESCRIPTION:    row.Description,
 				PRICE:          row.Price,
 				STATUS:         row.Status,
+				IMAGE_URL:      row.ImageURL,
 				PRODUCT_OPTION: &[]domain.ProductOption{},
 				CREATED_AT:     row.CreatedAt,
 				UPDATED_AT:     row.UpdatedAt,
@@ -75,6 +76,7 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Produc
 			option = &domain.ProductOption{
 				ID:           row.OptionID,
 				LABEL:        row.OptionLabel,
+				IMAGE_URL:    row.OptionImageURL,
 				PRODUCT_SIZE: &[]domain.ProductSize{},
 				CREATED_AT:   row.OptionCreatedAt,
 				UPDATED_AT:   row.OptionUpdatedAt,
@@ -144,6 +146,7 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productId string) (*do
 				DESCRIPTION:    row.Description,
 				PRICE:          row.Price,
 				STATUS:         row.Status,
+				IMAGE_URL:      row.ImageURL,
 				PRODUCT_OPTION: &[]domain.ProductOption{},
 				CREATED_AT:     row.CreatedAt,
 				UPDATED_AT:     row.UpdatedAt,
@@ -156,6 +159,7 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productId string) (*do
 				option = &domain.ProductOption{
 					ID:           row.OptionID,
 					LABEL:        row.OptionLabel,
+					IMAGE_URL:    row.OptionImageURL,
 					PRODUCT_SIZE: &[]domain.ProductSize{},
 					CREATED_AT:   row.OptionCreatedAt,
 					UPDATED_AT:   row.OptionUpdatedAt,
@@ -226,6 +230,7 @@ func (r *productRepository) GetProductsBySeller(sellerID string) (*[]domain.Prod
 				DESCRIPTION:    row.Description,
 				PRICE:          row.Price,
 				STATUS:         row.Status,
+				IMAGE_URL:      row.ImageURL,
 				PRODUCT_OPTION: &[]domain.ProductOption{},
 				CREATED_AT:     row.CreatedAt,
 				UPDATED_AT:     row.UpdatedAt,
@@ -243,6 +248,7 @@ func (r *productRepository) GetProductsBySeller(sellerID string) (*[]domain.Prod
 			option = &domain.ProductOption{
 				ID:           row.OptionID,
 				LABEL:        row.OptionLabel,
+				IMAGE_URL:    row.OptionImageURL,
 				PRODUCT_SIZE: &[]domain.ProductSize{},
 				CREATED_AT:   row.OptionCreatedAt,
 				UPDATED_AT:   row.OptionUpdatedAt,
