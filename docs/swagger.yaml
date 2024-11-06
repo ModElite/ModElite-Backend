@@ -9,6 +9,29 @@ definitions:
       success:
         type: boolean
     type: object
+  payload.CreateAddressDTO:
+    properties:
+      company:
+        type: string
+      country:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      state:
+        type: string
+      streetAddress:
+        type: string
+      type:
+        type: string
+      zipCode:
+        type: string
+    type: object
   payload.CreateProductDTO:
     properties:
       description:
@@ -74,6 +97,31 @@ definitions:
     - quantity
     - sizeId
     type: object
+  payload.UpdateAddressDTO:
+    properties:
+      company:
+        type: string
+      country:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      phone:
+        type: string
+      state:
+        type: string
+      streetAddress:
+        type: string
+      type:
+        type: string
+      zipCode:
+        type: string
+    type: object
   payload.UpdateSellerDTO:
     properties:
       description:
@@ -100,6 +148,100 @@ info:
   title: Sofware Engineering Project Backend API
   version: "1.0"
 paths:
+  /api/address:
+    get:
+      consumes:
+      - application/json
+      description: Get address By User ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Get address By User ID
+      tags:
+      - address
+    post:
+      consumes:
+      - application/json
+      description: Create Address
+      parameters:
+      - description: Address
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/payload.CreateAddressDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Create Address
+      tags:
+      - address
+    put:
+      consumes:
+      - application/json
+      description: Update Address
+      parameters:
+      - description: Address
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/payload.UpdateAddressDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Update Address
+      tags:
+      - address
+  /api/address/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Address
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Delete Address
+      tags:
+      - address
   /api/auth/google:
     get:
       consumes:

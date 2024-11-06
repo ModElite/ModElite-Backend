@@ -64,6 +64,7 @@ func initRepository(
 	db *sqlx.DB,
 ) *domain.Repository {
 	return &domain.Repository{
+		AddressRepository:       repository.NewAddressRepository(db),
 		UserRepository:          repository.NewUserRepository(db),
 		SessionRepository:       repository.NewSessionRepository(db),
 		SellerRepository:        repository.NewSellerRepository(db),
@@ -78,6 +79,7 @@ func initUseCase(
 	config *domain.ConfigEnv,
 	repo *domain.Repository,
 ) *domain.Usecase {
+	addressUsecase := usecase.NewAddressUsecase(repo.AddressRepository)
 	googleUsecase := usecase.NewGoogleUsecase(config)
 	userUsecase := usecase.NewUserUsecase(repo.UserRepository)
 	sessionUsecase := usecase.NewSessionUsecase(repo.SessionRepository)
@@ -88,6 +90,7 @@ func initUseCase(
 	sizeUsecase := usecase.NewSizeUsecase(repo.SizeRepository)
 	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, productOptionUsecase, productSizeUsecase)
 	return &domain.Usecase{
+		AddressUsecase:       addressUsecase,
 		AuthUsecase:          authUsecase,
 		GoogleUsecase:        googleUsecase,
 		UserUsecase:          userUsecase,

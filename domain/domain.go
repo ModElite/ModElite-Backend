@@ -8,6 +8,7 @@ type Repository struct {
 	ProductOptionRepository ProductOptionRepository
 	ProductSizeRepository   ProductSizeRepository
 	SizeRepository          SizeRepository
+	AddressRepository       AddressRepository
 }
 
 type Usecase struct {
@@ -20,4 +21,5 @@ type Usecase struct {
 	ProductOptionUsecase ProductOptionUsecase
 	ProductSizeUsecase   ProductSizeUsecase
 	SizeUsecase          SizeUsecase
+	AddressUsecase       AddressUsecase
 }
