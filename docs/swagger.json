@@ -126,6 +126,37 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Create product",
+                "parameters": [
+                    {
+                        "description": "Product Body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payload.CreateProductDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/product/seller/{id}": {
@@ -370,6 +401,40 @@
                 }
             }
         },
+        "payload.CreateProductDTO": {
+            "type": "object",
+            "required": [
+                "description",
+                "imageUrl",
+                "name",
+                "price",
+                "productOption",
+                "sellerId"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "productOption": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/payload.ProductOptionDTO"
+                    }
+                },
+                "sellerId": {
+                    "type": "string"
+                }
+            }
+        },
         "payload.CreateSellerDTO": {
             "type": "object",
             "required": [
@@ -389,6 +454,43 @@
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "payload.ProductOptionDTO": {
+            "type": "object",
+            "required": [
+                "imageUrl",
+                "label",
+                "productSize"
+            ],
+            "properties": {
+                "imageUrl": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "productSize": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/payload.ProductSizeDTO"
+                    }
+                }
+            }
+        },
+        "payload.ProductSizeDTO": {
+            "type": "object",
+            "required": [
+                "quantity",
+                "sizeId"
+            ],
+            "properties": {
+                "quantity": {
+                    "type": "integer"
+                },
+                "sizeId": {
                     "type": "string"
                 }
             }

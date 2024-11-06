@@ -1,6 +1,9 @@
 package domain
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
 type ProductStatus string
 
@@ -24,28 +27,28 @@ type Product struct {
 }
 
 type ProductRow struct {
-	ProductID       string    `db:"id"`
-	SellerID        string    `db:"seller_id"`
-	Name            string    `db:"name"`
-	Description     string    `db:"description"`
-	Price           float64   `db:"price"`
-	Status          string    `db:"status"`
-	ImageURL        string    `db:"image_url"`
-	CreatedAt       time.Time `db:"created_at"`
-	UpdatedAt       time.Time `db:"updated_at"`
-	OptionID        string    `db:"option_id"`
-	OptionLabel     string    `db:"label"`
-	OptionImageURL  string    `db:"option_image_url"`
-	OptionCreatedAt time.Time `db:"option_created_at"`
-	OptionUpdatedAt time.Time `db:"option_updated_at"`
-	ProductSizeID   string    `db:"product_size_id"`
-	ProductSizeQty  int       `db:"quantity"`
-	ProductSizeCA   time.Time `db:"product_size_created_at"`
-	ProductSizeUA   time.Time `db:"product_size_updated_at"`
-	SizeID          string    `db:"size_id"`
-	SizeValue       string    `db:"size"`
-	SizeCreatedAt   time.Time `db:"size_created_at"`
-	SizeUpdatedAt   time.Time `db:"size_updated_at"`
+	ProductID       string         `db:"id"`
+	SellerID        string         `db:"seller_id"`
+	Name            string         `db:"name"`
+	Description     string         `db:"description"`
+	Price           float64        `db:"price"`
+	Status          string         `db:"status"`
+	ImageURL        string         `db:"image_url"`
+	CreatedAt       time.Time      `db:"created_at"`
+	UpdatedAt       time.Time      `db:"updated_at"`
+	OptionID        sql.NullString `db:"option_id"`
+	OptionLabel     sql.NullString `db:"label"`
+	OptionImageURL  sql.NullString `db:"option_image_url"`
+	OptionCreatedAt sql.NullTime   `db:"option_created_at"`
+	OptionUpdatedAt sql.NullTime   `db:"option_updated_at"`
+	ProductSizeID   sql.NullString `db:"product_size_id"`
+	ProductSizeQty  sql.NullInt64  `db:"quantity"`
+	ProductSizeCA   sql.NullTime   `db:"product_size_created_at"`
+	ProductSizeUA   sql.NullTime   `db:"product_size_updated_at"`
+	SizeID          sql.NullString `db:"size_id"`
+	SizeValue       sql.NullString `db:"size"`
+	SizeCreatedAt   sql.NullTime   `db:"size_created_at"`
+	SizeUpdatedAt   sql.NullTime   `db:"size_updated_at"`
 }
 
 type ProductRepository interface {
@@ -67,4 +70,5 @@ type ProductUsecase interface {
 	GetProductsBySeller(sellerID string) (*[]Product, error)
 	GetByID(id string) (*Product, error)
 	GetBySellerID(SellerID string) (*[]Product, error)
+	Create(product *Product) error
 }

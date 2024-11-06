@@ -43,7 +43,7 @@ func (r *productOptionRepository) GetByProductID(productID string) (*[]domain.Pr
 }
 
 func (r *productOptionRepository) Create(productOption *domain.ProductOption) error {
-	_, err := r.db.NamedExec("INSERT INTO product_option (id, product_id, label, image_url, price) VALUES (:id, :product_id, :label, :image_url, :price)", productOption)
+	_, err := r.db.NamedExec("INSERT INTO product_option (id, product_id, label, image_url) VALUES (:id, :product_id, :label, :image_url)", productOption)
 	if err != nil {
 		return err
 	}
@@ -51,7 +51,7 @@ func (r *productOptionRepository) Create(productOption *domain.ProductOption) er
 }
 
 func (r *productOptionRepository) Update(productOption *domain.ProductOption) error {
-	_, err := r.db.NamedExec("UPDATE product_option SET label = :label, price = :price WHERE id = :id", productOption)
+	_, err := r.db.NamedExec("UPDATE product_option SET label = :label WHERE id = :id", productOption)
 	if err != nil {
 		return err
 	}

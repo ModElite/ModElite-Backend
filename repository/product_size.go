@@ -45,7 +45,7 @@ func (r *productSizeRepository) GetByProductOptionID(productOptionID string) (*[
 }
 
 func (r *productSizeRepository) Create(productSize *domain.ProductSize) error {
-	_, err := r.db.NamedExec("INSERT INTO product_size (id, product_option_id, name) VALUES (:id, :product_option_id, :name)", productSize)
+	_, err := r.db.NamedExec("INSERT INTO product_size (id, product_option_id, size_id, quantity) VALUES (:id, :product_option_id, :size_id, :quantity)", productSize)
 	if err != nil {
 		return fmt.Errorf("error cannot create product size: %w", err)
 	}
@@ -53,7 +53,7 @@ func (r *productSizeRepository) Create(productSize *domain.ProductSize) error {
 }
 
 func (r *productSizeRepository) Update(productSize *domain.ProductSize) error {
-	_, err := r.db.NamedExec("UPDATE product_size SET name = :name WHERE id = :id", productSize)
+	_, err := r.db.NamedExec("UPDATE product_size SET quantity = :quantity WHERE id = :id", productSize)
 	if err != nil {
 		return fmt.Errorf("error cannot update product size: %w", err)
 	}

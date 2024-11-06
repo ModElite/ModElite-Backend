@@ -8,7 +8,6 @@ type ProductOption struct {
 	PRODUCT_SIZE *[]ProductSize `json:"productSize" db:"-"`
 	LABEL        string         `json:"label" db:"label"`
 	IMAGE_URL    string         `json:"imageUrl" db:"image_url"`
-	QUANTITY     int            `json:"quantity" db:"quantity"`
 	CREATED_AT   time.Time      `json:"createdAt" db:"created_at"`
 	UPDATED_AT   time.Time      `json:"updatedAt" db:"updated_at"`
 }

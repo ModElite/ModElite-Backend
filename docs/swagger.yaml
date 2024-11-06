@@ -9,6 +9,30 @@ definitions:
       success:
         type: boolean
     type: object
+  payload.CreateProductDTO:
+    properties:
+      description:
+        type: string
+      imageUrl:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      productOption:
+        items:
+          $ref: '#/definitions/payload.ProductOptionDTO'
+        type: array
+      sellerId:
+        type: string
+    required:
+    - description
+    - imageUrl
+    - name
+    - price
+    - productOption
+    - sellerId
+    type: object
   payload.CreateSellerDTO:
     properties:
       description:
@@ -24,6 +48,31 @@ definitions:
     - location
     - logoUrl
     - name
+    type: object
+  payload.ProductOptionDTO:
+    properties:
+      imageUrl:
+        type: string
+      label:
+        type: string
+      productSize:
+        items:
+          $ref: '#/definitions/payload.ProductSizeDTO'
+        type: array
+    required:
+    - imageUrl
+    - label
+    - productSize
+    type: object
+  payload.ProductSizeDTO:
+    properties:
+      quantity:
+        type: integer
+      sizeId:
+        type: string
+    required:
+    - quantity
+    - sizeId
     type: object
   payload.UpdateSellerDTO:
     properties:
@@ -123,6 +172,26 @@ paths:
           schema:
             $ref: '#/definitions/domain.Response'
       summary: Get all products
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.CreateProductDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Create product
       tags:
       - Product
   /api/product/{id}:

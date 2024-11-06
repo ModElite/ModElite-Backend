@@ -86,7 +86,7 @@ func initUseCase(
 	productOptionUsecase := usecase.NewProductOptionUsecase(repo.ProductOptionRepository)
 	productSizeUsecase := usecase.NewProductSizeUsecase(repo.ProductSizeRepository)
 	sizeUsecase := usecase.NewSizeUsecase(repo.SizeRepository)
-	productUsecase := usecase.NewProductUsecase(repo.ProductRepository)
+	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, productOptionUsecase, productSizeUsecase)
 	return &domain.Usecase{
 		AuthUsecase:          authUsecase,
 		GoogleUsecase:        googleUsecase,
