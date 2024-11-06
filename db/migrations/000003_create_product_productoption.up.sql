@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS "product" (
   description TEXT NOT NULL,
   price DOUBLE PRECISION NOT NULL,
   "status" product_status NOT NULL DEFAULT 'ACTIVE',
+  image_url TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_seller_product FOREIGN KEY (seller_id) REFERENCES "seller"(id)
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS "product_option" (
   id UUID PRIMARY KEY,
   product_id UUID NOT NULL,
   label VARCHAR(255) NOT NULL,
+  image_url TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_seller_product_option FOREIGN KEY (product_id) REFERENCES "product"(id)

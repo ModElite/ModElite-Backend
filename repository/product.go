@@ -21,8 +21,8 @@ func NewProductRepository(db *sqlx.DB) domain.ProductRepository {
 
 func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Product, error) {
 	query := `
-		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.created_at, p.updated_at,
-				po.id AS option_id, po.label, po.created_at AS option_created_at, po.updated_at AS option_updated_at,
+		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at,
+				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at,
 				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at,
 				s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at
 		FROM product p
@@ -109,8 +109,8 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Produc
 
 func (r *productRepository) GetProductWithOptionsAndSizes(productId string) (*domain.Product, error) {
 	query := `
-		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.created_at, p.updated_at,
-		       po.id AS option_id, po.label, po.created_at AS option_created_at, po.updated_at AS option_updated_at,
+		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at,
+		       po.id AS option_id, po.label, po.image_url AS option_image_url po.created_at AS option_created_at, po.updated_at AS option_updated_at,
 		       ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at,
 		       s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at
 		FROM product p
@@ -188,8 +188,8 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productId string) (*do
 
 func (r *productRepository) GetProductsBySeller(sellerID string) (*[]domain.Product, error) {
 	query := `
-		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.created_at, p.updated_at,
-		       po.id AS option_id, po.label, po.created_at AS option_created_at, po.updated_at AS option_updated_at,
+		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at,
+		       po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at,
 		       ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at,
 		       s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at
 		FROM product p
