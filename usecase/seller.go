@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
-	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/constant"
 	"github.com/google/uuid"
 )
 
@@ -44,7 +43,7 @@ func (u *sellerUsecase) GetByID(id string) (*domain.Seller, error) {
 	if err != nil {
 		return nil, err
 	} else if seller == nil {
-		return nil, fmt.Errorf(constant.MESSAGE_NOT_FOUND)
+		return nil, fmt.Errorf("cannot find seller with id: %s", id)
 	}
 	return seller, nil
 }
@@ -70,14 +69,14 @@ func (u *sellerUsecase) Create(data *domain.Seller) error {
 func (u *sellerUsecase) Update(id string, data *domain.Seller, userId string) error {
 	seller, err := u.sellerRepo.GetByID(id)
 	if err != nil {
-		return fmt.Errorf(constant.MESSAGE_INTERNAL_SERVER_ERROR)
+		return fmt.Errorf("cannot find seller with err: %s", err.Error())
 	} else if seller == nil {
-		return fmt.Errorf(constant.MESSAGE_NOT_FOUND)
+		return fmt.Errorf("cannot find seller with id: %s", id)
 	} else if seller.OWNER_ID != userId {
 		if Permission, err := u.userUsecase.CheckAdmin(userId); err != nil {
 			return err
 		} else if !Permission {
-			return fmt.Errorf(constant.MESSAGE_PERMISSION_DENIED)
+			return fmt.Errorf("you are not the owner of this seller")
 		}
 	}
 
