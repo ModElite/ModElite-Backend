@@ -29,19 +29,19 @@ func main() {
 	if selectCase == 1 {
 		err = m.Up()
 		if err != nil {
-			log.Fatal("Cannot run migration Up", err)
+			log.Fatal("Cannot run migration Up: ", err)
 		}
 		log.Default().Println("Migration Up done")
 	} else if selectCase == 2 {
 		err = m.Down()
 		if err != nil {
-			log.Fatal("Cannot run migration Down", err)
+			log.Fatal("Cannot run migration Down: ", err)
 		}
 		log.Default().Println("Migration Down done")
 	} else {
 		err = m.Drop()
 		if err != nil {
-			log.Fatal("Cannot run migration Drop", err)
+			log.Fatal("Cannot run migration Drop: ", err)
 		}
 		log.Default().Println("Migration Drop done")
 	}
