@@ -28,7 +28,7 @@ func NewAddressController(
 
 // @Summary Get address By User ID
 // @Description Get address By User ID
-// @Tags address
+// @Tags Address
 // @Accept json
 // @Produce json
 // @Success 200 {object} domain.Response
@@ -51,7 +51,7 @@ func (a *addressController) GetByUserID(ctx *fiber.Ctx) error {
 
 // @Summary Create Address
 // @Description Create Address
-// @Tags address
+// @Tags Address
 // @Accept json
 // @Produce json
 // @Param address body payload.CreateAddressDTO true "Address"
@@ -83,7 +83,7 @@ func (a *addressController) Create(ctx *fiber.Ctx) error {
 
 // @Summary Update Address
 // @Description Update Address
-// @Tags address
+// @Tags Address
 // @Accept json
 // @Produce json
 // @Param address body payload.UpdateAddressDTO true "Address"
@@ -115,7 +115,7 @@ func (a *addressController) Update(ctx *fiber.Ctx) error {
 
 // @Summary Delete Address
 // @Description Delete Address
-// @Tags address
+// @Tags Address
 // @Accept json
 // @Produce json
 // @Param id path int true "Address ID"

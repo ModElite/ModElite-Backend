@@ -103,4 +103,10 @@ func (s *FiberServer) Route() {
 	product.Get("/seller/:id", productController.GetBySellerID)
 	product.Get("/:id", productController.GetByID)
 	product.Post("/", middlewareAuth, productController.Create)
+
+	favorite := app.Group("/favorite")
+	favoriteController := controller.NewFavoriteController(validator, s.usecase.FavoriteUsecase)
+	favorite.Get("/", middlewareAuth, favoriteController.GetByUserID)
+	favorite.Post("/", middlewareAuth, favoriteController.Create)
+	favorite.Delete("/:id", middlewareAuth, favoriteController.Delete)
 }

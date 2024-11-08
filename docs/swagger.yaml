@@ -32,6 +32,13 @@ definitions:
       zipCode:
         type: string
     type: object
+  payload.CreateFavoriteDTO:
+    properties:
+      productId:
+        type: string
+    required:
+    - productId
+    type: object
   payload.CreateProductDTO:
     properties:
       description:
@@ -166,7 +173,7 @@ paths:
             $ref: '#/definitions/domain.Response'
       summary: Get address By User ID
       tags:
-      - address
+      - Address
     post:
       consumes:
       - application/json
@@ -191,7 +198,7 @@ paths:
             $ref: '#/definitions/domain.Response'
       summary: Create Address
       tags:
-      - address
+      - Address
     put:
       consumes:
       - application/json
@@ -216,7 +223,7 @@ paths:
             $ref: '#/definitions/domain.Response'
       summary: Update Address
       tags:
-      - address
+      - Address
   /api/address/{id}:
     delete:
       consumes:
@@ -241,7 +248,7 @@ paths:
             $ref: '#/definitions/domain.Response'
       summary: Delete Address
       tags:
-      - address
+      - Address
   /api/auth/google:
     get:
       consumes:
@@ -309,6 +316,69 @@ paths:
       summary: Get user profile
       tags:
       - Auth
+  /api/favorite:
+    get:
+      consumes:
+      - application/json
+      description: Get favorite by user id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get favorite by user id
+      tags:
+      - Favorite
+    post:
+      consumes:
+      - application/json
+      description: Create favorite
+      parameters:
+      - description: Favorite
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.CreateFavoriteDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create favorite
+      tags:
+      - Favorite
+  /api/favorite/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete favorite
+      parameters:
+      - description: Favorite ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete favorite
+      tags:
+      - Favorite
   /api/product:
     get:
       produces:

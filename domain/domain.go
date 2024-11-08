@@ -9,6 +9,7 @@ type Repository struct {
 	ProductSizeRepository   ProductSizeRepository
 	SizeRepository          SizeRepository
 	AddressRepository       AddressRepository
+	FavoriteRepository      FavoriteRepository
 }
 
 type Usecase struct {
@@ -22,4 +23,5 @@ type Usecase struct {
 	ProductSizeUsecase   ProductSizeUsecase
 	SizeUsecase          SizeUsecase
 	AddressUsecase       AddressUsecase
+	FavoriteUsecase      FavoriteUsecase
 }
