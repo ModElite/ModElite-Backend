@@ -58,7 +58,14 @@ func (p *productController) GetAllProductWithOptionsAndSizes(ctx *fiber.Ctx) err
 // @Success 200 {object} domain.Response
 // @Router /api/product/seller/{id} [get]
 func (p *productController) GetBySellerID(ctx *fiber.Ctx) error {
-	if seller, err := p.sellerUseCase.GetByID(ctx.Params("id")); err == nil && seller == nil {
+	sellerId := ctx.Params("id")
+	if sellerId == "" {
+		return ctx.Status(fiber.StatusNotFound).JSON(&domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_NOT_FOUND,
+		})
+	}
+	if seller, err := p.sellerUseCase.GetByID(sellerId); err == nil && seller == nil {
 		return ctx.Status(fiber.StatusNotFound).JSON(&domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_NOT_FOUND,
@@ -70,7 +77,7 @@ func (p *productController) GetBySellerID(ctx *fiber.Ctx) error {
 		})
 	}
 
-	products, err := p.productUseCase.GetProductsBySeller(ctx.Params("id"))
+	products, err := p.productUseCase.GetProductsBySeller(sellerId)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(&domain.Response{
 			SUCCESS: false,
@@ -93,6 +100,13 @@ func (p *productController) GetBySellerID(ctx *fiber.Ctx) error {
 // @Success 200 {object} domain.Response
 // @Router /api/product/{id} [get]
 func (p *productController) GetByID(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	if id == "" {
+		return ctx.Status(fiber.StatusNotFound).JSON(&domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_NOT_FOUND,
+		})
+	}
 	product, err := p.productUseCase.GetProductWithOptionsAndSizes(ctx.Params("id"))
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(&domain.Response{

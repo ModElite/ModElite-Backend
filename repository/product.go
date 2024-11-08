@@ -125,7 +125,7 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*do
 		LEFT JOIN product_option po ON po.product_id = p.id
 		LEFT JOIN product_size ps ON ps.product_option_id = po.id
 		LEFT JOIN size s ON s.id = ps.size_id
-		WHERE p.id = ?
+		WHERE p.id = $1
 		ORDER BY po.id, ps.id
 	`
 
@@ -218,7 +218,7 @@ func (r *productRepository) GetProductsBySeller(sellerID string) (*[]domain.Prod
 		LEFT JOIN product_option po ON po.product_id = p.id
 		LEFT JOIN product_size ps ON ps.product_option_id = po.id
 		LEFT JOIN size s ON s.id = ps.size_id
-		WHERE p.seller_id = ?
+		WHERE p.seller_id = $1
 		ORDER BY p.id, po.id, ps.id
 	`
 
