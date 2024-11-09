@@ -36,8 +36,10 @@ func (su *sessionUsecase) Create(userId string, ipAddress string, userAgent stri
 		Value:    session.ID,
 		Expires:  time.Now().Add(time.Hour * 24 * 3),
 		HTTPOnly: true,
+		Secure:   false,
+		Domain:   "sssboom.xyz",
+		Path:     "/",
 		SameSite: "None",
-		Secure:   true,
 	}
 
 	return cookie, nil
