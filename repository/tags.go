@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"database/sql"
 	"fmt"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
@@ -29,7 +30,9 @@ func (tr *tagsRepository) GetAll() (*[]domain.Tag, error) {
 func (tr *tagsRepository) GetByID(id int) (*domain.Tag, error) {
 	var tag domain.Tag
 	err := tr.db.Get(&tag, "SELECT * FROM tags WHERE id = $1", id)
-	if err != nil {
+	if err == sql.ErrNoRows {
+		return nil, nil
+	} else if err != nil {
 		return nil, fmt.Errorf("error get tag by id: %w", err)
 	}
 	return &tag, nil
