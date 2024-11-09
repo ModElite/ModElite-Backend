@@ -11,6 +11,7 @@ type Repository struct {
 	AddressRepository       AddressRepository
 	FavoriteRepository      FavoriteRepository
 	TagsRepository          TagsRepository
+	ProductTagsRepository   ProductTagsRepository
 }
 
 type Usecase struct {

@@ -20,6 +20,7 @@ type TagsRepository interface {
 type TagsUsecase interface {
 	GetAll() (*[]Tag, error)
 	GetByID(id int) (*Tag, error)
+	GetByProductID(productId string) (*[]Tag, error)
 	Create(tag *Tag) error
 	Update(tag *Tag) error
 	Delete(id int) error

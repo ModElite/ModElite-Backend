@@ -11,17 +11,20 @@ type productUsecase struct {
 	productRepo          domain.ProductRepository
 	productOptionUsecase domain.ProductOptionUsecase
 	productSizeUsecase   domain.ProductSizeUsecase
+	tagUsecase           domain.TagsUsecase
 }
 
 func NewProductUsecase(
 	productRepo domain.ProductRepository,
 	productOptionUsecase domain.ProductOptionUsecase,
 	productSizeUsecase domain.ProductSizeUsecase,
+	tagUsecase domain.TagsUsecase,
 ) domain.ProductUsecase {
 	return &productUsecase{
 		productRepo:          productRepo,
 		productOptionUsecase: productOptionUsecase,
 		productSizeUsecase:   productSizeUsecase,
+		tagUsecase:           tagUsecase,
 	}
 }
 
@@ -40,6 +43,14 @@ func (u *productUsecase) GetAllProductWithOptionsAndSizes() (*[]domain.Product, 
 		return nil, fmt.Errorf("error product getall: %w", err)
 	}
 
+	for i, product := range *products {
+		productTags, err := u.tagUsecase.GetByProductID(product.ID)
+		if err != nil {
+			return nil, fmt.Errorf("error product getall: %w", err)
+		}
+		(*products)[i].TAGS = productTags
+	}
+
 	return products, nil
 }
 
@@ -49,6 +60,12 @@ func (u *productUsecase) GetProductWithOptionsAndSizes(productId string) (*domai
 		return nil, fmt.Errorf("error product getall: %w", err)
 	}
 
+	productTags, err := u.tagUsecase.GetByProductID(product.ID)
+	if err != nil {
+		return nil, fmt.Errorf("error product getall: %w", err)
+	}
+	product.TAGS = productTags
+
 	return product, nil
 }
 
@@ -56,6 +73,14 @@ func (u *productUsecase) GetProductsBySeller(sellerID string) (*[]domain.Product
 	products, err := u.productRepo.GetProductsBySeller(sellerID)
 	if err != nil {
 		return nil, fmt.Errorf("error product getall: %w", err)
+	}
+
+	for i, product := range *products {
+		productTags, err := u.tagUsecase.GetByProductID(product.ID)
+		if err != nil {
+			return nil, fmt.Errorf("error product getall: %w", err)
+		}
+		(*products)[i].TAGS = productTags
 	}
 
 	return products, nil

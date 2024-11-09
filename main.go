@@ -74,6 +74,7 @@ func initRepository(
 		SizeRepository:          repository.NewSizeRepository(db),
 		FavoriteRepository:      repository.NewFavoriteRepository(db),
 		TagsRepository:          repository.NewTagsRepository(db),
+		ProductTagsRepository:   repository.NewProductTagsRepository(db),
 	}
 }
 
@@ -90,9 +91,9 @@ func initUseCase(
 	productOptionUsecase := usecase.NewProductOptionUsecase(repo.ProductOptionRepository)
 	productSizeUsecase := usecase.NewProductSizeUsecase(repo.ProductSizeRepository)
 	sizeUsecase := usecase.NewSizeUsecase(repo.SizeRepository)
-	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, productOptionUsecase, productSizeUsecase)
+	tagsUsecase := usecase.NewTagsUsecase(repo.TagsRepository, repo.ProductTagsRepository)
+	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, productOptionUsecase, productSizeUsecase, tagsUsecase)
 	favoriteUsecase := usecase.NewFavoriteUsecase(repo.FavoriteRepository, productUsecase)
-	tagsUsecase := usecase.NewTagsUsecase(repo.TagsRepository)
 	return &domain.Usecase{
 		AddressUsecase:       addressUsecase,
 		AuthUsecase:          authUsecase,

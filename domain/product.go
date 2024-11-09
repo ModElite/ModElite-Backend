@@ -22,6 +22,7 @@ type Product struct {
 	STATUS         string           `json:"status" db:"status"`
 	IMAGE_URL      string           `json:"imageUrl" db:"image_url"`
 	PRODUCT_OPTION *[]ProductOption `json:"productOption" db:"product_option"`
+	TAGS           *[]Tag           `json:"tags" db:"-"`
 	CREATED_AT     time.Time        `json:"createdAt" db:"created_at"`
 	UPDATED_AT     time.Time        `json:"updatedAt" db:"updated_at"`
 }
