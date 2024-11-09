@@ -58,6 +58,7 @@ func (s *FiberServer) Close() error {
 func (s *FiberServer) Route() {
 	validator := validator.NewPayloadValidator()
 	middlewareAuth := middleware.NewAuthMiddleware(s.usecase.SessionUsecase)
+	middlewareAuthAdmin := middleware.NewAuthAdminMiddleware(s.usecase.UserUsecase)
 
 	s.app.Use(swagger.New(swagger.Config{
 		BasePath: "/",
@@ -109,4 +110,10 @@ func (s *FiberServer) Route() {
 	favorite.Get("/", middlewareAuth, favoriteController.GetByUserID)
 	favorite.Post("/", middlewareAuth, favoriteController.Create)
 	favorite.Delete("/:id", middlewareAuth, favoriteController.Delete)
+
+	tags := app.Group("/tags")
+	tagsController := controller.NewTagsController(validator, s.usecase.TagsUsecase)
+	tags.Get("/", tagsController.GetTags)
+	tags.Post("/", middlewareAuth, middlewareAuthAdmin, tagsController.CreateTag)
+	tags.Patch("/", middlewareAuth, middlewareAuthAdmin, tagsController.UpdateTag)
 }

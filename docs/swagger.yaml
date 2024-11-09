@@ -79,6 +79,16 @@ definitions:
     - logoUrl
     - name
     type: object
+  payload.CreateTagDTO:
+    properties:
+      label:
+        type: string
+      show:
+        type: boolean
+    required:
+    - label
+    - show
+    type: object
   payload.ProductOptionDTO:
     properties:
       imageUrl:
@@ -147,6 +157,19 @@ definitions:
     - location
     - logoUrl
     - name
+    type: object
+  payload.UpdateTagDTO:
+    properties:
+      id:
+        type: integer
+      label:
+        type: string
+      show:
+        type: boolean
+    required:
+    - id
+    - label
+    - show
     type: object
 host: localhost:8080
 info:
@@ -535,6 +558,63 @@ paths:
       summary: Get all sellers by owner
       tags:
       - Seller
+  /api/tags:
+    get:
+      consumes:
+      - application/json
+      description: Get all tags
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Get all tags
+      tags:
+      - Tags
+    patch:
+      consumes:
+      - application/json
+      description: Update a tag
+      parameters:
+      - description: Tag
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/payload.UpdateTagDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Update a tag
+      tags:
+      - Tags
+    post:
+      consumes:
+      - application/json
+      description: Create a tag
+      parameters:
+      - description: Tag
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/payload.CreateTagDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Create a tag
+      tags:
+      - Tags
   /api/user:
     get:
       consumes:
