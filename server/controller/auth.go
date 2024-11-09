@@ -98,7 +98,7 @@ func (auth *authController) SignInWithGoogle(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Cookie(cookie)
-	return ctx.Redirect(stateUrl)
+	return ctx.Redirect(stateUrl + "?token=" + cookie.Value)
 }
 
 // @Summary Logout
