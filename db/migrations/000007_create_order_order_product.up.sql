@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS "order" (
   "address" TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (voucher_code) REFERENCES "voucher"(id)
+  FOREIGN KEY (voucher_code) REFERENCES "voucher"(id),
+  FOREIGN KEY (user_id) REFERENCES "users"(id)
 );
 DO $$ BEGIN BEGIN CREATE TYPE order_product_status AS ENUM (
   'PENDING',
@@ -53,5 +54,7 @@ CREATE TABLE IF NOT EXISTS "order_product" (
   quantity INT NOT NULL,
   price DOUBLE PRECISION NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (order_id) REFERENCES "order"(id),
+  FOREIGN KEY (product_size_id) REFERENCES "product_size"(id)
 );
