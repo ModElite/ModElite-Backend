@@ -43,7 +43,7 @@ func (u *authUsecase) SignInWithGoogle(c *fiber.Ctx) (*fiber.Cookie, error) {
 		return nil, err
 	}
 	if user == nil {
-		user, err = u.userUsecase.CreateFromGoogle(profile.NAME, profile.EMAIL, profile.ID)
+		user, err = u.userUsecase.CreateFromGoogle(profile.NAME, profile.EMAIL, profile.ID, profile.PICTURE)
 		if err != nil {
 			return nil, err
 		}

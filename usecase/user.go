@@ -30,7 +30,7 @@ func (u *userUsecase) CheckAdmin(id string) (bool, error) {
 	return true, nil
 }
 
-func (u *userUsecase) CreateFromGoogle(name string, email string, google_id string) (*domain.User, error) {
+func (u *userUsecase) CreateFromGoogle(name string, email string, google_id string, picture string) (*domain.User, error) {
 	FirstName := ""
 	LastName := ""
 	result := strings.Split(name, " ")
@@ -46,7 +46,7 @@ func (u *userUsecase) CreateFromGoogle(name string, email string, google_id stri
 		FIRST_NAME:  FirstName,
 		LAST_NAME:   LastName,
 		PHONE:       "",
-		PROFILE_URL: "",
+		PROFILE_URL: picture,
 		UPDATED_AT:  time.Now(),
 		CREATED_AT:  time.Now(),
 	}

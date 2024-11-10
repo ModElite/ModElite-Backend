@@ -472,6 +472,63 @@ paths:
       summary: Delete favorite
       tags:
       - Favorite
+  /api/geo-location/districts/{province_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get all districts by province id
+      parameters:
+      - description: Province ID
+        in: path
+        name: province_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Get all districts by province id
+      tags:
+      - GeoLocation
+  /api/geo-location/provinces:
+    get:
+      consumes:
+      - application/json
+      description: Get all provinces
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Get all provinces
+      tags:
+      - GeoLocation
+  /api/geo-location/sub-districts/{district_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get all sub-districts by district id
+      parameters:
+      - description: District ID
+        in: path
+        name: district_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Get all sub-districts by district id
+      tags:
+      - GeoLocation
   /api/order:
     get:
       consumes:

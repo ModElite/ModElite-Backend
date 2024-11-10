@@ -127,4 +127,10 @@ func (s *FiberServer) Route() {
 	voucherController := controller.NewVoucherController(validator, s.usecase.VoucherUsecase)
 	voucher.Get("/:code", middlewareAuth, voucherController.Search)
 	voucher.Post("/", middlewareAuth, middlewareAuthAdmin, voucherController.CreateVoucher)
+
+	geoLocation := app.Group("/geo-location")
+	geoLocationController := controller.NewGeoLocationController(validator, s.usecase.GeoLocationUsecase)
+	geoLocation.Get("/provinces", geoLocationController.GetProvinces)
+	geoLocation.Get("/districts/:province_id", geoLocationController.GetDistrictsByProvinceId)
+	geoLocation.Get("/sub-districts/:district_id", geoLocationController.GetSubDistrictsByDistrictId)
 }
