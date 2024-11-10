@@ -1,6 +1,6 @@
 stages:
   - build
-  - lint
+  - test
 
 image: golang:1.23.1
 
