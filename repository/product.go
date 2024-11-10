@@ -363,3 +363,23 @@ func (r *productRepository) Delete(id string) error {
 	}
 	return nil
 }
+
+func (r *productRepository) GetProductPriceQuantity(id string) (*domain.ProductPriceQuantity, error) {
+	var product domain.ProductPriceQuantity
+	err := r.db.Get(&product, `
+		SELECT
+			product_size.quantity AS quantity,
+			product.price AS price
+		FROM
+			product_size
+			INNER JOIN product_option ON product_size.product_option_id = product_option."id"
+			INNER JOIN product ON product_option.product_id = product."id" 
+		WHERE
+			product_size."id" = $1
+		LIMIT 1
+		`, id)
+	if err != nil {
+		return nil, fmt.Errorf("error getting product price and quantity: %w", err)
+	}
+	return &product, nil
+}

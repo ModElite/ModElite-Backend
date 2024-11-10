@@ -16,7 +16,7 @@ type OrderProduct struct {
 	PRODUCT_SIZE_ID string             `json:"productSizeId" db:"product_size_id"`
 	STATUS          OrderProductStatus `json:"status" db:"status"`
 	QUANTITY        int                `json:"quantity" db:"quantity"`
-	PRICE           int                `json:"price" db:"price"`
+	PRICE           float64            `json:"price" db:"price"`
 	CREATED_AT      time.Time          `json:"createdAt" db:"created_at"`
 	UPDATED_AT      time.Time          `json:"updatedAt" db:"updated_at"`
 }

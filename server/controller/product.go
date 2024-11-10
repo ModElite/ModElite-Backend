@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/constant"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/payload"
@@ -182,7 +180,6 @@ func (p *productController) Create(ctx *fiber.Ctx) error {
 	}
 
 	if err := p.productUseCase.Create(product); err != nil {
-		fmt.Println(err)
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,

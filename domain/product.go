@@ -52,6 +52,11 @@ type ProductRow struct {
 	SizeUpdatedAt   sql.NullTime   `db:"size_updated_at"`
 }
 
+type ProductPriceQuantity struct {
+	Price    float64 `json:"price" db:"price"`
+	Quantity int     `json:"quantity" db:"quantity"`
+}
+
 type ProductRepository interface {
 	GetAllProductWithOptionsAndSizes() (*[]Product, error)
 	GetProductWithOptionsAndSizes(productId string) (*Product, error)
@@ -62,6 +67,7 @@ type ProductRepository interface {
 	Create(product *Product) error
 	Update(product *Product) error
 	Delete(id string) error
+	GetProductPriceQuantity(productSizeID string) (*ProductPriceQuantity, error)
 }
 
 type ProductUsecase interface {

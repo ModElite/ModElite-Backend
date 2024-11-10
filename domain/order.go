@@ -22,7 +22,7 @@ type Order struct {
 	PRODUCT_PRICE  float64         `json:"productPrice" db:"product_price"`
 	SHIPPING_PRICE float64         `json:"shippingPrice" db:"shipping_price"`
 	DISCOUNT       float64         `json:"discount" db:"discount"`
-	VOUCHER_CODE   string          `json:"voucher" db:"voucher"`
+	VOUCHER_CODE   *string         `json:"voucherCode" db:"voucher_code"`
 	ADDRESS        string          `json:"address" db:"address"`
 	CREATED_AT     time.Time       `json:"createdAt" db:"created_at"`
 	UPDATED_AT     time.Time       `json:"updatedAt" db:"updated_at"`
@@ -31,9 +31,12 @@ type Order struct {
 type OrderRepository interface {
 	GetAll() (*[]Order, error)
 	GetSelfOrder(userID string) (*[]Order, error)
+	CreateOrder(order *[]OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string) error
 }
 
 type OrderUsecase interface {
 	GetAll() (*[]Order, error)
 	GetSelfOrder(userID string) (*[]Order, error)
+	CreateOrder(order *[]OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string) error
+	GetProductDetail(productSizeID string, quantity int) (*OrderProduct, error)
 }
