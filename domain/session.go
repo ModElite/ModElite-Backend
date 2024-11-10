@@ -19,10 +19,12 @@ type SessionRepository interface {
 	Create(session *Session) error
 	GetByID(id string) (*Session, error)
 	DeleteById(id string) error
+	ExtendExpiredAt(id string) error
 }
 
 type SessionUsecase interface {
 	Create(userId string, ipAddress string, userAgent string) (*fiber.Cookie, error)
 	GetByID(id string) (*Session, error)
 	DeleteById(id string) error
+	ExtendExpiredAt(id string) error
 }

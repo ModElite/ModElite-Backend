@@ -49,6 +49,10 @@ func (su *sessionUsecase) GetByID(id string) (*domain.Session, error) {
 	return su.sessionRepo.GetByID(id)
 }
 
+func (su *sessionUsecase) ExtendExpiredAt(id string) error {
+	return su.sessionRepo.ExtendExpiredAt(id)
+}
+
 func (su *sessionUsecase) DeleteById(id string) error {
 	return su.sessionRepo.DeleteById(id)
 }

@@ -45,6 +45,15 @@ func NewAuthMiddleware(sessionUsecase domain.SessionUsecase) fiber.Handler {
 			})
 		}
 
+		if time.Until(session.EXPIRED_AT) < time.Hour*24 {
+			if err := sessionUsecase.ExtendExpiredAt(ssid); err != nil {
+				return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+					SUCCESS: false,
+					MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+				})
+			}
+		}
+
 		ctx.Locals(constant.USER_ID, session.USER_ID)
 
 		return ctx.Next()

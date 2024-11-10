@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/jmoiron/sqlx"
@@ -36,6 +37,14 @@ func (r *sessionRepository) GetByID(id string) (*domain.Session, error) {
 		return nil, fmt.Errorf("error getting session: %w", err)
 	}
 	return &session, nil
+}
+
+func (r *sessionRepository) ExtendExpiredAt(id string) error {
+	_, err := r.db.Exec(`UPDATE session SET expired_at = $1 WHERE id = $2`, time.Now().Add(time.Hour*24*3), id)
+	if err != nil {
+		return fmt.Errorf("error extending session: %w", err)
+	}
+	return nil
 }
 
 func (r *sessionRepository) DeleteById(id string) error {
