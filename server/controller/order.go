@@ -20,6 +20,14 @@ func NewOrderController(validator domain.ValidatorUsecase, orderUsecase domain.O
 	}
 }
 
+// @Summary Get all order
+// @Description Get all order
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} domain.Response
+// @Router /api/order [get]
 func (c *orderController) GetAll(ctx *fiber.Ctx) error {
 	orders, err := c.orderUsecase.GetAll()
 	if err != nil {
@@ -37,6 +45,15 @@ func (c *orderController) GetAll(ctx *fiber.Ctx) error {
 	})
 }
 
+// Swagger for get order api that only user can access
+// @Summary Get self order
+// @Description Get self order
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} domain.Response
+// @Router /api/order/self [get]
 func (c *orderController) GetSelfOrder(ctx *fiber.Ctx) error {
 	userID := ctx.Locals(constant.USER_ID).(string)
 	orders, err := c.orderUsecase.GetSelfOrder(userID)

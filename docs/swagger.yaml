@@ -402,6 +402,40 @@ paths:
       summary: Delete favorite
       tags:
       - Favorite
+  /api/order:
+    get:
+      consumes:
+      - application/json
+      description: Get all order
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all order
+      tags:
+      - Order
+  /api/order/self:
+    get:
+      consumes:
+      - application/json
+      description: Get self order
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get self order
+      tags:
+      - Order
   /api/product:
     get:
       produces:
