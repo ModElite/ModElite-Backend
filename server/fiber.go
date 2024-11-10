@@ -122,4 +122,9 @@ func (s *FiberServer) Route() {
 	order.Get("/", orderController.GetAll)
 	order.Get("/self", middlewareAuth, orderController.GetSelfOrder)
 	order.Post("/", middlewareAuth, orderController.CreateOrder)
+
+	voucher := app.Group("/voucher")
+	voucherController := controller.NewVoucherController(validator, s.usecase.VoucherUsecase)
+	voucher.Get("/:code", middlewareAuth, voucherController.Search)
+	voucher.Post("/", middlewareAuth, middlewareAuthAdmin, voucherController.CreateVoucher)
 }
