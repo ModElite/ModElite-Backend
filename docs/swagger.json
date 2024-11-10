@@ -362,6 +362,93 @@
                 }
             }
         },
+        "/api/geo-location/districts/{province_id}": {
+            "get": {
+                "description": "Get all districts by province id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GeoLocation"
+                ],
+                "summary": "Get all districts by province id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Province ID",
+                        "name": "province_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/geo-location/provinces": {
+            "get": {
+                "description": "Get all provinces",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GeoLocation"
+                ],
+                "summary": "Get all provinces",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/geo-location/sub-districts/{district_id}": {
+            "get": {
+                "description": "Get all sub-districts by district id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GeoLocation"
+                ],
+                "summary": "Get all sub-districts by district id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "District ID",
+                        "name": "district_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/order": {
             "get": {
                 "security": [

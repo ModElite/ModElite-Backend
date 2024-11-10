@@ -50,7 +50,9 @@ func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address stri
 	_, err = tx.Exec(`INSERT INTO "order" (id, user_id, status, total_price, product_price, shipping_price, discount, voucher_code, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`,
 		id, userId, domain.ORDER_PENDING, totalPrice+shipping_price, totalPrice, shipping_price, toDiscount, voucherId, address)
 	if err != nil {
-		tx.Rollback()
+		if err := tx.Rollback(); err != nil {
+			return err
+		}
 		return err
 	}
 	// INSERT INTO order_product (order_id, product_size_id, quantity, price, status) VALUES ($1, $2, $3, $4, $5);
@@ -59,7 +61,9 @@ func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address stri
 		_, err = tx.Exec(`INSERT INTO order_product (id ,order_id, product_size_id, quantity, price, status) VALUES ($1, $2, $3, $4, $5, $6); UPDATE product_size SET quantity = quantity - $4 WHERE id = $3;`,
 			orderProductId, id, orderProduct.PRODUCT_SIZE_ID, orderProduct.QUANTITY, orderProduct.PRICE, domain.ORDER_PRODUCT_PENDING)
 		if err != nil {
-			tx.Rollback()
+			if err := tx.Rollback(); err != nil {
+				return err
+			}
 			return err
 		}
 	}

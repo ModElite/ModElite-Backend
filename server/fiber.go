@@ -122,4 +122,10 @@ func (s *FiberServer) Route() {
 	order.Get("/", orderController.GetAll)
 	order.Get("/self", middlewareAuth, orderController.GetSelfOrder)
 	order.Post("/", middlewareAuth, orderController.CreateOrder)
+
+	geoLocation := app.Group("/geo-location")
+	geoLocationController := controller.NewGeoLocationController(validator, s.usecase.GeoLocationUsecase)
+	geoLocation.Get("/provinces", geoLocationController.GetProvinces)
+	geoLocation.Get("/districts/:province_id", geoLocationController.GetDistrictsByProvinceId)
+	geoLocation.Get("/sub-districts/:district_id", geoLocationController.GetSubDistrictsByDistrictId)
 }
