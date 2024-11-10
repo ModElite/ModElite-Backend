@@ -12,6 +12,7 @@ type Repository struct {
 	FavoriteRepository      FavoriteRepository
 	TagsRepository          TagsRepository
 	ProductTagsRepository   ProductTagsRepository
+	OrderRepository         OrderRepository
 }
 
 type Usecase struct {
@@ -27,4 +28,5 @@ type Usecase struct {
 	AddressUsecase       AddressUsecase
 	FavoriteUsecase      FavoriteUsecase
 	TagsUsecase          TagsUsecase
+	OrderUsecase         OrderUsecase
 }

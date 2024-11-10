@@ -116,4 +116,10 @@ func (s *FiberServer) Route() {
 	tags.Get("/", tagsController.GetTags)
 	tags.Post("/", middlewareAuth, middlewareAuthAdmin, tagsController.CreateTag)
 	tags.Patch("/", middlewareAuth, middlewareAuthAdmin, tagsController.UpdateTag)
+
+	order := app.Group("/order")
+	orderController := controller.NewOrderController(validator, s.usecase.OrderUsecase)
+	order.Get("/", orderController.GetAll)
+	order.Get("/self", middlewareAuth, orderController.GetSelfOrder)
+
 }
