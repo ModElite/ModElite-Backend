@@ -2,28 +2,26 @@ package domain
 
 import "time"
 
-type OrderStatus string
+type OrderStatusType string
 
 const (
-	PAYMENTSUCCESS OrderStatus = "PAYMENT_SUCCESS"
-	REFUND         OrderStatus = "REFUND"
-	END            OrderStatus = "END"
-	CANCEL         OrderStatus = "CANCEL"
-	PENDING        OrderStatus = "PENDING"
+	ORDER_PENDING         OrderStatusType = "PENDING"
+	ORDER_PAYMENT_SUCCESS OrderStatusType = "PAYMENT_SUCCESS"
+	ORDER_REFUND          OrderStatusType = "REFUND"
+	ORDER_END             OrderStatusType = "END"
+	ORDER_CANCEL          OrderStatusType = "CANCEL"
 )
 
 type Order struct {
-	ID             string      `json:"id" db:"id"`
-	USER_ID        string      `json:"user_id" db:"user_id"`
-	STATUS         OrderStatus `json:"status" db:"status"`
-	TOTAL_PRICE    float64     `json:"total_price" db:"total_price"`
-	PRODUCT_PRICE  float64     `json:"product_price" db:"product_price"`
-	SHIPPING_PRICE float64     `json:"shipping_price" db:"shipping_price"`
-	DISCOUNT       float64     `json:"discount" db:"discount"`
-	VOUCHER_CODE   string      `json:"voucher_code" db:"voucher_code"`
-	ADDRESS        string      `json:"address" db:"address"`
-	CREATED_AT     time.Time   `json:"created_at" db:"created_at"`
-	UPDATED_AT     time.Time   `json:"updated_at" db:"updated_at"`
+	ID             string          `json:"id" db:"id"`
+	USER_ID        string          `json:"userId" db:"user_id"`
+	STATUS         OrderStatusType `json:"status" db:"status"`
+	TOTAL_PRICE    float64         `json:"totalPrice" db:"total_price"`
+	PRODUCT_PRICE  float64         `json:"productPrice" db:"product_price"`
+	SHIPPING_PRICE float64         `json:"shippingCost" db:"shipping_cost"`
+	ADDRESS        string          `json:"address" db:"address"`
+	CREATED_AT     time.Time       `json:"createdAt" db:"created_at"`
+	UPDATED_AT     time.Time       `json:"updatedAt" db:"updated_at"`
 }
 
 type OrderRepository interface {
