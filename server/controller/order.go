@@ -94,6 +94,7 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 	orderProdcts := make([]domain.OrderProduct, 0)
 	totalPrice := float64(0)
 	var seller_id string
+	seller_id = ""
 	for _, product := range payload.PRODUCTS {
 		// IF FOUND SEND ERROR
 		productDetail, err := c.orderUsecase.GetProductDetail(product.PRODUCT_SIZE_ID, product.QUANTITY)
@@ -122,7 +123,7 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 	}
 
 	// Check Voucher
-	var toDiscount float64
+	var toDiscount float64 = 0
 	if payload.VOUCHER_ID != "" {
 		voucher, err := c.voucherUsecase.GetByID(payload.VOUCHER_ID)
 		if err != nil {
