@@ -121,5 +121,4 @@ func (s *FiberServer) Route() {
 	orderController := controller.NewOrderController(validator, s.usecase.OrderUsecase)
 	order.Get("/", orderController.GetAll)
 	order.Get("/self", middlewareAuth, orderController.GetSelfOrder)
-
 }
