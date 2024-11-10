@@ -5,6 +5,7 @@ import (
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/constant"
+	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/payload"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -59,16 +60,27 @@ func (a *addressController) GetByUserID(ctx *fiber.Ctx) error {
 // @Failure 500 {object} domain.Response
 // @Router /api/address [post]
 func (a *addressController) Create(ctx *fiber.Ctx) error {
-	var address domain.Address
+	var address payload.CreateAddressDTO
 	if err := a.validator.ValidateBody(ctx, &address); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
-			MESSAGE: constant.MESSAGE_BAD_REQUEST,
+			MESSAGE: constant.MESSAGE_INVALID_BODY,
 			SUCCESS: false,
 		})
 	}
 
-	address.USER_ID = ctx.Locals(constant.USER_ID).(string)
-	if err := a.addressUsecase.Create(&address); err != nil {
+	if err := a.addressUsecase.Create(&domain.Address{
+		USER_ID:        ctx.Locals(constant.USER_ID).(string),
+		FIRST_NAME:     address.FIRST_NAME,
+		LAST_NAME:      address.LAST_NAME,
+		COMPANY:        address.COMPANY,
+		STREET_ADDRESS: address.STREET_ADDRESS,
+		STATE:          address.STATE,
+		COUNTRY:        address.COUNTRY,
+		ZIP_CODE:       address.ZIP_CODE,
+		EMAIL:          address.EMAIL,
+		PHONE:          address.PHONE,
+		TYPE:           address.TYPE,
+	}); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
 			SUCCESS: false,
@@ -91,7 +103,7 @@ func (a *addressController) Create(ctx *fiber.Ctx) error {
 // @Failure 500 {object} domain.Response
 // @Router /api/address [put]
 func (a *addressController) Update(ctx *fiber.Ctx) error {
-	var address domain.Address
+	var address payload.UpdateAddressDTO
 	if err := a.validator.ValidateBody(ctx, &address); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_BAD_REQUEST,
@@ -99,8 +111,20 @@ func (a *addressController) Update(ctx *fiber.Ctx) error {
 		})
 	}
 
-	address.USER_ID = ctx.Locals(constant.USER_ID).(string)
-	if err := a.addressUsecase.Update(&address); err != nil {
+	if err := a.addressUsecase.Update(&domain.Address{
+		ID:             address.ID,
+		USER_ID:        ctx.Locals(constant.USER_ID).(string),
+		FIRST_NAME:     address.FIRST_NAME,
+		LAST_NAME:      address.LAST_NAME,
+		COMPANY:        address.COMPANY,
+		STREET_ADDRESS: address.STREET_ADDRESS,
+		STATE:          address.STATE,
+		COUNTRY:        address.COUNTRY,
+		ZIP_CODE:       address.ZIP_CODE,
+		EMAIL:          address.EMAIL,
+		PHONE:          address.PHONE,
+		TYPE:           address.TYPE,
+	}); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
 			SUCCESS: false,
