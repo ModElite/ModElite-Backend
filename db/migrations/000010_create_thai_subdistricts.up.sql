@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS "thai_tambons" (
+CREATE TABLE IF NOT EXISTS "thai_subdistricts" (
   id UUID NOT NULL PRIMARY KEY,
   zip_code INT NOT NULL,
   name_th VARCHAR(150) NOT NULL,
