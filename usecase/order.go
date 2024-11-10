@@ -41,6 +41,7 @@ func (u *orderUsecase) GetProductDetail(productSizeID string, quantity int) (*do
 		QUANTITY:        quantity,
 		PRICE:           quantityData.Price,
 		STATUS:          domain.ORDER_PRODUCT_PENDING,
+		SELLER_ID:       quantityData.SellerID,
 	}
 	return &orderProduct, nil
 }

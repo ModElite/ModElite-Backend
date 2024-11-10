@@ -55,6 +55,7 @@ type ProductRow struct {
 type ProductPriceQuantity struct {
 	Price    float64 `json:"price" db:"price"`
 	Quantity int     `json:"quantity" db:"quantity"`
+	SellerID string  `json:"sellerId" db:"seller_id"`
 }
 
 type ProductRepository interface {

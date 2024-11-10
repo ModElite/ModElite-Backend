@@ -369,7 +369,8 @@ func (r *productRepository) GetProductPriceQuantity(id string) (*domain.ProductP
 	err := r.db.Get(&product, `
 		SELECT
 			product_size.quantity AS quantity,
-			product.price AS price
+			product.price AS price,
+			product.seller_id AS seller_id
 		FROM
 			product_size
 			INNER JOIN product_option ON product_size.product_option_id = product_option."id"

@@ -93,16 +93,25 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 
 	orderProdcts := make([]domain.OrderProduct, 0)
 	totalPrice := float64(0)
+	var seller_id string
 	for _, product := range payload.PRODUCTS {
 		// IF FOUND SEND ERROR
 		productDetail, err := c.orderUsecase.GetProductDetail(product.PRODUCT_SIZE_ID, product.QUANTITY)
 		if err != nil || productDetail == nil {
 			return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
-				MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+				MESSAGE: constant.MESSAGE_BAD_REQUEST,
 				SUCCESS: false,
 			})
 		}
 		if productDetail.QUANTITY < product.QUANTITY {
+			return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+				MESSAGE: constant.MESSAGE_BAD_REQUEST,
+				SUCCESS: false,
+			})
+		}
+		if seller_id == "" {
+			seller_id = productDetail.SELLER_ID
+		} else if seller_id != productDetail.SELLER_ID {
 			return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 				MESSAGE: constant.MESSAGE_BAD_REQUEST,
 				SUCCESS: false,
