@@ -43,5 +43,8 @@ func (u *orderUsecase) GetProductDetail(productSizeID string, quantity int) (*do
 		STATUS:          domain.ORDER_PRODUCT_PENDING,
 	}
 	return &orderProduct, nil
+}
 
+func (u *orderUsecase) GetSelfOrderDetail(orderID string, userID string) (*domain.Order, error) {
+	return u.orderRepo.GetSelfOrderDetail(orderID, userID)
 }

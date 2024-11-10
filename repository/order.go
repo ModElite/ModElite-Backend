@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"database/sql"
+
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -68,4 +70,22 @@ func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address stri
 		}
 	}
 	return tx.Commit()
+}
+
+func (r *orderRepository) GetSelfOrderDetail(orderID string, userID string) (*domain.Order, error) {
+	order := domain.Order{}
+	err := r.db.Get(&order, `SELECT * FROM "order" WHERE id = $1 AND user_id = $2;`, orderID, userID)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	orderProducts := make([]domain.OrderProduct, 0)
+	err = r.db.Select(&orderProducts, `SELECT * FROM order_product WHERE order_id = $1;`, orderID)
+	if err != nil {
+		return nil, err
+	}
+	order.ORDER_PRODUCT = &orderProducts
+	return &order, nil
 }

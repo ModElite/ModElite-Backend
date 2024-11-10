@@ -146,3 +146,38 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 		SUCCESS: true,
 	})
 }
+
+// Swagger for get order detail api that only user can access
+// @Summary Get self order detail
+// @Description Get self order detail
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id path string true "Order ID"
+// @Success 200 {object} domain.Response
+// @Error 400 {object} domain.Response
+// @Error 404 {object} domain.Response
+// @Router /api/order/self/{id} [get]
+func (c *orderController) GetSelfOrderDetail(ctx *fiber.Ctx) error {
+	userID := ctx.Locals(constant.USER_ID).(string)
+	order, err := c.orderUsecase.GetSelfOrderDetail(ctx.Params("id"), userID)
+	if order == nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_NOT_FOUND,
+			SUCCESS: false,
+		})
+	}
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_BAD_REQUEST,
+			SUCCESS: false,
+		})
+	}
+
+	return ctx.JSON(domain.Response{
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		SUCCESS: true,
+		DATA:    order,
+	})
+}

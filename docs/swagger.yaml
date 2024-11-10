@@ -586,6 +586,29 @@ paths:
       summary: Get self order
       tags:
       - Order
+  /api/order/self/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get self order detail
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get self order detail
+      tags:
+      - Order
   /api/product:
     get:
       produces:
