@@ -39,6 +39,23 @@ definitions:
     required:
     - productId
     type: object
+  payload.CreateOrderPayload:
+    properties:
+      addressId:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/payload.OrderProductPayload'
+        type: array
+      shippingPrice:
+        type: number
+      voucherId:
+        type: string
+    required:
+    - addressId
+    - products
+    - shippingPrice
+    type: object
   payload.CreateProductDTO:
     properties:
       description:
@@ -88,6 +105,16 @@ definitions:
     required:
     - label
     - show
+    type: object
+  payload.OrderProductPayload:
+    properties:
+      productSizeId:
+        type: string
+      quantity:
+        type: integer
+    required:
+    - productSizeId
+    - quantity
     type: object
   payload.ProductOptionDTO:
     properties:
@@ -417,6 +444,29 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get all order
+      tags:
+      - Order
+    post:
+      consumes:
+      - application/json
+      description: Create order
+      parameters:
+      - description: Create Order Payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.CreateOrderPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create order
       tags:
       - Order
   /api/order/self:

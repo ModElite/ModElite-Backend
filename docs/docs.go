@@ -391,6 +391,43 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create order",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Create order",
+                "parameters": [
+                    {
+                        "description": "Create Order Payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payload.CreateOrderPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
             }
         },
         "/api/order/self": {
@@ -846,6 +883,31 @@ const docTemplate = `{
                 }
             }
         },
+        "payload.CreateOrderPayload": {
+            "type": "object",
+            "required": [
+                "addressId",
+                "products",
+                "shippingPrice"
+            ],
+            "properties": {
+                "addressId": {
+                    "type": "string"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/payload.OrderProductPayload"
+                    }
+                },
+                "shippingPrice": {
+                    "type": "number"
+                },
+                "voucherId": {
+                    "type": "string"
+                }
+            }
+        },
         "payload.CreateProductDTO": {
             "type": "object",
             "required": [
@@ -915,6 +977,21 @@ const docTemplate = `{
                 },
                 "show": {
                     "type": "boolean"
+                }
+            }
+        },
+        "payload.OrderProductPayload": {
+            "type": "object",
+            "required": [
+                "productSizeId",
+                "quantity"
+            ],
+            "properties": {
+                "productSizeId": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
                 }
             }
         },
