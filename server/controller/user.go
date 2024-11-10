@@ -27,7 +27,7 @@ func NewUserController(
 // @Tags User
 // @Accept json
 // @Produce json
-// @Security Bearer
+// @Security ApiKeyAuth
 // @Success 200 {object} domain.Response
 // @Router /api/user [get]
 func (u *userController) Update(ctx *fiber.Ctx) error {

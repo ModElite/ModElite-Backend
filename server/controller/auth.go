@@ -35,7 +35,7 @@ func NewAuthController(
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Security Bearer
+// @Security ApiKeyAuth
 // @Success 200 {object} domain.Response
 // @Router /api/auth/me [get]
 func (auth *authController) Me(ctx *fiber.Ctx) error {

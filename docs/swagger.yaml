@@ -116,6 +116,28 @@ definitions:
     - label
     - show
     type: object
+  payload.CreateVoucherDTO:
+    properties:
+      code:
+        type: string
+      expiredAt:
+        type: string
+      maxDiscount:
+        type: number
+      minTotalPrice:
+        type: number
+      percentage:
+        type: number
+      quota:
+        type: integer
+    required:
+    - code
+    - expiredAt
+    - maxDiscount
+    - minTotalPrice
+    - percentage
+    - quota
+    type: object
   payload.OrderProductPayload:
     properties:
       productSizeId:
@@ -383,7 +405,7 @@ paths:
           schema:
             $ref: '#/definitions/domain.Response'
       security:
-      - Bearer: []
+      - ApiKeyAuth: []
       summary: Get user profile
       tags:
       - Auth
@@ -605,7 +627,7 @@ paths:
           schema:
             $ref: '#/definitions/domain.Response'
       security:
-      - Bearer: []
+      - ApiKeyAuth: []
       summary: Update seller
       tags:
       - Seller
@@ -627,7 +649,7 @@ paths:
           schema:
             $ref: '#/definitions/domain.Response'
       security:
-      - Bearer: []
+      - ApiKeyAuth: []
       summary: Create seller
       tags:
       - Seller
@@ -659,7 +681,7 @@ paths:
           schema:
             $ref: '#/definitions/domain.Response'
       security:
-      - Bearer: []
+      - ApiKeyAuth: []
       summary: Get all sellers by owner
       tags:
       - Seller
@@ -733,10 +755,61 @@ paths:
           schema:
             $ref: '#/definitions/domain.Response'
       security:
-      - Bearer: []
+      - ApiKeyAuth: []
       summary: Get user profile
       tags:
       - User
+  /api/voucher:
+    post:
+      consumes:
+      - application/json
+      description: Create voucher
+      parameters:
+      - description: Voucher
+        in: body
+        name: voucher
+        required: true
+        schema:
+          $ref: '#/definitions/payload.CreateVoucherDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create voucher
+      tags:
+      - Voucher
+  /api/voucher/{code}:
+    get:
+      consumes:
+      - application/json
+      description: Search voucher by code
+      parameters:
+      - description: Code
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Search voucher by code
+      tags:
+      - Voucher
 schemes:
 - http
 securityDefinitions:

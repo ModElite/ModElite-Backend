@@ -42,7 +42,7 @@ func (c *sellerController) GetAll(ctx *fiber.Ctx) error {
 
 // @Summary Get all sellers by owner
 // @Tags Seller
-// @Security Bearer
+// @Security ApiKeyAuth
 // @Produce json
 // @Success 200 {object} domain.Response
 // @Router /api/seller/owner [get]
@@ -90,7 +90,7 @@ func (c *sellerController) GetByID(ctx *fiber.Ctx) error {
 
 // @Summary Create seller
 // @Tags Seller
-// @Security Bearer
+// @Security ApiKeyAuth
 // @Accept json
 // @Produce json
 // @Param body body payload.CreateSellerDTO true "Create Seller"
@@ -127,7 +127,7 @@ func (c *sellerController) Create(ctx *fiber.Ctx) error {
 
 // @Summary Update seller
 // @Tags Seller
-// @Security Bearer
+// @Security ApiKeyAuth
 // @Accept json
 // @Produce json
 // @Param body body payload.UpdateSellerDTO true "Update Seller"
