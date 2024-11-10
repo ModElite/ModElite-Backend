@@ -31,6 +31,16 @@ definitions:
         type: string
       zipCode:
         type: string
+    required:
+    - country
+    - email
+    - firstName
+    - lastName
+    - phone
+    - state
+    - streetAddress
+    - type
+    - zipCode
     type: object
   payload.CreateFavoriteDTO:
     properties:
@@ -165,6 +175,17 @@ definitions:
         type: string
       zipCode:
         type: string
+    required:
+    - country
+    - email
+    - firstName
+    - id
+    - lastName
+    - phone
+    - state
+    - streetAddress
+    - type
+    - zipCode
     type: object
   payload.UpdateSellerDTO:
     properties:

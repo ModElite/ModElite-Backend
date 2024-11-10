@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS "thai_provinces" (
+  id UUID NOT NULL PRIMARY KEY,
+  name_th VARCHAR(150) NOT NULL
+);

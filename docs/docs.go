@@ -839,6 +839,17 @@ const docTemplate = `{
         },
         "payload.CreateAddressDTO": {
             "type": "object",
+            "required": [
+                "country",
+                "email",
+                "firstName",
+                "lastName",
+                "phone",
+                "state",
+                "streetAddress",
+                "type",
+                "zipCode"
+            ],
             "properties": {
                 "company": {
                     "type": "string"
@@ -1034,6 +1045,18 @@ const docTemplate = `{
         },
         "payload.UpdateAddressDTO": {
             "type": "object",
+            "required": [
+                "country",
+                "email",
+                "firstName",
+                "id",
+                "lastName",
+                "phone",
+                "state",
+                "streetAddress",
+                "type",
+                "zipCode"
+            ],
             "properties": {
                 "company": {
                     "type": "string"
