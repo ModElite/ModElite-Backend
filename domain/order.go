@@ -37,6 +37,12 @@ type OrderProductResponse struct {
 	PRODUCT_DESCRIPTION      string  `json:"productDescription" db:"description"`
 	PRODUCT_PRICE            float64 `json:"productPrice" db:"product_price"`
 	SIZE                     string  `json:"productSize" db:"size"`
+	SELLER_NAME              string  `json:"sellerName" db:"seller_name"`
+	SELLER_LOGO_URL          string  `json:"sellerLogoUrl" db:"seller_logo_url"`
+	SELLER_ID                string  `json:"sellerId" db:"seller_id"`
+	// seller_name
+	// seller_logo_url
+	// seller_id
 }
 
 type OrderRepository interface {

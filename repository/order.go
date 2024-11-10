@@ -39,7 +39,7 @@ func (r *orderRepository) GetSelfOrder(userID string) (*[]domain.Order, error) {
 		orderProducts := make([]domain.OrderProductResponse, 0)
 		err = r.db.Select(&orderProducts, `
 		SELECT
-			order_product."id" AS id, 
+			order_product."id" AS "id", 
 			order_product.order_id AS order_id, 
 			order_product.product_size_id AS product_size_id, 
 			order_product.status AS status, 
@@ -47,12 +47,15 @@ func (r *orderRepository) GetSelfOrder(userID string) (*[]domain.Order, error) {
 			order_product.price AS price, 
 			order_product.created_at AS created_at, 
 			order_product.updated_at AS updated_at, 
-			"size"."size" AS size, 
+			"size"."size" AS "size", 
 			product_option.label AS label, 
 			product_option.image_url AS image_url, 
-			product."name" AS name, 
+			product."name" AS "name", 
 			product.description AS description, 
-			product.price AS product_price
+			product.price AS product_price, 
+			seller."name" AS seller_name, 
+			seller.logo_url AS seller_logo_url, 
+			seller."id" AS seller_id
 		FROM
 			order_product
 			INNER JOIN
@@ -71,6 +74,10 @@ func (r *orderRepository) GetSelfOrder(userID string) (*[]domain.Order, error) {
 			"size"
 			ON 
 				product_size.size_id = "size"."id"
+			INNER JOIN
+			seller
+			ON 
+				product.seller_id = seller."id"
 		WHERE order_id = $1;
 	`, order[i].ID)
 		if err != nil {
