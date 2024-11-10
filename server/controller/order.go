@@ -96,9 +96,15 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 	for _, product := range payload.PRODUCTS {
 		// IF FOUND SEND ERROR
 		productDetail, err := c.orderUsecase.GetProductDetail(product.PRODUCT_SIZE_ID, product.QUANTITY)
-		if err != nil {
+		if err != nil || productDetail == nil {
 			return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 				MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+				SUCCESS: false,
+			})
+		}
+		if productDetail.QUANTITY < product.QUANTITY {
+			return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+				MESSAGE: constant.MESSAGE_BAD_REQUEST,
 				SUCCESS: false,
 			})
 		}

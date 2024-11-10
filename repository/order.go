@@ -56,7 +56,7 @@ func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address stri
 	// INSERT INTO order_product (order_id, product_size_id, quantity, price, status) VALUES ($1, $2, $3, $4, $5);
 	for _, orderProduct := range *order {
 		orderProductId := uuid.New().String()
-		_, err = tx.Exec(`INSERT INTO order_product (id ,order_id, product_size_id, quantity, price, status) VALUES ($1, $2, $3, $4, $5, $6);`,
+		_, err = tx.Exec(`INSERT INTO order_product (id ,order_id, product_size_id, quantity, price, status) VALUES ($1, $2, $3, $4, $5, $6); UPDATE product_size SET quantity = quantity - $4 WHERE id = $3;`,
 			orderProductId, id, orderProduct.PRODUCT_SIZE_ID, orderProduct.QUANTITY, orderProduct.PRICE, domain.ORDER_PRODUCT_PENDING)
 		if err != nil {
 			tx.Rollback()
