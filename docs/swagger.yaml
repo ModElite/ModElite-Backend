@@ -82,6 +82,10 @@ definitions:
         type: array
       sellerId:
         type: string
+      tagId:
+        items:
+          type: integer
+        type: array
     required:
     - description
     - imageUrl

@@ -1457,6 +1457,12 @@ const docTemplate = `{
                 },
                 "sellerId": {
                     "type": "string"
+                },
+                "tagId": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
