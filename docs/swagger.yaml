@@ -1019,7 +1019,7 @@ paths:
       tags:
       - Tag
   /api/user:
-    get:
+    patch:
       consumes:
       - application/json
       description: Get user profile

@@ -29,7 +29,7 @@ func NewUserController(
 // @Produce json
 // @Security ApiKeyAuth
 // @Success 200 {object} domain.Response
-// @Router /api/user [get]
+// @Router /api/user [patch]
 func (u *userController) Update(ctx *fiber.Ctx) error {
 	var body payload.UpdateUserDTO
 	if err := u.validator.ValidateBody(ctx, &body); err != nil {
