@@ -246,6 +246,20 @@ definitions:
     - logoUrl
     - name
     type: object
+  payload.UpdateUserDTO:
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      profileUrl:
+        type: string
+    required:
+    - firstName
+    - lastName
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -1022,7 +1036,14 @@ paths:
     patch:
       consumes:
       - application/json
-      description: Get user profile
+      description: Patch user profile
+      parameters:
+      - description: Patch user profile
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.UpdateUserDTO'
       produces:
       - application/json
       responses:
@@ -1030,9 +1051,17 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
       security:
       - ApiKeyAuth: []
-      summary: Get user profile
+      summary: Patch user profile
       tags:
       - User
   /api/voucher:

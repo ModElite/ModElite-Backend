@@ -1226,7 +1226,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get user profile",
+                "description": "Patch user profile",
                 "consumes": [
                     "application/json"
                 ],
@@ -1236,10 +1236,33 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "Get user profile",
+                "summary": "Patch user profile",
+                "parameters": [
+                    {
+                        "description": "Patch user profile",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payload.UpdateUserDTO"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/domain.Response"
                         }
@@ -1681,6 +1704,27 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "payload.UpdateUserDTO": {
+            "type": "object",
+            "required": [
+                "firstName",
+                "lastName"
+            ],
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "profileUrl": {
                     "type": "string"
                 }
             }

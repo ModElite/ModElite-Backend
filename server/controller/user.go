@@ -22,13 +22,16 @@ func NewUserController(
 	}
 }
 
-// @Summary Get user profile
-// @Description Get user profile
+// @Summary Patch user profile
+// @Description Patch user profile
 // @Tags User
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
+// @Param body body payload.UpdateUserDTO true "Patch user profile"
 // @Success 200 {object} domain.Response
+// @Failure 400 {object} domain.Response
+// @Failure 500 {object} domain.Response
 // @Router /api/user [patch]
 func (u *userController) Update(ctx *fiber.Ctx) error {
 	var body payload.UpdateUserDTO
