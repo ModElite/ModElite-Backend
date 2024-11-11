@@ -10,8 +10,9 @@ type Repository struct {
 	SizeRepository          SizeRepository
 	AddressRepository       AddressRepository
 	FavoriteRepository      FavoriteRepository
-	TagsRepository          TagsRepository
-	ProductTagsRepository   ProductTagsRepository
+	TagRepository           TagRepository
+	TagGroupRepository      TagGroupRepository
+	ProductTagRepository    ProductTagRepository
 	OrderRepository         OrderRepository
 	VoucherRepository       VoucherRepository
 	GeoLocationRepository   GeoLocationRepository
@@ -29,7 +30,7 @@ type Usecase struct {
 	SizeUsecase          SizeUsecase
 	AddressUsecase       AddressUsecase
 	FavoriteUsecase      FavoriteUsecase
-	TagsUsecase          TagsUsecase
+	TagUsecase           TagUsecase
 	OrderUsecase         OrderUsecase
 	VoucherUsecase       VoucherUsecase
 	GeoLocationUsecase   GeoLocationUsecase

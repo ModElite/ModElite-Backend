@@ -73,8 +73,9 @@ func initRepository(
 		ProductSizeRepository:   repository.NewProductSizeRepository(db),
 		SizeRepository:          repository.NewSizeRepository(db),
 		FavoriteRepository:      repository.NewFavoriteRepository(db),
-		TagsRepository:          repository.NewTagsRepository(db),
-		ProductTagsRepository:   repository.NewProductTagsRepository(db),
+		TagRepository:           repository.NewTagRepository(db),
+		TagGroupRepository:      repository.NewTagGroupRepository(db),
+		ProductTagRepository:    repository.NewProductTagRepository(db),
 		OrderRepository:         repository.NewOrderRepository(db),
 		VoucherRepository:       repository.NewVoucherRepository(db),
 		GeoLocationRepository:   repository.NewGeoLocationRepository(db),
@@ -94,8 +95,8 @@ func initUseCase(
 	productOptionUsecase := usecase.NewProductOptionUsecase(repo.ProductOptionRepository)
 	productSizeUsecase := usecase.NewProductSizeUsecase(repo.ProductSizeRepository)
 	sizeUsecase := usecase.NewSizeUsecase(repo.SizeRepository)
-	tagsUsecase := usecase.NewTagsUsecase(repo.TagsRepository, repo.ProductTagsRepository)
-	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, productOptionUsecase, productSizeUsecase, tagsUsecase)
+	tagUsecase := usecase.NewTagUsecase(repo.TagRepository, repo.TagGroupRepository, repo.ProductTagRepository)
+	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, productOptionUsecase, productSizeUsecase, tagUsecase)
 	favoriteUsecase := usecase.NewFavoriteUsecase(repo.FavoriteRepository, productUsecase)
 	vocherUsecase := usecase.NewVoucherUsecase(repo.VoucherRepository)
 	orderUsecase := usecase.NewOrderUsecase(repo.OrderRepository, repo.ProductRepository)
@@ -112,7 +113,7 @@ func initUseCase(
 		ProductSizeUsecase:   productSizeUsecase,
 		SizeUsecase:          sizeUsecase,
 		FavoriteUsecase:      favoriteUsecase,
-		TagsUsecase:          tagsUsecase,
+		TagUsecase:           tagUsecase,
 		OrderUsecase:         orderUsecase,
 		VoucherUsecase:       vocherUsecase,
 		GeoLocationUsecase:   geoLocationUsecase,

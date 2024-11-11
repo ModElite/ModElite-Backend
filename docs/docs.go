@@ -831,9 +831,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/tags": {
+        "/api/tag": {
             "get": {
-                "description": "Get all tags",
+                "description": "Get tag",
                 "consumes": [
                     "application/json"
                 ],
@@ -841,9 +841,115 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tags"
+                    "Tag"
                 ],
-                "summary": "Get all tags",
+                "summary": "Get tag",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tag ID",
+                        "name": "tagId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create tag",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Create tag",
+                "parameters": [
+                    {
+                        "description": "Create Tag",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payload.TagDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tag/group": {
+            "get": {
+                "description": "Get all tag group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Get all tag group",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "withTag",
+                        "name": "withTags",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -854,7 +960,12 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Create a tag",
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create tag group",
                 "consumes": [
                     "application/json"
                 ],
@@ -862,17 +973,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tags"
+                    "Tag"
                 ],
-                "summary": "Create a tag",
+                "summary": "Create tag group",
                 "parameters": [
                     {
-                        "description": "Tag",
-                        "name": "tag",
+                        "description": "Create Tag Group",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/payload.CreateTagDTO"
+                            "$ref": "#/definitions/payload.TagGroupDTO"
                         }
                     }
                 ],
@@ -882,11 +993,30 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/domain.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
                     }
                 }
-            },
-            "patch": {
-                "description": "Update a tag",
+            }
+        },
+        "/api/tag/group/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update tag group",
                 "consumes": [
                     "application/json"
                 ],
@@ -894,23 +1024,194 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tags"
+                    "Tag"
                 ],
-                "summary": "Update a tag",
+                "summary": "Update tag group",
                 "parameters": [
                     {
-                        "description": "Tag",
-                        "name": "tag",
+                        "type": "integer",
+                        "description": "Tag Group ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Tag Group",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/payload.UpdateTagDTO"
+                            "$ref": "#/definitions/payload.TagGroupDTO"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete tag group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Delete tag group",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tag Group ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tag/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update tag",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Update tag",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tag ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Tag",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payload.TagDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete tag",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Delete tag",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tag ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/domain.Response"
                         }
@@ -1182,21 +1483,6 @@ const docTemplate = `{
                 }
             }
         },
-        "payload.CreateTagDTO": {
-            "type": "object",
-            "required": [
-                "label",
-                "show"
-            ],
-            "properties": {
-                "label": {
-                    "type": "string"
-                },
-                "show": {
-                    "type": "boolean"
-                }
-            }
-        },
         "payload.CreateVoucherDTO": {
             "type": "object",
             "required": [
@@ -1280,6 +1566,42 @@ const docTemplate = `{
                 }
             }
         },
+        "payload.TagDTO": {
+            "type": "object",
+            "required": [
+                "label",
+                "tagGroupId"
+            ],
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "tagGroupId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "payload.TagGroupDTO": {
+            "type": "object",
+            "required": [
+                "label",
+                "show"
+            ],
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "show": {
+                    "type": "boolean"
+                },
+                "tag": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/payload.TagDTO"
+                    }
+                }
+            }
+        },
         "payload.UpdateAddressDTO": {
             "type": "object",
             "required": [
@@ -1354,25 +1676,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "payload.UpdateTagDTO": {
-            "type": "object",
-            "required": [
-                "id",
-                "label",
-                "show"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "label": {
-                    "type": "string"
-                },
-                "show": {
-                    "type": "boolean"
                 }
             }
         }

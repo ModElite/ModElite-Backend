@@ -106,16 +106,6 @@ definitions:
     - logoUrl
     - name
     type: object
-  payload.CreateTagDTO:
-    properties:
-      label:
-        type: string
-      show:
-        type: boolean
-    required:
-    - label
-    - show
-    type: object
   payload.CreateVoucherDTO:
     properties:
       code:
@@ -173,6 +163,30 @@ definitions:
     - quantity
     - sizeId
     type: object
+  payload.TagDTO:
+    properties:
+      label:
+        type: string
+      tagGroupId:
+        type: integer
+    required:
+    - label
+    - tagGroupId
+    type: object
+  payload.TagGroupDTO:
+    properties:
+      label:
+        type: string
+      show:
+        type: boolean
+      tag:
+        items:
+          $ref: '#/definitions/payload.TagDTO'
+        type: array
+    required:
+    - label
+    - show
+    type: object
   payload.UpdateAddressDTO:
     properties:
       company:
@@ -227,19 +241,6 @@ definitions:
     - location
     - logoUrl
     - name
-    type: object
-  payload.UpdateTagDTO:
-    properties:
-      id:
-        type: integer
-      label:
-        type: string
-      show:
-        type: boolean
-    required:
-    - id
-    - label
-    - show
     type: object
 host: localhost:8080
 info:
@@ -765,32 +766,16 @@ paths:
       summary: Get all sellers by owner
       tags:
       - Seller
-  /api/tags:
+  /api/tag:
     get:
       consumes:
       - application/json
-      description: Get all tags
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.Response'
-      summary: Get all tags
-      tags:
-      - Tags
-    patch:
-      consumes:
-      - application/json
-      description: Update a tag
+      description: Get tag
       parameters:
-      - description: Tag
-        in: body
-        name: tag
-        required: true
-        schema:
-          $ref: '#/definitions/payload.UpdateTagDTO'
+      - description: Tag ID
+        in: query
+        name: tagId
+        type: integer
       produces:
       - application/json
       responses:
@@ -798,20 +783,32 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.Response'
-      summary: Update a tag
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Get tag
       tags:
-      - Tags
+      - Tag
     post:
       consumes:
       - application/json
-      description: Create a tag
+      description: Create tag
       parameters:
-      - description: Tag
+      - description: Create Tag
         in: body
-        name: tag
+        name: body
         required: true
         schema:
-          $ref: '#/definitions/payload.CreateTagDTO'
+          $ref: '#/definitions/payload.TagDTO'
       produces:
       - application/json
       responses:
@@ -819,9 +816,204 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.Response'
-      summary: Create a tag
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create tag
       tags:
-      - Tags
+      - Tag
+  /api/tag/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete tag
+      parameters:
+      - description: Tag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete tag
+      tags:
+      - Tag
+    put:
+      consumes:
+      - application/json
+      description: Update tag
+      parameters:
+      - description: Tag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Tag
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.TagDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Update tag
+      tags:
+      - Tag
+  /api/tag/group:
+    get:
+      consumes:
+      - application/json
+      description: Get all tag group
+      parameters:
+      - description: withTag
+        in: query
+        name: withTags
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Get all tag group
+      tags:
+      - Tag
+    post:
+      consumes:
+      - application/json
+      description: Create tag group
+      parameters:
+      - description: Create Tag Group
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.TagGroupDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create tag group
+      tags:
+      - Tag
+  /api/tag/group/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete tag group
+      parameters:
+      - description: Tag Group ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete tag group
+      tags:
+      - Tag
+    put:
+      consumes:
+      - application/json
+      description: Update tag group
+      parameters:
+      - description: Tag Group ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Tag Group
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.TagGroupDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Update tag group
+      tags:
+      - Tag
   /api/user:
     get:
       consumes:
