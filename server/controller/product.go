@@ -12,6 +12,7 @@ type productController struct {
 	productUseCase domain.ProductUsecase
 	sellerUseCase  domain.SellerUsecase
 	userUseCase    domain.UserUsecase
+	tagUseCase     domain.TagUsecase
 }
 
 func NewProductController(
@@ -19,12 +20,14 @@ func NewProductController(
 	productUseCase domain.ProductUsecase,
 	sellerUseCase domain.SellerUsecase,
 	userUseCase domain.UserUsecase,
+	tagUseCase domain.TagUsecase,
 ) *productController {
 	return &productController{
 		validator:      validator,
 		productUseCase: productUseCase,
 		sellerUseCase:  sellerUseCase,
 		userUseCase:    userUseCase,
+		tagUseCase:     tagUseCase,
 	}
 }
 
@@ -179,11 +182,23 @@ func (p *productController) Create(ctx *fiber.Ctx) error {
 		PRODUCT_OPTION: &productOption,
 	}
 
-	if err := p.productUseCase.Create(product); err != nil {
+	id, err := p.productUseCase.Create(product)
+	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
 		})
+	}
+
+	if body.TAG_ID != nil {
+		for _, tagID := range *body.TAG_ID {
+			if err := p.tagUseCase.CreateProductTag(*id, tagID); err != nil {
+				return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+					SUCCESS: false,
+					MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+				})
+			}
+		}
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(domain.Response{

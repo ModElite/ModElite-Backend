@@ -7,6 +7,7 @@ type CreateProductDTO struct {
 	PRICE          float64             `json:"price" validate:"required"`
 	IMAGE_URL      string              `json:"imageUrl" validate:"required"`
 	PRODUCT_OPTION *[]ProductOptionDTO `json:"productOption" validate:"required"`
+	TAG_ID         *[]int              `json:"tagId" validate:"omitempty"`
 }
 
 type ProductOptionDTO struct {

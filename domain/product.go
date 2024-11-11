@@ -78,5 +78,5 @@ type ProductUsecase interface {
 	GetProductsBySeller(sellerID string) (*[]Product, error)
 	GetByID(id string) (*Product, error)
 	GetBySellerID(SellerID string) (*[]Product, error)
-	Create(product *Product) error
+	Create(product *Product) (id *string, err error)
 }

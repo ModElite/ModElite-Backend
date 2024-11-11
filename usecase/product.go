@@ -43,13 +43,13 @@ func (u *productUsecase) GetAllProductWithOptionsAndSizes() (*[]domain.Product, 
 		return nil, fmt.Errorf("error product getall: %w", err)
 	}
 
-	// for i, product := range *products {
-	// 	productTags, err := u.tagUsecase.GetByProductID(product.ID)
-	// 	if err != nil {
-	// 		return nil, fmt.Errorf("error product getall: %w", err)
-	// 	}
-	// 	(*products)[i].TAGS = productTags
-	// }
+	for i, product := range *products {
+		productTags, err := u.tagUsecase.GetTagByProductID(product.ID)
+		if err != nil {
+			return nil, fmt.Errorf("error product getall: %w", err)
+		}
+		(*products)[i].TAGS = productTags
+	}
 
 	return products, nil
 }
@@ -60,11 +60,11 @@ func (u *productUsecase) GetProductWithOptionsAndSizes(productId string) (*domai
 		return nil, fmt.Errorf("error product getall: %w", err)
 	}
 
-	// productTags, err := u.tagUsecase.GetByProductID(product.ID)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("error product getall: %w", err)
-	// }
-	// product.TAGS = productTags
+	productTags, err := u.tagUsecase.GetTagByProductID(product.ID)
+	if err != nil {
+		return nil, fmt.Errorf("error product getall: %w", err)
+	}
+	product.TAGS = productTags
 
 	return product, nil
 }
@@ -75,13 +75,13 @@ func (u *productUsecase) GetProductsBySeller(sellerID string) (*[]domain.Product
 		return nil, fmt.Errorf("error product getall: %w", err)
 	}
 
-	// for i, product := range *products {
-	// 	productTags, err := u.tagUsecase.GetByProductID(product.ID)
-	// 	if err != nil {
-	// 		return nil, fmt.Errorf("error product getall: %w", err)
-	// 	}
-	// 	(*products)[i].TAGS = productTags
-	// }
+	for i, product := range *products {
+		productTags, err := u.tagUsecase.GetTagByProductID(product.ID)
+		if err != nil {
+			return nil, fmt.Errorf("error product getall: %w", err)
+		}
+		(*products)[i].TAGS = productTags
+	}
 
 	return products, nil
 }
@@ -104,7 +104,7 @@ func (u *productUsecase) GetBySellerID(SellerID string) (*[]domain.Product, erro
 	return products, nil
 }
 
-func (u *productUsecase) Create(product *domain.Product) error {
+func (u *productUsecase) Create(product *domain.Product) (*string, error) {
 	product.ID = uuid.New().String()
 
 	if err := u.productRepo.Create(&domain.Product{
@@ -116,7 +116,7 @@ func (u *productUsecase) Create(product *domain.Product) error {
 		IMAGE_URL:   product.IMAGE_URL,
 		STATUS:      string(domain.ProductActive),
 	}); err != nil {
-		return fmt.Errorf("error product create: %w", err)
+		return nil, fmt.Errorf("error product create: %w", err)
 	}
 
 	for _, option := range *product.PRODUCT_OPTION {
@@ -128,7 +128,7 @@ func (u *productUsecase) Create(product *domain.Product) error {
 			LABEL:      option.LABEL,
 			IMAGE_URL:  option.IMAGE_URL,
 		}); err != nil {
-			return fmt.Errorf("error product option create: %w", err)
+			return nil, fmt.Errorf("error product option create: %w", err)
 		}
 
 		for _, size := range *option.PRODUCT_SIZE {
@@ -140,10 +140,10 @@ func (u *productUsecase) Create(product *domain.Product) error {
 				SIZE_ID:           size.SIZE_ID,
 				QUANTITY:          size.QUANTITY,
 			}); err != nil {
-				return fmt.Errorf("error product size create: %w", err)
+				return nil, fmt.Errorf("error product size create: %w", err)
 			}
 		}
 	}
 
-	return nil
+	return &product.ID, nil
 }

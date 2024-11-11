@@ -103,3 +103,29 @@ func (u *tagUsecase) UpdateTag(tag *domain.Tag) error {
 func (u *tagUsecase) DeleteTag(id int) error {
 	return u.tagRepo.Delete(id)
 }
+
+func (u *tagUsecase) GetTagByProductID(productID string) (*[]domain.Tag, error) {
+	productTags, err := u.productTagRepo.GetByProductID(productID)
+	if err != nil {
+		return nil, err
+	}
+
+	tags := make([]domain.Tag, 0)
+	for _, productTag := range *productTags {
+		tag, err := u.tagRepo.GetByID(productTag.TAG_ID)
+		if err != nil {
+			return nil, err
+		}
+		tags = append(tags, *tag)
+	}
+
+	return &tags, nil
+}
+
+func (u *tagUsecase) CreateProductTag(productID string, tagID int) error {
+	tag, err := u.tagRepo.GetByID(tagID)
+	if err != nil || tag == nil {
+		return err
+	}
+	return u.productTagRepo.Create(productID, tagID)
+}

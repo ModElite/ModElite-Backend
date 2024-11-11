@@ -99,7 +99,7 @@ func (s *FiberServer) Route() {
 	seller.Patch("/", middlewareAuth, sellerController.Update)
 
 	product := app.Group("/product")
-	productController := controller.NewProductController(validator, s.usecase.ProductUsecase, s.usecase.SellerUsecase, s.usecase.UserUsecase)
+	productController := controller.NewProductController(validator, s.usecase.ProductUsecase, s.usecase.SellerUsecase, s.usecase.UserUsecase, s.usecase.TagUsecase)
 	product.Get("/", productController.GetAllProductWithOptionsAndSizes)
 	product.Get("/seller/:id", productController.GetBySellerID)
 	product.Get("/:id", productController.GetByID)

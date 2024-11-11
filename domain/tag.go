@@ -41,4 +41,6 @@ type TagUsecase interface {
 	CreateTag(tag *Tag) error
 	UpdateTag(tag *Tag) error
 	DeleteTag(id int) error
+	GetTagByProductID(productID string) (*[]Tag, error)
+	CreateProductTag(productID string, tagID int) error
 }
