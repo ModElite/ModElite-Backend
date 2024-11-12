@@ -60,7 +60,7 @@ func (p *productController) GetAllProductWithOptionsAndSizes(ctx *fiber.Ctx) err
 // @Router /api/product/seller/{id} [get]
 func (p *productController) GetBySellerID(ctx *fiber.Ctx) error {
 	sellerId := ctx.Params("id")
-	if sellerId == "" {
+	if sellerId == "" || !p.validator.ValidateUUID(sellerId) {
 		return ctx.Status(fiber.StatusNotFound).JSON(&domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_NOT_FOUND,
@@ -102,7 +102,7 @@ func (p *productController) GetBySellerID(ctx *fiber.Ctx) error {
 // @Router /api/product/{id} [get]
 func (p *productController) GetByID(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
-	if id == "" {
+	if id == "" || !p.validator.ValidateUUID(id) {
 		return ctx.Status(fiber.StatusNotFound).JSON(&domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_NOT_FOUND,
@@ -204,5 +204,53 @@ func (p *productController) Create(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
 		SUCCESS: true,
 		MESSAGE: constant.MESSAGE_SUCCESS,
+	})
+}
+
+func (p *productController) Update(ctx *fiber.Ctx) error {
+	// TODO: Implement Update product with options and sizes and tags
+	return nil
+}
+
+// @Summary Delete product
+// @Tags Product
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id path string true "Product ID"
+// @Success 200 {object} domain.Response
+// @Router /api/product/{id} [delete]
+func (p *productController) SoftDelete(ctx *fiber.Ctx) error {
+	userId := ctx.Locals(constant.USER_ID).(string)
+	productId := ctx.Params("id", "")
+	if productId == "" || !p.validator.ValidateUUID(productId) {
+		return ctx.Status(fiber.StatusNotFound).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_NOT_FOUND,
+		})
+	}
+
+	if canEdit, err := p.productUseCase.CheckPermissionCanModifyProduct(userId, productId); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
+		})
+	} else if !canEdit {
+		return ctx.Status(fiber.StatusForbidden).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_PERMISSION_DENIED,
+			SUCCESS: false,
+		})
+	}
+
+	if err := p.productUseCase.SoftDeleteWithOptionsAndSizes(productId); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		SUCCESS: true,
 	})
 }

@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS "product" (
   image_url TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP,
   CONSTRAINT fk_seller_product FOREIGN KEY (seller_id) REFERENCES "seller"(id)
 );
 CREATE TABLE IF NOT EXISTS "product_option" (
@@ -23,6 +24,7 @@ CREATE TABLE IF NOT EXISTS "product_option" (
   image_url TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP,
   CONSTRAINT fk_seller_product_option FOREIGN KEY (product_id) REFERENCES "product"(id)
 );
 CREATE TABLE IF NOT EXISTS "size" (
@@ -38,6 +40,7 @@ CREATE TABLE IF NOT EXISTS "product_size" (
   quantity INT NOT NULL DEFAULT 0,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP,
   CONSTRAINT fk_product_option_product_size FOREIGN KEY (product_option_id) REFERENCES "product_option"(id),
   CONSTRAINT fk_size_product_size FOREIGN KEY (size_id) REFERENCES "size"(id)
 );

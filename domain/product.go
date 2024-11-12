@@ -25,6 +25,7 @@ type Product struct {
 	TAGS           *[]Tag           `json:"tags" db:"-"`
 	CREATED_AT     time.Time        `json:"createdAt" db:"created_at"`
 	UPDATED_AT     time.Time        `json:"updatedAt" db:"updated_at"`
+	DELETED_AT     *time.Time       `json:"deletedAt" db:"deleted_at"`
 }
 
 type ProductRow struct {
@@ -37,15 +38,18 @@ type ProductRow struct {
 	ImageURL        string         `db:"image_url"`
 	CreatedAt       time.Time      `db:"created_at"`
 	UpdatedAt       time.Time      `db:"updated_at"`
+	DeletedAt       *time.Time     `db:"deleted_at"`
 	OptionID        sql.NullString `db:"option_id"`
 	OptionLabel     sql.NullString `db:"label"`
 	OptionImageURL  sql.NullString `db:"option_image_url"`
 	OptionCreatedAt sql.NullTime   `db:"option_created_at"`
 	OptionUpdatedAt sql.NullTime   `db:"option_updated_at"`
+	OptionDeletedAt *time.Time     `db:"option_deleted_at"`
 	ProductSizeID   sql.NullString `db:"product_size_id"`
 	ProductSizeQty  sql.NullInt64  `db:"quantity"`
 	ProductSizeCA   sql.NullTime   `db:"product_size_created_at"`
 	ProductSizeUA   sql.NullTime   `db:"product_size_updated_at"`
+	ProductSizeDA   *time.Time     `db:"product_size_deleted_at"`
 	SizeID          sql.NullString `db:"size_id"`
 	SizeValue       sql.NullString `db:"size"`
 	SizeCreatedAt   sql.NullTime   `db:"size_created_at"`
@@ -67,11 +71,13 @@ type ProductRepository interface {
 	GetBySellerID(SellerID string) (*[]Product, error)
 	Create(product *Product) error
 	Update(product *Product) error
-	Delete(id string) error
+	SoftDelete(id string) error
+	SoftDeleteWithOptionsAndSizes(productID string) error
 	GetProductPriceQuantity(productSizeID string) (*ProductPriceQuantity, error)
 }
 
 type ProductUsecase interface {
+	CheckPermissionCanModifyProduct(ownerID string, productID string) (bool, error)
 	GetAll() (*[]Product, error)
 	GetAllProductWithOptionsAndSizes() (*[]Product, error)
 	GetProductWithOptionsAndSizes(productId string) (*Product, error)
@@ -79,4 +85,6 @@ type ProductUsecase interface {
 	GetByID(id string) (*Product, error)
 	GetBySellerID(SellerID string) (*[]Product, error)
 	Create(product *Product) (id *string, err error)
+	Update(newProduct *Product) error
+	SoftDeleteWithOptionsAndSizes(id string) error
 }

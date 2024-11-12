@@ -59,3 +59,11 @@ func (r *productSizeRepository) Update(productSize *domain.ProductSize) error {
 	}
 	return nil
 }
+
+func (r *productSizeRepository) SoftDelete(id string) error {
+	_, err := r.db.Exec("UPDATE product_size SET deleted_at = NOW() WHERE id = $1", id)
+	if err != nil {
+		return fmt.Errorf("error cannot delete product size: %w", err)
+	}
+	return nil
+}

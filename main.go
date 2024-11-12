@@ -96,7 +96,7 @@ func initUseCase(
 	productSizeUsecase := usecase.NewProductSizeUsecase(repo.ProductSizeRepository)
 	sizeUsecase := usecase.NewSizeUsecase(repo.SizeRepository)
 	tagUsecase := usecase.NewTagUsecase(repo.TagRepository, repo.TagGroupRepository, repo.ProductTagRepository)
-	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, productOptionUsecase, productSizeUsecase, tagUsecase)
+	productUsecase := usecase.NewProductUsecase(repo.ProductRepository, productOptionUsecase, productSizeUsecase, tagUsecase, userUsecase, sellerUsecase)
 	favoriteUsecase := usecase.NewFavoriteUsecase(repo.FavoriteRepository, productUsecase)
 	vocherUsecase := usecase.NewVoucherUsecase(repo.VoucherRepository)
 	orderUsecase := usecase.NewOrderUsecase(repo.OrderRepository, repo.ProductRepository)

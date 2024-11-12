@@ -57,3 +57,11 @@ func (r *productOptionRepository) Update(productOption *domain.ProductOption) er
 	}
 	return nil
 }
+
+func (r *productOptionRepository) SoftDelete(id string) error {
+	_, err := r.db.Exec("UPDATE product_option SET deleted_at = NOW() WHERE id = $1", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

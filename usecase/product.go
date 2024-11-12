@@ -12,6 +12,8 @@ type productUsecase struct {
 	productOptionUsecase domain.ProductOptionUsecase
 	productSizeUsecase   domain.ProductSizeUsecase
 	tagUsecase           domain.TagUsecase
+	userUsecase          domain.UserUsecase
+	sellerUsecase        domain.SellerUsecase
 }
 
 func NewProductUsecase(
@@ -19,13 +21,37 @@ func NewProductUsecase(
 	productOptionUsecase domain.ProductOptionUsecase,
 	productSizeUsecase domain.ProductSizeUsecase,
 	tagUsecase domain.TagUsecase,
+	userUsecase domain.UserUsecase,
+	sellerUsecase domain.SellerUsecase,
 ) domain.ProductUsecase {
 	return &productUsecase{
 		productRepo:          productRepo,
 		productOptionUsecase: productOptionUsecase,
 		productSizeUsecase:   productSizeUsecase,
 		tagUsecase:           tagUsecase,
+		userUsecase:          userUsecase,
+		sellerUsecase:        sellerUsecase,
 	}
+}
+
+func (u *productUsecase) CheckPermissionCanModifyProduct(ownerID string, productID string) (bool, error) {
+	product, err := u.productRepo.GetByID(productID)
+	if err != nil || product == nil {
+		return false, fmt.Errorf("error product getbyid: %w", err)
+	}
+
+	seller, err := u.sellerUsecase.GetByID(product.SELLER_ID)
+	if err != nil || seller == nil {
+		return false, fmt.Errorf("error seller getbyid: %w", err)
+	} else if seller.OWNER_ID != ownerID {
+		if isAdmin, err := u.userUsecase.CheckAdmin(ownerID); err != nil {
+			return false, fmt.Errorf("error user checkadmin: %w", err)
+		} else if !isAdmin {
+			return false, nil
+		}
+	}
+
+	return true, nil
 }
 
 func (u *productUsecase) GetAll() (*[]domain.Product, error) {
@@ -58,6 +84,8 @@ func (u *productUsecase) GetProductWithOptionsAndSizes(productId string) (*domai
 	product, err := u.productRepo.GetProductWithOptionsAndSizes(productId)
 	if err != nil {
 		return nil, fmt.Errorf("error product getall: %w", err)
+	} else if product == nil {
+		return nil, nil
 	}
 
 	productTags, err := u.tagUsecase.GetTagByProductID(product.ID)
@@ -146,4 +174,17 @@ func (u *productUsecase) Create(product *domain.Product) (*string, error) {
 	}
 
 	return &product.ID, nil
+}
+
+func (u *productUsecase) Update(newProduct *domain.Product) error {
+
+	return nil
+}
+
+func (u *productUsecase) SoftDeleteWithOptionsAndSizes(id string) error {
+	if err := u.productRepo.SoftDeleteWithOptionsAndSizes(id); err != nil {
+		return fmt.Errorf("error product softdelete: %w", err)
+	}
+
+	return nil
 }

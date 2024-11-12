@@ -21,14 +21,15 @@ func NewProductRepository(db *sqlx.DB) domain.ProductRepository {
 
 func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Product, error) {
 	query := `
-		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at,
-				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at,
-				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at,
+		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
+				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at, po.deleted_at AS option_deleted_at,
+				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at, ps.deleted_at AS product_size_deleted_at,
 				s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at
 		FROM product p
-		LEFT JOIN product_option po ON po.product_id = p.id
-		LEFT JOIN product_size ps ON ps.product_option_id = po.id
+		LEFT JOIN product_option po ON po.product_id = p.id AND po.deleted_at ISNULL
+		LEFT JOIN product_size ps ON ps.product_option_id = po.id AND ps.deleted_at ISNULL
 		LEFT JOIN size s ON s.id = ps.size_id
+		WHERE p.deleted_at ISNULL
 		ORDER BY p.id, po.id, ps.id
 	`
 
@@ -62,6 +63,7 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Produc
 				PRODUCT_OPTION: &[]domain.ProductOption{},
 				CREATED_AT:     row.CreatedAt,
 				UPDATED_AT:     row.UpdatedAt,
+				DELETED_AT:     row.DeletedAt,
 			}
 			productsMap[row.ProductID] = product
 		}
@@ -82,6 +84,7 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Produc
 					PRODUCT_SIZE: &[]domain.ProductSize{},
 					CREATED_AT:   row.OptionCreatedAt.Time,
 					UPDATED_AT:   row.OptionUpdatedAt.Time,
+					DELETED_AT:   row.OptionDeletedAt,
 				}
 				*product.PRODUCT_OPTION = append(*product.PRODUCT_OPTION, *option)
 			}
@@ -101,6 +104,7 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Produc
 					QUANTITY:   int(row.ProductSizeQty.Int64),
 					CREATED_AT: row.ProductSizeCA.Time,
 					UPDATED_AT: row.ProductSizeUA.Time,
+					DELETED_AT: row.ProductSizeDA,
 				}
 				*option.PRODUCT_SIZE = append(*option.PRODUCT_SIZE, ps)
 			}
@@ -117,15 +121,15 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Produc
 
 func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*domain.Product, error) {
 	query := `
-		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at,
-				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at,
-				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at,
+		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
+				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at, po.deleted_at AS option_deleted_at,
+				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at, ps.deleted_at AS product_size_deleted_at,
 				s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at
 		FROM product p
-		LEFT JOIN product_option po ON po.product_id = p.id
-		LEFT JOIN product_size ps ON ps.product_option_id = po.id
+		LEFT JOIN product_option po ON po.product_id = p.id AND po.deleted_at ISNULL
+		LEFT JOIN product_size ps ON ps.product_option_id = po.id AND ps.deleted_at ISNULL
 		LEFT JOIN size s ON s.id = ps.size_id
-		WHERE p.id = $1
+		WHERE p.id = $1 AND p.deleted_at ISNULL
 		ORDER BY po.id, ps.id
 	`
 
@@ -160,6 +164,7 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*do
 				PRODUCT_OPTION: &[]domain.ProductOption{},
 				CREATED_AT:     row.CreatedAt,
 				UPDATED_AT:     row.UpdatedAt,
+				DELETED_AT:     row.DeletedAt,
 			}
 		}
 
@@ -176,6 +181,7 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*do
 					PRODUCT_SIZE: &[]domain.ProductSize{},
 					CREATED_AT:   row.OptionCreatedAt.Time,
 					UPDATED_AT:   row.OptionUpdatedAt.Time,
+					DELETED_AT:   row.OptionDeletedAt,
 				}
 				productOptionsMap[optionID] = option
 				*product.PRODUCT_OPTION = append(*product.PRODUCT_OPTION, *option)
@@ -195,6 +201,7 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*do
 					QUANTITY:   int(row.ProductSizeQty.Int64),
 					CREATED_AT: row.ProductSizeCA.Time,
 					UPDATED_AT: row.ProductSizeUA.Time,
+					DELETED_AT: row.ProductSizeDA,
 				}
 				*option.PRODUCT_SIZE = append(*option.PRODUCT_SIZE, ps)
 			}
@@ -202,7 +209,7 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*do
 	}
 
 	if product == nil {
-		return nil, fmt.Errorf("product with ID %s not found", productID)
+		return nil, nil
 	}
 
 	return product, nil
@@ -210,15 +217,15 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*do
 
 func (r *productRepository) GetProductsBySeller(sellerID string) (*[]domain.Product, error) {
 	query := `
-		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at,
-				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at,
-				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at,
+		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
+				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at, po.deleted_at AS option_deleted_at,
+				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at, ps.deleted_at AS product_size_deleted_at,
 				s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at
 		FROM product p
-		LEFT JOIN product_option po ON po.product_id = p.id
-		LEFT JOIN product_size ps ON ps.product_option_id = po.id
+		LEFT JOIN product_option po ON po.product_id = p.id AND po.deleted_at ISNULL
+		LEFT JOIN product_size ps ON ps.product_option_id = po.id AND ps.deleted_at ISNULL
 		LEFT JOIN size s ON s.id = ps.size_id
-		WHERE p.seller_id = $1
+		WHERE p.seller_id = $1 AND p.deleted_at ISNULL
 		ORDER BY p.id, po.id, ps.id
 	`
 
@@ -252,6 +259,7 @@ func (r *productRepository) GetProductsBySeller(sellerID string) (*[]domain.Prod
 				PRODUCT_OPTION: &[]domain.ProductOption{}, // Initialize as empty slice
 				CREATED_AT:     row.CreatedAt,
 				UPDATED_AT:     row.UpdatedAt,
+				DELETED_AT:     row.DeletedAt,
 			}
 			productsMap[row.ProductID] = product
 		}
@@ -276,6 +284,7 @@ func (r *productRepository) GetProductsBySeller(sellerID string) (*[]domain.Prod
 					PRODUCT_SIZE: &[]domain.ProductSize{},
 					CREATED_AT:   row.OptionCreatedAt.Time,
 					UPDATED_AT:   row.OptionUpdatedAt.Time,
+					DELETED_AT:   row.OptionDeletedAt,
 				}
 				*product.PRODUCT_OPTION = append(*product.PRODUCT_OPTION, *option)
 			}
@@ -295,6 +304,7 @@ func (r *productRepository) GetProductsBySeller(sellerID string) (*[]domain.Prod
 					QUANTITY:   int(row.ProductSizeQty.Int64),
 					CREATED_AT: row.ProductSizeCA.Time,
 					UPDATED_AT: row.ProductSizeUA.Time,
+					DELETED_AT: row.ProductSizeDA,
 				}
 				*option.PRODUCT_SIZE = append(*option.PRODUCT_SIZE, ps)
 			}
@@ -356,11 +366,59 @@ func (r *productRepository) Update(product *domain.Product) error {
 	return nil
 }
 
-func (r *productRepository) Delete(id string) error {
-	_, err := r.db.Exec("DELETE FROM product WHERE id = $1", id)
+func (r *productRepository) SoftDelete(id string) error {
+	_, err := r.db.Exec("UPDATE product SET deleted_at = NOW() WHERE id = $1", id)
 	if err != nil {
-		return fmt.Errorf("error deleting product: %w", err)
+		return fmt.Errorf("error soft deleting product: %w", err)
 	}
+	return nil
+}
+
+func (r *productRepository) SoftDeleteWithOptionsAndSizes(productID string) error {
+	tx, err := r.db.Begin()
+	if err != nil {
+		return fmt.Errorf("error starting transaction: %w", err)
+	}
+	// Soft delete product
+	_, err = tx.Exec("UPDATE product SET deleted_at = NOW() WHERE id = $1", productID)
+	if err != nil {
+		if rollbackErr := tx.Rollback(); rollbackErr != nil {
+			return fmt.Errorf("error rolling back transaction: %w", rollbackErr)
+		}
+		return fmt.Errorf("error soft deleting product: %w", err)
+	}
+
+	// Soft delete product options
+	_, err = tx.Exec("UPDATE product_option SET deleted_at = NOW() WHERE product_id = $1", productID)
+	if err != nil {
+		if rollbackErr := tx.Rollback(); rollbackErr != nil {
+			return fmt.Errorf("error rolling back transaction: %w", rollbackErr)
+		}
+		return fmt.Errorf("error soft deleting product options: %w", err)
+	}
+
+	// Soft delete product sizes
+	_, err = tx.Exec(`
+		UPDATE 
+			product_size ps
+		SET
+			deleted_at = NOW()
+		FROM
+			product_option po
+		WHERE
+			ps.product_option_id = po.id AND po.product_id = $1
+		`, productID)
+	if err != nil {
+		if rollbackErr := tx.Rollback(); rollbackErr != nil {
+			return fmt.Errorf("error rolling back transaction: %w", rollbackErr)
+		}
+		return fmt.Errorf("error soft deleting product sizes: %w", err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("error committing transaction: %w", err)
+	}
+
 	return nil
 }
 

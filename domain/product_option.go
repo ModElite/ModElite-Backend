@@ -10,6 +10,7 @@ type ProductOption struct {
 	IMAGE_URL    string         `json:"imageUrl" db:"image_url"`
 	CREATED_AT   time.Time      `json:"createdAt" db:"created_at"`
 	UPDATED_AT   time.Time      `json:"updatedAt" db:"updated_at"`
+	DELETED_AT   *time.Time     `json:"deletedAt" db:"deleted_at"`
 }
 
 type ProductOptionRepository interface {
@@ -18,6 +19,7 @@ type ProductOptionRepository interface {
 	GetByProductID(productID string) (*[]ProductOption, error)
 	Create(productOption *ProductOption) error
 	Update(productOption *ProductOption) error
+	SoftDelete(id string) error
 }
 
 type ProductOptionUsecase interface {
