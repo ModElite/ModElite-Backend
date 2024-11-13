@@ -251,6 +251,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Get address By User ID
       tags:
       - Address
@@ -276,6 +278,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Create Address
       tags:
       - Address
@@ -301,7 +305,35 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Delete Address
+      tags:
+      - Address
+    get:
+      consumes:
+      - application/json
+      description: Get By ID
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get By ID
       tags:
       - Address
     put:
@@ -331,6 +363,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
       summary: Update Address
       tags:
       - Address

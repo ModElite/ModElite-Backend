@@ -32,6 +32,7 @@ func NewAddressController(
 // @Tags Address
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Success 200 {object} domain.Response
 // @Failure 500 {object} domain.Response
 // @Router /api/address [get]
@@ -50,11 +51,60 @@ func (a *addressController) GetByUserID(ctx *fiber.Ctx) error {
 	})
 }
 
+// @Summary Get By ID
+// @Description Get By ID
+// @Tags Address
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id path int true "Address ID"
+// @Success 200 {object} domain.Response
+// @Failure 500 {object} domain.Response
+// @Router /api/address/{id} [get]
+func (a *addressController) GetByID(ctx *fiber.Ctx) error {
+	addressID, err := strconv.Atoi(ctx.Params("id"))
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_BAD_REQUEST,
+			SUCCESS: false,
+		})
+	}
+
+	address, err := a.addressUsecase.GetAddressByID(addressID)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
+		})
+	} else if address == nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_NOT_FOUND,
+			SUCCESS: false,
+		})
+	}
+
+	if address.USER_ID != ctx.Locals(constant.USER_ID).(string) {
+		if isAdmin, err := a.userUsecase.CheckAdmin(ctx.Locals(constant.USER_ID).(string)); err != nil || !isAdmin {
+			return ctx.Status(fiber.StatusForbidden).JSON(domain.Response{
+				MESSAGE: constant.MESSAGE_PERMISSION_DENIED,
+				SUCCESS: false,
+			})
+		}
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		SUCCESS: true,
+		DATA:    address,
+	})
+}
+
 // @Summary Create Address
 // @Description Create Address
 // @Tags Address
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param address body payload.AddressDTO true "Address"
 // @Success 200 {object} domain.Response
 // @Failure 500 {object} domain.Response
@@ -99,6 +149,7 @@ func (a *addressController) Create(ctx *fiber.Ctx) error {
 // @Tags Address
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param id path int true "Address ID"
 // @Param address body payload.AddressDTO true "Address"
 // @Success 200 {object} domain.Response
@@ -160,6 +211,7 @@ func (a *addressController) Update(ctx *fiber.Ctx) error {
 // @Tags Address
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param id path int true "Address ID"
 // @Success 200 {object} domain.Response
 // @Failure 500 {object} domain.Response

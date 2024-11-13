@@ -32,7 +32,7 @@ func (r *addressRepository) GetById(id int) (*domain.Address, error) {
 	address := domain.Address{}
 	err := r.db.Get(&address, "SELECT * FROM address WHERE id = $1", id)
 	if err == sql.ErrNoRows {
-		return nil, fmt.Errorf("address with id %d not found", id)
+		return nil, nil
 	} else if err != nil {
 		return nil, err
 	}
