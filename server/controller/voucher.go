@@ -26,7 +26,7 @@ func NewVoucherController(validator domain.ValidatorUsecase, voucherUsecase doma
 // @Produce json
 // @Security ApiKeyAuth
 // @Param code path string true "Code"
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=domain.Voucher}
 // @Router /api/voucher/{code} [get]
 func (c *voucherController) Search(ctx *fiber.Ctx) error {
 	code := ctx.Params("code", "")
@@ -46,7 +46,7 @@ func (c *voucherController) Search(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(domain.Response{
-		MESSAGE: "Success",
+		MESSAGE: constant.MESSAGE_SUCCESS,
 		SUCCESS: true,
 		DATA:    voucher,
 	})
@@ -96,7 +96,7 @@ func (c *voucherController) CreateVoucher(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(domain.Response{
-		MESSAGE: "Success",
+		MESSAGE: constant.MESSAGE_SUCCESS,
 		SUCCESS: true,
 	})
 }

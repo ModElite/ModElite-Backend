@@ -37,7 +37,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Address"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -123,7 +138,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/domain.Address"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -251,7 +278,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -325,7 +364,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/domain.User"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -353,7 +404,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Favorite"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -459,7 +525,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.District"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -482,7 +563,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Province"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -514,7 +610,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.SubDistrict"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -542,7 +653,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Order"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -607,7 +733,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Order"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -644,7 +785,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/domain.Order"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -663,12 +816,32 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Product"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -722,7 +895,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Product"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -750,7 +938,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/domain.Product"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -803,7 +1003,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Seller"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -899,7 +1114,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Seller"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -927,7 +1157,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/domain.Seller"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -935,7 +1177,7 @@ const docTemplate = `{
         },
         "/api/tag": {
             "get": {
-                "description": "Get tag",
+                "description": "Get all tag",
                 "consumes": [
                     "application/json"
                 ],
@@ -945,32 +1187,27 @@ const docTemplate = `{
                 "tags": [
                     "Tag"
                 ],
-                "summary": "Get tag",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Tag ID",
-                        "name": "tagId",
-                        "in": "query"
-                    }
-                ],
+                "summary": "Get all tag",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/domain.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Tag"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -1041,7 +1278,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tag"
+                    "TagGroup"
                 ],
                 "summary": "Get all tag group",
                 "parameters": [
@@ -1056,7 +1293,22 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.TagGroup"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -1075,7 +1327,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tag"
+                    "TagGroup"
                 ],
                 "summary": "Create tag group",
                 "parameters": [
@@ -1126,7 +1378,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tag"
+                    "TagGroup"
                 ],
                 "summary": "Update tag group",
                 "parameters": [
@@ -1182,7 +1434,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tag"
+                    "TagGroup"
                 ],
                 "summary": "Delete tag group",
                 "parameters": [
@@ -1217,6 +1469,66 @@ const docTemplate = `{
             }
         },
         "/api/tag/{id}": {
+            "get": {
+                "description": "Get tag",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Get tag",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tag ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/domain.Tag"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -1448,7 +1760,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/domain.Voucher"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -1456,6 +1780,383 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "domain.AccountType": {
+            "type": "string",
+            "enum": [
+                "ADMIN",
+                "USER"
+            ],
+            "x-enum-varnames": [
+                "AdminAccount",
+                "UserAccount"
+            ]
+        },
+        "domain.Address": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "default": {
+                    "type": "boolean"
+                },
+                "district": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "province": {
+                    "type": "string"
+                },
+                "subDistrict": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                },
+                "zipCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.District": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "nameTh": {
+                    "type": "string"
+                },
+                "provinceId": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Favorite": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "product": {
+                    "$ref": "#/definitions/domain.Product"
+                },
+                "productId": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/domain.User"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Order": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "discount": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "orderProduct": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.OrderProduct"
+                    }
+                },
+                "orderProductData": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.OrderProductResponse"
+                    }
+                },
+                "productPrice": {
+                    "type": "number"
+                },
+                "shippingPrice": {
+                    "type": "number"
+                },
+                "status": {
+                    "$ref": "#/definitions/domain.OrderStatusType"
+                },
+                "totalPrice": {
+                    "type": "number"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/domain.User"
+                },
+                "userId": {
+                    "type": "string"
+                },
+                "voucherCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.OrderProduct": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "orderId": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "productSizeId": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "sellerId": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/domain.OrderProductStatus"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.OrderProductResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "orderId": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "productDescription": {
+                    "type": "string"
+                },
+                "productName": {
+                    "type": "string"
+                },
+                "productOptionImageUrl": {
+                    "type": "string"
+                },
+                "productOptionLabel": {
+                    "type": "string"
+                },
+                "productPrice": {
+                    "type": "number"
+                },
+                "productSize": {
+                    "type": "string"
+                },
+                "productSizeId": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "sellerId": {
+                    "type": "string"
+                },
+                "sellerLogoUrl": {
+                    "type": "string"
+                },
+                "sellerName": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/domain.OrderProductStatus"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.OrderProductStatus": {
+            "type": "string",
+            "enum": [
+                "PENDING",
+                "DELIVERY_ON_THE_WAY"
+            ],
+            "x-enum-varnames": [
+                "ORDER_PRODUCT_PENDING",
+                "ORDER_PRODUCT_DELIVERY_ON_THE_WAY"
+            ]
+        },
+        "domain.OrderStatusType": {
+            "type": "string",
+            "enum": [
+                "PENDING",
+                "PAYMENT_SUCCESS",
+                "REFUND",
+                "END",
+                "CANCEL"
+            ],
+            "x-enum-varnames": [
+                "ORDER_PENDING",
+                "ORDER_PAYMENT_SUCCESS",
+                "ORDER_REFUND",
+                "ORDER_END",
+                "ORDER_CANCEL"
+            ]
+        },
+        "domain.Product": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "productOption": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.ProductOption"
+                    }
+                },
+                "sellerId": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Tag"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.ProductOption": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "productSize": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.ProductSize"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.ProductSize": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "size": {
+                    "$ref": "#/definitions/domain.Size"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Province": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "nameTh": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.Response": {
             "type": "object",
             "properties": {
@@ -1466,6 +2167,173 @@ const docTemplate = `{
                 },
                 "success": {
                     "type": "boolean"
+                }
+            }
+        },
+        "domain.Seller": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isVerify": {
+                    "type": "boolean"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "logoUrl": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ownerId": {
+                    "type": "string"
+                },
+                "updateAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Size": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.SubDistrict": {
+            "type": "object",
+            "properties": {
+                "districtId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "nameTh": {
+                    "type": "string"
+                },
+                "zipcode": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Tag": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "tagGroupId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "domain.TagGroup": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "show": {
+                    "type": "boolean"
+                },
+                "tag": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Tag"
+                    }
+                }
+            }
+        },
+        "domain.User": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "google_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "profileUrl": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/domain.AccountType"
+                },
+                "updateAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Voucher": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "expiredAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "maxDiscount": {
+                    "type": "number"
+                },
+                "minTotalPrice": {
+                    "type": "number"
+                },
+                "percentage": {
+                    "type": "number"
+                },
+                "quota": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },

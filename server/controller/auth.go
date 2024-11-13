@@ -36,7 +36,7 @@ func NewAuthController(
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=domain.User}
 // @Router /api/auth/me [get]
 func (auth *authController) Me(ctx *fiber.Ctx) error {
 	user, err := auth.userUsecase.Get(ctx.Locals(constant.USER_ID).(string))
@@ -64,7 +64,7 @@ func (auth *authController) Me(ctx *fiber.Ctx) error {
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=string}
 // @Router /api/auth/google [get]
 // @Param redirectUrl query string false "Redirect url"
 func (auth *authController) GetUrl(ctx *fiber.Ctx) error {

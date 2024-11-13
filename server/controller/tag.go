@@ -27,11 +27,11 @@ func NewTagController(
 // GetAllTagGroup godoc
 // @Summary Get all tag group
 // @Description Get all tag group
-// @Tags Tag
+// @Tags TagGroup
 // @Accept json
 // @Produce json
 // @Param withTags query bool false "withTag"
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.TagGroup}
 // @Router /api/tag/group [get]
 func (c *tagController) GetAllTagGroup(ctx *fiber.Ctx) error {
 	withTags, err := strconv.ParseBool(ctx.Query("withTags", "false"))
@@ -66,7 +66,7 @@ func (c *tagController) GetAllTagGroup(ctx *fiber.Ctx) error {
 // CreateTagGroup godoc
 // @Summary Create tag group
 // @Description Create tag group
-// @Tags Tag
+// @Tags TagGroup
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -117,7 +117,7 @@ func (c *tagController) CreateTagGroup(ctx *fiber.Ctx) error {
 // UpdateTagGroup godoc
 // @Summary Update tag group
 // @Description Update tag group
-// @Tags Tag
+// @Tags TagGroup
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -164,7 +164,7 @@ func (c *tagController) UpdateTagGroup(ctx *fiber.Ctx) error {
 // DeleteTagGroup godoc
 // @Summary Delete tag group
 // @Description Delete tag group
-// @Tags Tag
+// @Tags TagGroup
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -195,61 +195,70 @@ func (c *tagController) DeleteTagGroup(ctx *fiber.Ctx) error {
 	})
 }
 
+// GetAllTag godoc
+// @Summary Get all tag
+// @Description Get all tag
+// @Tags Tag
+// @Accept json
+// @Produce json
+// @Success 200 {object} domain.Response{data=[]domain.Tag}
+// @Failure 500 {object} domain.Response
+// @Router /api/tag [get]
+func (c *tagController) GetAllTag(ctx *fiber.Ctx) error {
+	tags, err := c.tagUseCase.GetAllTag()
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		SUCCESS: true,
+		DATA:    tags,
+	})
+}
+
 // GetTag godoc
 // @Summary Get tag
 // @Description Get tag
 // @Tags Tag
 // @Accept json
 // @Produce json
-// @Param tagId query int false "Tag ID"
-// @Success 200 {object} domain.Response
+// @Param id path int true "Tag ID"
+// @Success 200 {object} domain.Response{data=domain.Tag}
 // @Failure 400 {object} domain.Response
 // @Failure 404 {object} domain.Response
 // @Failure 500 {object} domain.Response
-// @Router /api/tag [get]
+// @Router /api/tag/{id} [get]
 func (c *tagController) GetTag(ctx *fiber.Ctx) error {
-	tagId, err := strconv.ParseInt(ctx.Query("tagId", "0"), 10, 64)
-	if err != nil || tagId < 0 {
+	tagId, err := strconv.ParseInt(ctx.Params("id", "0"), 10, 64)
+	if err != nil || tagId <= 0 {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_BAD_REQUEST,
 			SUCCESS: false,
 		})
 	}
 
-	if tagId == 0 {
-		tags, err := c.tagUseCase.GetAllTag()
-		if err != nil {
-			return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
-				MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
-				SUCCESS: false,
-			})
-		}
-
-		return ctx.Status(fiber.StatusOK).JSON(domain.Response{
-			MESSAGE: constant.MESSAGE_SUCCESS,
-			SUCCESS: true,
-			DATA:    tags,
+	tag, err := c.tagUseCase.GetTagByID(int(tagId))
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
 		})
-	} else {
-		tag, err := c.tagUseCase.GetTagByID(int(tagId))
-		if err != nil {
-			return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
-				MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
-				SUCCESS: false,
-			})
-		} else if tag == nil {
-			return ctx.Status(fiber.StatusNotFound).JSON(domain.Response{
-				MESSAGE: constant.MESSAGE_NOT_FOUND,
-				SUCCESS: false,
-			})
-		}
-
-		return ctx.Status(fiber.StatusOK).JSON(domain.Response{
-			MESSAGE: constant.MESSAGE_SUCCESS,
-			SUCCESS: true,
-			DATA:    tag,
+	} else if tag == nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_NOT_FOUND,
+			SUCCESS: false,
 		})
 	}
+
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		SUCCESS: true,
+		DATA:    tag,
+	})
 }
 
 // CreateTag godoc

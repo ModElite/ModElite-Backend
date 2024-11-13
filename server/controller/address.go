@@ -33,7 +33,7 @@ func NewAddressController(
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.Address}
 // @Failure 500 {object} domain.Response
 // @Router /api/address [get]
 func (a *addressController) GetByUserID(ctx *fiber.Ctx) error {
@@ -58,7 +58,7 @@ func (a *addressController) GetByUserID(ctx *fiber.Ctx) error {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param id path int true "Address ID"
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=domain.Address}
 // @Failure 500 {object} domain.Response
 // @Router /api/address/{id} [get]
 func (a *addressController) GetByID(ctx *fiber.Ctx) error {

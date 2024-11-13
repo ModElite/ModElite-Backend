@@ -27,7 +27,7 @@ func NewGeoLocationController(
 // @Tags GeoLocation
 // @Accept json
 // @Produce json
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.Province}
 // @Router /api/geo-location/provinces [get]
 func (c *geoLocationController) GetProvinces(ctx *fiber.Ctx) error {
 	provinces, err := c.geoLocationUsecase.GetProvinces()
@@ -52,7 +52,7 @@ func (c *geoLocationController) GetProvinces(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param province_id path string true "Province ID"
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.District}
 // @Router /api/geo-location/districts/{province_id} [get]
 func (c *geoLocationController) GetDistrictsByProvinceId(ctx *fiber.Ctx) error {
 	provinceId := ctx.Params("province_id")
@@ -89,7 +89,7 @@ func (c *geoLocationController) GetDistrictsByProvinceId(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param district_id path string true "District ID"
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.SubDistrict}
 // @Router /api/geo-location/sub-districts/{district_id} [get]
 func (c *geoLocationController) GetSubDistrictsByDistrictId(ctx *fiber.Ctx) error {
 	districtId := ctx.Params("district_id")

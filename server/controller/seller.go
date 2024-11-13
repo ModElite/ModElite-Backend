@@ -22,7 +22,7 @@ func NewSellerController(validator domain.ValidatorUsecase, sellerUsecase domain
 // @Summary Get all sellers
 // @Tags Seller
 // @Produce json
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.Seller}
 // @Router /api/seller [get]
 func (c *sellerController) GetAll(ctx *fiber.Ctx) error {
 	sellers, err := c.sellerUsecase.GetAll()
@@ -44,7 +44,7 @@ func (c *sellerController) GetAll(ctx *fiber.Ctx) error {
 // @Tags Seller
 // @Security ApiKeyAuth
 // @Produce json
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.Seller}
 // @Router /api/seller/owner [get]
 func (c *sellerController) GetByOwner(ctx *fiber.Ctx) error {
 	userId := ctx.Locals(constant.USER_ID).(string)
@@ -68,7 +68,7 @@ func (c *sellerController) GetByOwner(ctx *fiber.Ctx) error {
 // @Tags Seller
 // @Produce json
 // @Param id path string true "Seller ID"
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=domain.Seller}
 // @Router /api/seller/{id} [get]
 func (c *sellerController) GetByID(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")

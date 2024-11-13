@@ -27,7 +27,7 @@ func NewOrderController(validator domain.ValidatorUsecase, orderUsecase domain.O
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.Order}
 // @Router /api/order [get]
 func (c *orderController) GetAll(ctx *fiber.Ctx) error {
 	orders, err := c.orderUsecase.GetAll()
@@ -52,7 +52,7 @@ func (c *orderController) GetAll(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.Order}
 // @Router /api/order/self [get]
 func (c *orderController) GetSelfOrder(ctx *fiber.Ctx) error {
 	userID := ctx.Locals(constant.USER_ID).(string)
@@ -165,7 +165,7 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param id path string true "Order ID"
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=domain.Order}
 // @Error 400 {object} domain.Response
 // @Error 404 {object} domain.Response
 // @Router /api/order/self/{id} [get]

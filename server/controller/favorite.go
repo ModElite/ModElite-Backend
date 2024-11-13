@@ -45,7 +45,7 @@ func (fc *favoriteController) GetAll(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.Favorite}
 // @Router /api/favorite [get]
 func (fc *favoriteController) GetByUserID(ctx *fiber.Ctx) error {
 	userID := ctx.Locals(constant.USER_ID).(string)

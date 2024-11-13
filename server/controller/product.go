@@ -34,7 +34,7 @@ func NewProductController(
 // @Summary Get all products
 // @Tags Product
 // @Produce json
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.Product}
 // @Router /api/product [get]
 func (p *productController) GetAllProductWithOptionsAndSizes(ctx *fiber.Ctx) error {
 	products, err := p.productUseCase.GetAllProductWithOptionsAndSizes()
@@ -56,7 +56,7 @@ func (p *productController) GetAllProductWithOptionsAndSizes(ctx *fiber.Ctx) err
 // @Tags Product
 // @Produce json
 // @Param id path string true "Seller ID"
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=[]domain.Product}
 // @Router /api/product/seller/{id} [get]
 func (p *productController) GetBySellerID(ctx *fiber.Ctx) error {
 	sellerId := ctx.Params("id")
@@ -98,7 +98,7 @@ func (p *productController) GetBySellerID(ctx *fiber.Ctx) error {
 // @Tags Product
 // @Produce json
 // @Param id path string true "Product ID"
-// @Success 200 {object} domain.Response
+// @Success 200 {object} domain.Response{data=domain.Product}
 // @Router /api/product/{id} [get]
 func (p *productController) GetByID(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
@@ -132,6 +132,7 @@ func (p *productController) GetByID(ctx *fiber.Ctx) error {
 // @Tags Product
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param body body payload.CreateProductDTO true "Product Body"
 // @Success 200 {object} domain.Response
 // @Router /api/product [post]
