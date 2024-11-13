@@ -38,4 +38,5 @@ type AddressUsecase interface {
 	Create(address *Address) error
 	Update(address *Address) error
 	Delete(addressID int) error
+	AddressToString(address *Address) string
 }
