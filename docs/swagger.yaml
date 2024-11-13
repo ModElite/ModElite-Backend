@@ -9,37 +9,41 @@ definitions:
       success:
         type: boolean
     type: object
-  payload.CreateAddressDTO:
+  payload.AddressDTO:
     properties:
-      company:
+      address:
         type: string
-      country:
+      default:
+        type: boolean
+      district:
         type: string
       email:
         type: string
       firstName:
         type: string
+      label:
+        type: string
       lastName:
         type: string
       phone:
         type: string
-      state:
+      province:
         type: string
-      streetAddress:
-        type: string
-      type:
+      subDistrict:
         type: string
       zipCode:
         type: string
     required:
-    - country
+    - address
+    - default
+    - district
     - email
     - firstName
+    - label
     - lastName
     - phone
-    - state
-    - streetAddress
-    - type
+    - province
+    - subDistrict
     - zipCode
     type: object
   payload.CreateFavoriteDTO:
@@ -191,42 +195,6 @@ definitions:
     - label
     - show
     type: object
-  payload.UpdateAddressDTO:
-    properties:
-      company:
-        type: string
-      country:
-        type: string
-      email:
-        type: string
-      firstName:
-        type: string
-      id:
-        type: integer
-      lastName:
-        type: string
-      phone:
-        type: string
-      state:
-        type: string
-      streetAddress:
-        type: string
-      type:
-        type: string
-      zipCode:
-        type: string
-    required:
-    - country
-    - email
-    - firstName
-    - id
-    - lastName
-    - phone
-    - state
-    - streetAddress
-    - type
-    - zipCode
-    type: object
   payload.UpdateSellerDTO:
     properties:
       description:
@@ -296,7 +264,7 @@ paths:
         name: address
         required: true
         schema:
-          $ref: '#/definitions/payload.CreateAddressDTO'
+          $ref: '#/definitions/payload.AddressDTO'
       produces:
       - application/json
       responses:
@@ -309,31 +277,6 @@ paths:
           schema:
             $ref: '#/definitions/domain.Response'
       summary: Create Address
-      tags:
-      - Address
-    put:
-      consumes:
-      - application/json
-      description: Update Address
-      parameters:
-      - description: Address
-        in: body
-        name: address
-        required: true
-        schema:
-          $ref: '#/definitions/payload.UpdateAddressDTO'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/domain.Response'
-      summary: Update Address
       tags:
       - Address
   /api/address/{id}:
@@ -359,6 +302,36 @@ paths:
           schema:
             $ref: '#/definitions/domain.Response'
       summary: Delete Address
+      tags:
+      - Address
+    put:
+      consumes:
+      - application/json
+      description: Update Address
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Address
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/payload.AddressDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      summary: Update Address
       tags:
       - Address
   /api/auth/google:

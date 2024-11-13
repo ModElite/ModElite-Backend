@@ -86,9 +86,9 @@ func initUseCase(
 	config *domain.ConfigEnv,
 	repo *domain.Repository,
 ) *domain.Usecase {
-	addressUsecase := usecase.NewAddressUsecase(repo.AddressRepository)
 	googleUsecase := usecase.NewGoogleUsecase(config)
 	userUsecase := usecase.NewUserUsecase(repo.UserRepository)
+	addressUsecase := usecase.NewAddressUsecase(repo.AddressRepository, userUsecase)
 	sessionUsecase := usecase.NewSessionUsecase(repo.SessionRepository)
 	authUsecase := usecase.NewAuthUsecase(googleUsecase, userUsecase, sessionUsecase)
 	sellerUsecase := usecase.NewSellerUsecase(repo.SellerRepository, userUsecase)

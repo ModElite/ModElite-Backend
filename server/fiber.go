@@ -76,7 +76,7 @@ func (s *FiberServer) Route() {
 	addressController := controller.NewAddressController(validator, s.usecase.AddressUsecase, s.usecase.UserUsecase)
 	address.Get("/", middlewareAuth, addressController.GetByUserID)
 	address.Post("/", middlewareAuth, addressController.Create)
-	address.Put("/", middlewareAuth, addressController.Update)
+	address.Put("/:id", middlewareAuth, addressController.Update)
 	address.Delete("/:id", middlewareAuth, addressController.Delete)
 
 	user := app.Group("/user")

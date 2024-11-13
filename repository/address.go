@@ -50,22 +50,59 @@ func (r *addressRepository) GetByUserId(userId string) (*[]domain.Address, error
 	return &addresses, nil
 }
 
-func (r *addressRepository) Create(address *domain.Address) error {
-	_, err := r.db.NamedExec("INSERT INTO address (user_id, first_name, last_name, company, street_address, state, country, zip_code, email, phone, type)"+
-		" VALUES (:user_id, :first_name, :last_name, :company, :street_address, :state, :country, :zip_code, :email, :phone, :type)", address)
+func (r *addressRepository) Create(address *domain.Address) (int, error) {
+	var id int
+	query := `
+		INSERT INTO address (
+			user_id, first_name, last_name, email, phone, label, "default", address, sub_district, district, province, zip_code
+		) VALUES (
+			:user_id, :first_name, :last_name, :email, :phone, :label, :default, :address, :sub_district, :district, :province, :zip_code
+		) RETURNING id`
+
+	rows, err := r.db.NamedQuery(query, address)
 	if err != nil {
-		return fmt.Errorf("failed to create address: %w", err)
+		return 0, fmt.Errorf("failed to create address: %w", err)
+	}
+	defer rows.Close()
+
+	if rows.Next() {
+		if err := rows.Scan(&id); err != nil {
+			return 0, fmt.Errorf("failed to retrieve id: %w", err)
+		}
+	}
+
+	return id, nil
+}
+
+func (r *addressRepository) Update(address *domain.Address) error {
+	_, err := r.db.NamedExec(`UPDATE address SET first_name = :first_name, last_name = :last_name, email = :email, phone = :phone, label = :label, "default" = :default, address = :address, sub_district = :sub_district, district = :district, province = :province, zip_code = :zip_code, updated_at = now() WHERE id = :id`, address)
+	if err != nil {
+		return fmt.Errorf("failed to update address: %w", err)
 	}
 
 	return nil
 }
 
-func (r *addressRepository) Update(address *domain.Address) error {
-	_, err := r.db.NamedExec("UPDATE address SET user_id = :user_id, first_name = :first_name, last_name = :last_name, company = :company, street_address = :street_address, state = :state, country = :country, zip_code = :zip_code, email = :email, phone = :phone, type = :type WHERE id = :id", address)
+func (r *addressRepository) UpdateDefaultByUserId(userId string, id int) error {
+	tx := r.db.MustBegin()
+	_, err := tx.Exec(`UPDATE address SET "default" = false WHERE user_id = $1`, userId)
 	if err != nil {
+		if errRollback := tx.Rollback(); errRollback != nil {
+			return fmt.Errorf("failed to update address: %w", errRollback)
+		}
+		return fmt.Errorf("failed to update address: %w", err)
+	}
+	_, err = tx.Exec(`UPDATE address SET "default" = true WHERE id = $1`, id)
+	if err != nil {
+		if errRollback := tx.Rollback(); errRollback != nil {
+			return fmt.Errorf("failed to update address: %w", errRollback)
+		}
 		return fmt.Errorf("failed to update address: %w", err)
 	}
 
+	if err = tx.Commit(); err != nil {
+		return fmt.Errorf("failed to update address: %w", err)
+	}
 	return nil
 }
 

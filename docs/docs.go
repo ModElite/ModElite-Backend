@@ -43,44 +43,6 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
-                "description": "Update Address",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Address"
-                ],
-                "summary": "Update Address",
-                "parameters": [
-                    {
-                        "description": "Address",
-                        "name": "address",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/payload.UpdateAddressDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/domain.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/domain.Response"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "Create Address",
                 "consumes": [
@@ -100,7 +62,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/payload.CreateAddressDTO"
+                            "$ref": "#/definitions/payload.AddressDTO"
                         }
                     }
                 ],
@@ -121,6 +83,51 @@ const docTemplate = `{
             }
         },
         "/api/address/{id}": {
+            "put": {
+                "description": "Update Address",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Update Address",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Address ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Address",
+                        "name": "address",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payload.AddressDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete Address",
                 "consumes": [
@@ -1401,24 +1408,29 @@ const docTemplate = `{
                 }
             }
         },
-        "payload.CreateAddressDTO": {
+        "payload.AddressDTO": {
             "type": "object",
             "required": [
-                "country",
+                "address",
+                "default",
+                "district",
                 "email",
                 "firstName",
+                "label",
                 "lastName",
                 "phone",
-                "state",
-                "streetAddress",
-                "type",
+                "province",
+                "subDistrict",
                 "zipCode"
             ],
             "properties": {
-                "company": {
+                "address": {
                     "type": "string"
                 },
-                "country": {
+                "default": {
+                    "type": "boolean"
+                },
+                "district": {
                     "type": "string"
                 },
                 "email": {
@@ -1427,19 +1439,19 @@ const docTemplate = `{
                 "firstName": {
                     "type": "string"
                 },
+                "label": {
+                    "type": "string"
+                },
                 "lastName": {
                     "type": "string"
                 },
                 "phone": {
                     "type": "string"
                 },
-                "state": {
+                "province": {
                     "type": "string"
                 },
-                "streetAddress": {
-                    "type": "string"
-                },
-                "type": {
+                "subDistrict": {
                     "type": "string"
                 },
                 "zipCode": {
@@ -1662,56 +1674,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/payload.TagDTO"
                     }
-                }
-            }
-        },
-        "payload.UpdateAddressDTO": {
-            "type": "object",
-            "required": [
-                "country",
-                "email",
-                "firstName",
-                "id",
-                "lastName",
-                "phone",
-                "state",
-                "streetAddress",
-                "type",
-                "zipCode"
-            ],
-            "properties": {
-                "company": {
-                    "type": "string"
-                },
-                "country": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "state": {
-                    "type": "string"
-                },
-                "streetAddress": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                },
-                "zipCode": {
-                    "type": "string"
                 }
             }
         },
