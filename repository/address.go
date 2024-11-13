@@ -42,7 +42,7 @@ func (r *addressRepository) GetById(id int) (*domain.Address, error) {
 
 func (r *addressRepository) GetByUserId(userId string) (*[]domain.Address, error) {
 	addresses := make([]domain.Address, 0)
-	err := r.db.Select(&addresses, "SELECT * FROM address WHERE user_id = $1", userId)
+	err := r.db.Select(&addresses, `SELECT * FROM address WHERE user_id = $1 ORDER BY "default" DESC`, userId)
 	if err != nil {
 		return nil, err
 	}
