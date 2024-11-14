@@ -18,7 +18,7 @@ func NewCartRepository(db *sqlx.DB) domain.CartRepository {
 }
 
 func (c *cartRepository) GetAll() (*[]domain.Cart, error) {
-	var carts []domain.Cart
+	carts := make([]domain.Cart, 0)
 	err := c.db.Select(&carts, "SELECT * FROM cart")
 	if err != nil {
 		return nil, err
@@ -27,7 +27,7 @@ func (c *cartRepository) GetAll() (*[]domain.Cart, error) {
 }
 
 func (c *cartRepository) GetCartByUserId(userId string) (*[]domain.Cart, error) {
-	var carts []domain.Cart
+	carts := make([]domain.Cart, 0)
 	err := c.db.Select(&carts, "SELECT * FROM cart WHERE user_id = $1", userId)
 	if err != nil {
 		return nil, err
@@ -88,7 +88,7 @@ func (c *cartRepository) DeleteItemCart(userId string, productSizeId string) err
 
 // UpdateItemCart
 func (c *cartRepository) UpdateItemCart(userId string, productSizeId string, quantity int) error {
-	_, err := c.db.Exec("UPDATE cart SET quantity = $1 WHERE user_id = $2 AND product_size_id = $3", quantity, userId, productSizeId)
+	_, err := c.db.Exec("UPDATE cart SET quantity = $1, updated_at = NOW() WHERE user_id = $2 AND product_size_id = $3", quantity, userId, productSizeId)
 	if err != nil {
 		return err
 	}

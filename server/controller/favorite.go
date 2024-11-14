@@ -72,7 +72,7 @@ func (fc *favoriteController) GetByUserID(ctx *fiber.Ctx) error {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param body body payload.CreateFavoriteDTO true "Favorite"
-// @Success 201 {object} domain.Response
+// @Success 201 {object} domain.Response{data=[]domain.Favorite}
 // @Router /api/favorite [post]
 func (fc *favoriteController) Create(ctx *fiber.Ctx) error {
 	var body payload.CreateFavoriteDTO
@@ -84,20 +84,29 @@ func (fc *favoriteController) Create(ctx *fiber.Ctx) error {
 	}
 
 	userID := ctx.Locals(constant.USER_ID).(string)
-	favorite := domain.Favorite{
+	favoriteCreate := domain.Favorite{
 		USER_ID:    userID,
 		PRODUCT_ID: body.PRODUCT_ID,
 	}
-	if err := fc.favoriteUsecase.Create(&favorite); err != nil {
+	if err := fc.favoriteUsecase.Create(&favoriteCreate); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(&domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
 			SUCCESS: false,
 		})
 	}
 
+	favorite, err := fc.favoriteUsecase.GetByUserID(userID)
+	if err != nil {
+		return ctx.Status(fiber.StatusCreated).JSON(&domain.Response{
+			MESSAGE: constant.MESSAGE_SUCCESS,
+			SUCCESS: true,
+		})
+	}
+
 	return ctx.Status(fiber.StatusCreated).JSON(&domain.Response{
 		MESSAGE: constant.MESSAGE_SUCCESS,
 		SUCCESS: true,
+		DATA:    favorite,
 	})
 }
 

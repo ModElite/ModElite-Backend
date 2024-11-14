@@ -3,7 +3,6 @@ package domain
 import "time"
 
 type Cart struct {
-	ID              int          `json:"id" db:"id"`
 	USER_ID         string       `json:"userId" db:"user_id"`
 	PRODUCT         *ProductData `json:"product,omitempty" db:"-"`
 	PRODUCT_SIZE_ID string       `json:"productSizeId" db:"product_size_id"`

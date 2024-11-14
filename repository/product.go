@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	"time"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/jmoiron/sqlx"
@@ -358,8 +357,7 @@ func (r *productRepository) Create(product *domain.Product) error {
 }
 
 func (r *productRepository) Update(product *domain.Product) error {
-	product.UPDATED_AT = time.Now()
-	_, err := r.db.NamedExec("UPDATE product SET name = :name, description = :description, price = :price, status = :status, updated_at = :updated_at WHERE id = :id", product)
+	_, err := r.db.NamedExec("UPDATE product SET name = :name, description = :description, price = :price, status = :status, updated_at = NOW() WHERE id = :id", product)
 	if err != nil {
 		return fmt.Errorf("error updating product: %w", err)
 	}

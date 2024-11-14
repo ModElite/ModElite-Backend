@@ -85,14 +85,14 @@ func (r *addressRepository) Update(address *domain.Address) error {
 
 func (r *addressRepository) UpdateDefaultByUserId(userId string, id int) error {
 	tx := r.db.MustBegin()
-	_, err := tx.Exec(`UPDATE address SET "default" = false WHERE user_id = $1`, userId)
+	_, err := tx.Exec(`UPDATE address SET "default" = false, updated_at = NOW() WHERE user_id = $1`, userId)
 	if err != nil {
 		if errRollback := tx.Rollback(); errRollback != nil {
 			return fmt.Errorf("failed to update address: %w", errRollback)
 		}
 		return fmt.Errorf("failed to update address: %w", err)
 	}
-	_, err = tx.Exec(`UPDATE address SET "default" = true WHERE id = $1`, id)
+	_, err = tx.Exec(`UPDATE address SET "default" = true, updated_at = NOW() WHERE id = $1`, id)
 	if err != nil {
 		if errRollback := tx.Rollback(); errRollback != nil {
 			return fmt.Errorf("failed to update address: %w", errRollback)

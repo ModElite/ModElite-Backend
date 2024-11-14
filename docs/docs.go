@@ -594,7 +594,22 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/domain.Favorite"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -1984,9 +1999,6 @@ const docTemplate = `{
             "properties": {
                 "createdAt": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "product": {
                     "$ref": "#/definitions/domain.ProductData"
