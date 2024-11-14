@@ -67,3 +67,11 @@ func (r *productSizeRepository) SoftDelete(id string) error {
 	}
 	return nil
 }
+
+func (r *productSizeRepository) SoftDeleteByProductOptionID(productOptionID string) error {
+	_, err := r.db.Exec("UPDATE product_size SET deleted_at = NOW() WHERE product_option_id = $1", productOptionID)
+	if err != nil {
+		return fmt.Errorf("error cannot delete product size: %w", err)
+	}
+	return nil
+}

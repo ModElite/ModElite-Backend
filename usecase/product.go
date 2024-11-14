@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/google/uuid"
@@ -177,6 +178,105 @@ func (u *productUsecase) Create(product *domain.Product) (*string, error) {
 }
 
 func (u *productUsecase) Update(newProduct *domain.Product) error {
+	oldProductOption, err := u.productOptionUsecase.GetByProductIDAndFilterActive(newProduct.ID)
+	if err != nil {
+		return fmt.Errorf("error product option getbyproductid: %w", err)
+	}
+
+	// Delete old product option and size if not exist in new product
+	var wg sync.WaitGroup
+	wg.Add(len(*oldProductOption))
+	for _, option := range *oldProductOption {
+		go func(option domain.ProductOption) {
+			defer wg.Done()
+			found := false
+			for _, newOption := range *newProduct.PRODUCT_OPTION {
+				if option.ID == newOption.ID && newOption.ID != "" {
+					found = true
+					break
+				}
+			}
+
+			if !found {
+				if err := u.productOptionUsecase.SoftDeleteProductOptionAndSizeByProductID(option.ID); err != nil {
+					fmt.Printf("error product option softdelete: %v\n", err)
+				}
+
+			}
+		}(option)
+	}
+	wg.Wait()
+
+	// Update product
+	if err := u.productRepo.Update(&domain.Product{
+		ID:          newProduct.ID,
+		NAME:        newProduct.NAME,
+		DESCRIPTION: newProduct.DESCRIPTION,
+		PRICE:       newProduct.PRICE,
+		IMAGE_URL:   newProduct.IMAGE_URL,
+		STATUS:      string(domain.ProductActive),
+	}); err != nil {
+		return fmt.Errorf("error product update: %w", err)
+	}
+
+	// Create or update product option and size in new product
+	for _, option := range *newProduct.PRODUCT_OPTION {
+		if option.ID == "" {
+			option.ID = uuid.New().String()
+			option.PRODUCT_ID = newProduct.ID
+			if err := u.productOptionUsecase.Create(&domain.ProductOption{
+				ID:         option.ID,
+				PRODUCT_ID: option.PRODUCT_ID,
+				LABEL:      option.LABEL,
+				IMAGE_URL:  option.IMAGE_URL,
+			}); err != nil {
+				return fmt.Errorf("error product option create: %w", err)
+			}
+
+			for _, size := range *option.PRODUCT_SIZE {
+				size.ID = uuid.New().String()
+				size.PRODUCT_OPTION_ID = option.ID
+				if err := u.productSizeUsecase.Create(&domain.ProductSize{
+					ID:                size.ID,
+					PRODUCT_OPTION_ID: size.PRODUCT_OPTION_ID,
+					SIZE_ID:           size.SIZE_ID,
+					QUANTITY:          size.QUANTITY,
+				}); err != nil {
+					return fmt.Errorf("error product size create: %w", err)
+				}
+			}
+		} else {
+			if err := u.productOptionUsecase.Update(&domain.ProductOption{
+				ID:        option.ID,
+				LABEL:     option.LABEL,
+				IMAGE_URL: option.IMAGE_URL,
+			}); err != nil {
+				return fmt.Errorf("error product option update: %w", err)
+			}
+
+			for _, size := range *option.PRODUCT_SIZE {
+				if size.ID == "" {
+					size.ID = uuid.New().String()
+					size.PRODUCT_OPTION_ID = option.ID
+					if err := u.productSizeUsecase.Create(&domain.ProductSize{
+						ID:                size.ID,
+						PRODUCT_OPTION_ID: size.PRODUCT_OPTION_ID,
+						SIZE_ID:           size.SIZE_ID,
+						QUANTITY:          size.QUANTITY,
+					}); err != nil {
+						return fmt.Errorf("error product size create: %w", err)
+					}
+				} else {
+					if err := u.productSizeUsecase.Update(&domain.ProductSize{
+						ID:       size.ID,
+						QUANTITY: size.QUANTITY,
+					}); err != nil {
+						return fmt.Errorf("error product size update: %w", err)
+					}
+				}
+			}
+		}
+	}
 
 	return nil
 }

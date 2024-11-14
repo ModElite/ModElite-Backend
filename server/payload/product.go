@@ -4,7 +4,7 @@ type CreateProductDTO struct {
 	SELLER_ID      string              `json:"sellerId" validate:"required"`
 	NAME           string              `json:"name" validate:"required"`
 	DESCRIPTION    string              `json:"description" validate:"required"`
-	PRICE          float64             `json:"price" validate:"required"`
+	PRICE          float64             `json:"price" validate:"required,min=0"`
 	IMAGE_URL      string              `json:"imageUrl" validate:"required"`
 	PRODUCT_OPTION *[]ProductOptionDTO `json:"productOption" validate:"required"`
 	TAG_ID         *[]int              `json:"tagId" validate:"omitempty"`
@@ -18,5 +18,27 @@ type ProductOptionDTO struct {
 
 type ProductSizeDTO struct {
 	SIZE_ID  string `json:"sizeId" validate:"required"`
+	QUANTITY int    `json:"quantity" validate:"required"`
+}
+
+type UpdateProductDTO struct {
+	NAME           string                    `json:"name" validate:"required"`
+	DESCRIPTION    string                    `json:"description" validate:"required"`
+	PRICE          float64                   `json:"price" validate:"required,min=0"`
+	IMAGE_URL      string                    `json:"imageUrl" validate:"omitempty"`
+	PRODUCT_OPTION *[]UpdateProductOptionDTO `json:"productOption" validate:"required"`
+	TAG_ID         *[]int                    `json:"tagId" validate:"omitempty"`
+}
+
+type UpdateProductOptionDTO struct {
+	ID           string                  `json:"id" validate:"omitempty"`
+	LABEL        string                  `json:"label" validate:"required"`
+	IMAGE_URL    string                  `json:"imageUrl" validate:"omitempty"`
+	PRODUCT_SIZE *[]UpdateProductSizeDTO `json:"productSize" validate:"required"`
+}
+
+type UpdateProductSizeDTO struct {
+	ID       string `json:"id" validate:"omitempty"`
+	SIZE_ID  string `json:"sizeId" validate:"omitempty"`
 	QUANTITY int    `json:"quantity" validate:"required"`
 }

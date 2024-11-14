@@ -17,6 +17,7 @@ type ProductOptionRepository interface {
 	GetAll() (*[]ProductOption, error)
 	GetByID(id string) (*ProductOption, error)
 	GetByProductID(productID string) (*[]ProductOption, error)
+	GetByProductIDAndFilterActive(productID string) (*[]ProductOption, error)
 	Create(productOption *ProductOption) error
 	Update(productOption *ProductOption) error
 	SoftDelete(id string) error
@@ -26,6 +27,8 @@ type ProductOptionUsecase interface {
 	GetAll() (*[]ProductOption, error)
 	GetByID(id string) (*ProductOption, error)
 	GetByProductID(productID string) (*[]ProductOption, error)
+	GetByProductIDAndFilterActive(productID string) (*[]ProductOption, error)
 	Create(productOption *ProductOption) error
 	Update(productOption *ProductOption) error
+	SoftDeleteProductOptionAndSizeByProductID(ProductOptionId string) error
 }

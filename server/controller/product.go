@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"sync"
+
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/constant"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/payload"
@@ -208,9 +210,112 @@ func (p *productController) Create(ctx *fiber.Ctx) error {
 	})
 }
 
+// @Summary Update product
+// @Tags Product
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id path string true "Product ID"
+// @Param body body payload.UpdateProductDTO true "Product Body"
+// @Success 200 {object} domain.Response
+// @Failure 400 {object} domain.Response
+// @Failure 403 {object} domain.Response
+// @Failure 404 {object} domain.Response
+// @Failure 500 {object} domain.Response
+// @Router /api/product/{id} [put]
 func (p *productController) Update(ctx *fiber.Ctx) error {
 	// TODO: Implement Update product with options and sizes and tags
-	return nil
+	id := ctx.Params("id")
+	var body payload.UpdateProductDTO
+	if err := p.validator.ValidateBody(ctx, &body); err != nil || id == "" || !p.validator.ValidateUUID(id) {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INVALID_BODY,
+		})
+	}
+
+	userId := ctx.Locals(constant.USER_ID).(string)
+	if canEdit, err := p.productUseCase.CheckPermissionCanModifyProduct(userId, id); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+	} else if !canEdit {
+		return ctx.Status(fiber.StatusForbidden).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_PERMISSION_DENIED,
+		})
+	}
+
+	productOption := make([]domain.ProductOption, 0)
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	statusReturnErr := false
+	for _, option := range *body.PRODUCT_OPTION {
+		wg.Add(1)
+		go func(option payload.UpdateProductOptionDTO) {
+			defer wg.Done()
+			productSize := make([]domain.ProductSize, 0)
+			for _, size := range *option.PRODUCT_SIZE {
+				if (size.ID != "" && size.SIZE_ID != "") || (size.ID == "" && size.SIZE_ID == "") {
+					mu.Lock()
+					statusReturnErr = true
+					mu.Unlock()
+					return
+				}
+				productSize = append(productSize, domain.ProductSize{
+					ID:       size.ID,
+					SIZE_ID:  size.SIZE_ID,
+					QUANTITY: size.QUANTITY,
+				})
+			}
+			mu.Lock()
+			productOption = append(productOption, domain.ProductOption{
+				ID:           option.ID,
+				LABEL:        option.LABEL,
+				IMAGE_URL:    option.IMAGE_URL,
+				PRODUCT_SIZE: &productSize,
+			})
+			mu.Unlock()
+		}(option)
+	}
+	wg.Wait()
+	if statusReturnErr {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INVALID_BODY,
+		})
+	}
+
+	product := &domain.Product{
+		ID:             id,
+		NAME:           body.NAME,
+		DESCRIPTION:    body.DESCRIPTION,
+		PRICE:          body.PRICE,
+		IMAGE_URL:      body.IMAGE_URL,
+		PRODUCT_OPTION: &productOption,
+	}
+
+	if err := p.productUseCase.Update(product); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+	}
+
+	data, err := p.productUseCase.GetProductWithOptionsAndSizes(id)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		SUCCESS: true,
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		DATA:    data,
+	})
 }
 
 // @Summary Delete product

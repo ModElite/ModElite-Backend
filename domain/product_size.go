@@ -5,7 +5,7 @@ import "time"
 type ProductSize struct {
 	ID                string     `json:"id" db:"id"`
 	PRODUCT_OPTION_ID string     `json:"-" db:"product_option_id"`
-	SIZE_ID           string     `json:"-" db:"size_id"`
+	SIZE_ID           string     `json:"sizeId" db:"size_id"`
 	SIZE              *Size      `json:"size" db:"-"`
 	QUANTITY          int        `json:"quantity" db:"quantity"`
 	CREATED_AT        time.Time  `json:"createdAt" db:"created_at"`
@@ -20,6 +20,7 @@ type ProductSizeRepository interface {
 	Create(productSize *ProductSize) error
 	Update(productSize *ProductSize) error
 	SoftDelete(id string) error
+	SoftDeleteByProductOptionID(productOptionID string) error
 }
 
 type ProductSizeUsecase interface {

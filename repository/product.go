@@ -357,7 +357,7 @@ func (r *productRepository) Create(product *domain.Product) error {
 }
 
 func (r *productRepository) Update(product *domain.Product) error {
-	_, err := r.db.NamedExec("UPDATE product SET name = :name, description = :description, price = :price, status = :status, updated_at = NOW() WHERE id = :id", product)
+	_, err := r.db.NamedExec("UPDATE product SET name = :name, description = :description, price = :price, image_url = :image_url, status = :status, updated_at = NOW() WHERE id = :id", product)
 	if err != nil {
 		return fmt.Errorf("error updating product: %w", err)
 	}

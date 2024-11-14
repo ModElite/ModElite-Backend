@@ -42,6 +42,15 @@ func (r *productOptionRepository) GetByProductID(productID string) (*[]domain.Pr
 	return &productOptions, nil
 }
 
+func (r *productOptionRepository) GetByProductIDAndFilterActive(productID string) (*[]domain.ProductOption, error) {
+	productOptions := make([]domain.ProductOption, 0)
+	err := r.db.Select(&productOptions, "SELECT * FROM product_option WHERE product_id = $1 AND deleted_at ISNULL", productID)
+	if err != nil {
+		return nil, err
+	}
+	return &productOptions, nil
+}
+
 func (r *productOptionRepository) Create(productOption *domain.ProductOption) error {
 	_, err := r.db.NamedExec("INSERT INTO product_option (id, product_id, label, image_url) VALUES (:id, :product_id, :label, :image_url)", productOption)
 	if err != nil {

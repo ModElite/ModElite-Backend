@@ -93,7 +93,7 @@ func initUseCase(
 	sessionUsecase := usecase.NewSessionUsecase(repo.SessionRepository)
 	authUsecase := usecase.NewAuthUsecase(googleUsecase, userUsecase, sessionUsecase)
 	sellerUsecase := usecase.NewSellerUsecase(repo.SellerRepository, userUsecase)
-	productOptionUsecase := usecase.NewProductOptionUsecase(repo.ProductOptionRepository)
+	productOptionUsecase := usecase.NewProductOptionUsecase(repo.ProductOptionRepository, repo.ProductSizeRepository)
 	productSizeUsecase := usecase.NewProductSizeUsecase(repo.ProductSizeRepository)
 	sizeUsecase := usecase.NewSizeUsecase(repo.SizeRepository)
 	tagUsecase := usecase.NewTagUsecase(repo.TagRepository, repo.TagGroupRepository, repo.ProductTagRepository)
