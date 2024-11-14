@@ -54,7 +54,7 @@ func (c *cartController) GetAll(ctx *fiber.Ctx) error {
 // @Success 200 {object} domain.Response{data=[]domain.Cart}
 // @Router /api/cart/self [get]
 func (c *cartController) GetCartByUserId(ctx *fiber.Ctx) error {
-	userID := ctx.Locals("user_id").(string)
+	userID := ctx.Locals(constant.USER_ID).(string)
 	carts, err := c.cartUsecase.GetCartByUserId(userID)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
@@ -80,7 +80,7 @@ func (c *cartController) GetCartByUserId(ctx *fiber.Ctx) error {
 // @Success 200 {object} domain.Response{data=[]domain.Cart}
 // @Router /api/cart [post]
 func (c *cartController) EditCart(ctx *fiber.Ctx) error {
-	userID := ctx.Locals("user_id").(string)
+	userID := ctx.Locals(constant.USER_ID).(string)
 	var addCardData payload.AddCartDTO
 	if err := c.validator.ValidateBody(ctx, &addCardData); err != nil {
 		return err
