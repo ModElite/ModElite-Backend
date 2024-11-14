@@ -16,6 +16,7 @@ type Repository struct {
 	OrderRepository         OrderRepository
 	VoucherRepository       VoucherRepository
 	GeoLocationRepository   GeoLocationRepository
+	CartRepository          CartRepository
 }
 
 type Usecase struct {
@@ -34,4 +35,5 @@ type Usecase struct {
 	OrderUsecase         OrderUsecase
 	VoucherUsecase       VoucherUsecase
 	GeoLocationUsecase   GeoLocationUsecase
+	CartUsecase          CartUsecase
 }

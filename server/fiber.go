@@ -145,4 +145,10 @@ func (s *FiberServer) Route() {
 	geoLocation.Get("/provinces", geoLocationController.GetProvinces)
 	geoLocation.Get("/districts/:province_id", geoLocationController.GetDistrictsByProvinceId)
 	geoLocation.Get("/sub-districts/:district_id", geoLocationController.GetSubDistrictsByDistrictId)
+
+	cart := app.Group("/cart")
+	cartController := controller.NewCartController(validator, s.usecase.CartUsecase)
+	cart.Get("/", middlewareAuth, middlewareAuthAdmin, cartController.GetAll)
+	cart.Get("/self", middlewareAuth, cartController.GetCartByUserId)
+	cart.Post("/", middlewareAuth, cartController.EditCart)
 }

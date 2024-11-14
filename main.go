@@ -79,6 +79,7 @@ func initRepository(
 		OrderRepository:         repository.NewOrderRepository(db),
 		VoucherRepository:       repository.NewVoucherRepository(db),
 		GeoLocationRepository:   repository.NewGeoLocationRepository(db),
+		CartRepository:          repository.NewCartRepository(db),
 	}
 }
 
@@ -101,6 +102,7 @@ func initUseCase(
 	vocherUsecase := usecase.NewVoucherUsecase(repo.VoucherRepository)
 	orderUsecase := usecase.NewOrderUsecase(repo.OrderRepository, repo.ProductRepository)
 	geoLocationUsecase := usecase.NewGeoLocationUseCase(repo.GeoLocationRepository)
+	cartUsecase := usecase.NewCartUsecase(repo.CartRepository)
 	return &domain.Usecase{
 		AddressUsecase:       addressUsecase,
 		AuthUsecase:          authUsecase,
@@ -117,5 +119,6 @@ func initUseCase(
 		OrderUsecase:         orderUsecase,
 		VoucherUsecase:       vocherUsecase,
 		GeoLocationUsecase:   geoLocationUsecase,
+		CartUsecase:          cartUsecase,
 	}
 }

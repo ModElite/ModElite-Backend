@@ -41,6 +41,23 @@ definitions:
       zipCode:
         type: string
     type: object
+  domain.Cart:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      product:
+        $ref: '#/definitions/domain.ProductData'
+      productSizeId:
+        type: string
+      quantity:
+        type: integer
+      updatedAt:
+        type: string
+      userId:
+        type: string
+    type: object
   domain.District:
     properties:
       id:
@@ -211,6 +228,21 @@ definitions:
       updatedAt:
         type: string
     type: object
+  domain.ProductData:
+    properties:
+      productDescription:
+        type: string
+      productName:
+        type: string
+      productOption:
+        type: string
+      productPrice:
+        type: integer
+      quantity:
+        type: integer
+      size:
+        type: string
+    type: object
   domain.ProductOption:
     properties:
       createdAt:
@@ -369,6 +401,15 @@ definitions:
         type: integer
       updatedAt:
         type: string
+    type: object
+  payload.AddCartDTO:
+    properties:
+      productSizeId:
+        type: string
+      quantity:
+        type: integer
+    required:
+    - productSizeId
     type: object
   payload.AddressDTO:
     properties:
@@ -818,6 +859,85 @@ paths:
       summary: Get user profile
       tags:
       - Auth
+  /api/cart:
+    get:
+      consumes:
+      - application/json
+      description: Get all cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/domain.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/domain.Cart'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get all cart
+      tags:
+      - Cart
+    post:
+      consumes:
+      - application/json
+      description: Add cart or update cart quantity if product already in cart for
+        quantity is 0 then delete cart
+      parameters:
+      - description: Add cart
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.AddCartDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/domain.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/domain.Cart'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Add cart
+      tags:
+      - Cart
+  /api/cart/self:
+    get:
+      consumes:
+      - application/json
+      description: Get cart by user id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/domain.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/domain.Cart'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get cart by user id
+      tags:
+      - Cart
   /api/favorite:
     get:
       consumes:
