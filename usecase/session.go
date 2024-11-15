@@ -37,8 +37,8 @@ func (su *sessionUsecase) Create(userId string, ipAddress string, userAgent stri
 		Expires:  time.Now().Add(time.Hour * 24 * 3),
 		HTTPOnly: true,
 		Secure:   false,
-		// Domain:   "sssboom.xyz",
-		// Path:     "/",
+		Domain:   ".sssboom.xyz",
+		Path:     "/",
 		SameSite: "None",
 	}
 
