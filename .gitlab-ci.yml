@@ -40,4 +40,4 @@ deploy:
     - echo "$ENV" > .env
     - scp -r * .env $SSH_USER@$SSH_HOST:$DEPLOY_PATH
     - ssh $SSH_USER@$SSH_HOST 'cd app/modelitebackend && docker compose --env-file .env up -d --build && docker system prune -f'
-    - echo 'SSH connection successful!'
+    - echo 'Deploy successful!'
