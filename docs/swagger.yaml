@@ -602,6 +602,26 @@ definitions:
     - label
     - show
     type: object
+  payload.UpdateImageUserDTO:
+    properties:
+      profileUrl:
+        type: string
+    required:
+    - profileUrl
+    type: object
+  payload.UpdateInfoUserDTO:
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+    required:
+    - firstName
+    - lastName
+    - phone
+    type: object
   payload.UpdateProductDTO:
     properties:
       description:
@@ -672,20 +692,6 @@ definitions:
     - location
     - logoUrl
     - name
-    type: object
-  payload.UpdateUserDTO:
-    properties:
-      firstName:
-        type: string
-      lastName:
-        type: string
-      phone:
-        type: string
-      profileUrl:
-        type: string
-    required:
-    - firstName
-    - lastName
     type: object
 info:
   contact: {}
@@ -1805,7 +1811,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/payload.UpdateUserDTO'
+          $ref: '#/definitions/payload.UpdateInfoUserDTO'
       produces:
       - application/json
       responses:
@@ -1824,6 +1830,38 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Patch user profile
+      tags:
+      - User
+  /api/user/profile:
+    patch:
+      consumes:
+      - application/json
+      description: Patch profile
+      parameters:
+      - description: Patch user profile
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.UpdateImageUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Patch profile
       tags:
       - User
   /api/voucher:

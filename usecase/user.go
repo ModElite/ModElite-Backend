@@ -73,30 +73,24 @@ func (u *userUsecase) GetByEmail(email string) (*domain.User, error) {
 	return user, nil
 }
 
-func (u *userUsecase) Update(userId string, userUpdate *domain.User) error {
-	user, err := u.userRepository.Get(userId)
-	if err != nil {
-		return fmt.Errorf("cannot get user by id %s", userId)
-	} else if user == nil {
-		return fmt.Errorf("user not found by id %s", userId)
+func (u *userUsecase) UpdateInfo(userUpdate *domain.User) error {
+	if err := u.userRepository.UpdateInfo(&domain.User{
+		ID:         userUpdate.ID,
+		FIRST_NAME: userUpdate.FIRST_NAME,
+		LAST_NAME:  userUpdate.LAST_NAME,
+		PHONE:      userUpdate.PHONE,
+	}); err != nil {
+		return fmt.Errorf("cannot update user by id %s", userUpdate.ID)
 	}
+	return nil
+}
 
-	if userUpdate.FIRST_NAME != "" {
-		user.FIRST_NAME = userUpdate.FIRST_NAME
-	}
-	if userUpdate.LAST_NAME != "" {
-		user.LAST_NAME = userUpdate.LAST_NAME
-	}
-	if userUpdate.PHONE != "" {
-		user.PHONE = userUpdate.PHONE
-	}
-	if userUpdate.PROFILE_URL != "" {
-		user.PROFILE_URL = userUpdate.PROFILE_URL
-	}
-	user.UPDATED_AT = time.Now()
-
-	if err := u.userRepository.Update(user); err != nil {
-		return fmt.Errorf("cannot update user by id %s", userId)
+func (u *userUsecase) UpdateImage(userUpdate *domain.User) error {
+	if err := u.userRepository.UpdateImage(&domain.User{
+		ID:          userUpdate.ID,
+		PROFILE_URL: userUpdate.PROFILE_URL,
+	}); err != nil {
+		return fmt.Errorf("cannot update user image by id %s", userUpdate.ID)
 	}
 	return nil
 }

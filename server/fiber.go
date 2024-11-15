@@ -91,7 +91,8 @@ func (s *FiberServer) Route() {
 
 	user := app.Group("/user")
 	userController := controller.NewUserController(validator, s.usecase.UserUsecase)
-	user.Patch("/", middlewareAuth, userController.Update)
+	user.Patch("/", middlewareAuth, userController.UpdateInfo)
+	user.Patch("/profile", middlewareAuth, userController.UpdateImage)
 
 	auth := app.Group("/auth")
 	authController := controller.NewAuthController(validator, s.config, s.usecase.AuthUsecase, s.usecase.GoogleUsecase, s.usecase.UserUsecase)

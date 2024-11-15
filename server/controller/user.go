@@ -28,13 +28,13 @@ func NewUserController(
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param body body payload.UpdateUserDTO true "Patch user profile"
+// @Param body body payload.UpdateInfoUserDTO true "Patch user profile"
 // @Success 200 {object} domain.Response
 // @Failure 400 {object} domain.Response
 // @Failure 500 {object} domain.Response
 // @Router /api/user [patch]
-func (u *userController) Update(ctx *fiber.Ctx) error {
-	var body payload.UpdateUserDTO
+func (u *userController) UpdateInfo(ctx *fiber.Ctx) error {
+	var body payload.UpdateInfoUserDTO
 	if err := u.validator.ValidateBody(ctx, &body); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			SUCCESS: false,
@@ -43,12 +43,20 @@ func (u *userController) Update(ctx *fiber.Ctx) error {
 	}
 
 	userID := ctx.Locals(constant.USER_ID).(string)
-	if err := u.userUsecase.Update(userID, &domain.User{
-		FIRST_NAME:  body.FIRST_NAME,
-		LAST_NAME:   body.LAST_NAME,
-		PHONE:       body.PHONE,
-		PROFILE_URL: body.PROFILE_URL,
+	if err := u.userUsecase.UpdateInfo(&domain.User{
+		ID:         userID,
+		FIRST_NAME: body.FIRST_NAME,
+		LAST_NAME:  body.LAST_NAME,
+		PHONE:      body.PHONE,
 	}); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+	}
+
+	data, err := u.userUsecase.Get(userID)
+	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
@@ -58,5 +66,52 @@ func (u *userController) Update(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
 		SUCCESS: true,
 		MESSAGE: constant.MESSAGE_SUCCESS,
+		DATA:    data,
+	})
+}
+
+// @Summary Patch profile
+// @Description Patch profile
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param body body payload.UpdateImageUserDTO true "Patch user profile"
+// @Success 200 {object} domain.Response
+// @Failure 400 {object} domain.Response
+// @Failure 500 {object} domain.Response
+// @Router /api/user/profile [patch]
+func (u *userController) UpdateImage(ctx *fiber.Ctx) error {
+	var body payload.UpdateImageUserDTO
+	if err := u.validator.ValidateBody(ctx, &body); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INVALID_BODY,
+		})
+	}
+
+	userID := ctx.Locals(constant.USER_ID).(string)
+	if err := u.userUsecase.UpdateImage(&domain.User{
+		ID:          userID,
+		PROFILE_URL: body.PROFILE_URL,
+	}); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+	}
+
+	data, err := u.userUsecase.Get(userID)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		SUCCESS: true,
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		DATA:    data,
 	})
 }

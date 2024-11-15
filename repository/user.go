@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	"time"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/jmoiron/sqlx"
@@ -55,10 +54,20 @@ func (r *userRepository) GetByEmail(email string) (*domain.User, error) {
 	return &user, nil
 }
 
-func (r *userRepository) Update(user *domain.User) error {
-	user.UPDATED_AT = time.Now()
+func (r *userRepository) UpdateInfo(user *domain.User) error {
 	_, err := r.db.NamedExec(
-		`UPDATE users SET email = :email, google_id = :google_id, first_name = :first_name, last_name = :last_name, phone = :phone, profile_url = :profile_url, updated_at = :updated_at WHERE id = :id`,
+		`UPDATE users SET first_name = :first_name, last_name = :last_name, phone = :phone, updated_at = NOW() WHERE id = :id`,
+		user,
+	)
+	if err != nil {
+		return fmt.Errorf("cannot query to update user: %w", err)
+	}
+	return nil
+}
+
+func (r *userRepository) UpdateImage(user *domain.User) error {
+	_, err := r.db.NamedExec(
+		`UPDATE users SET profile_url = :profile_url, updated_at = NOW() WHERE id = :id`,
 		user,
 	)
 	if err != nil {
