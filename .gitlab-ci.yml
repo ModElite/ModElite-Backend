@@ -28,7 +28,7 @@ deploy:
     - lint
     - build
   only:
-    - main
+    - master
   dependencies:
     - build
   script:
