@@ -14,6 +14,8 @@ type Cart struct {
 type ProductData struct {
 	QUANTITY            int    `json:"quantity" db:"quantity"`
 	SIZE                string `json:"size" db:"size"`
+	SELLER              string `json:"seller" db:"seller"`
+	PRODUCT_IMAGE       string `json:"product_image" db:"product_image"`
 	PRODUCT_OPTION      string `json:"productOption" db:"product_option"`
 	PRODUCT_NAME        string `json:"productName" db:"product_name"`
 	PRODUCT_DESCRIPTION string `json:"productDescription" db:"product_description"`
@@ -38,4 +40,5 @@ type CartRepository interface {
 	AddItemCart(cart Cart) error
 	UpdateItemCart(userId string, productSizeId string, quantity int) error
 	DeleteItemCart(userId string, productSizeId string) error
+	GetProductQuantiry(productSizeId string) (int, error)
 }

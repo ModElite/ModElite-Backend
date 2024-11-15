@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 )
@@ -25,12 +26,20 @@ func (c *cartUsecase) GetCartByUserId(userId string) (*[]domain.Cart, error) {
 }
 
 func (c *cartUsecase) EditCart(cart domain.EditCart, userId string) error {
-	_, err := c.cartRepository.GetCartByUserIdProductSizeID(userId, cart.PRODUCT_SIZE_ID)
+	current_quantity, err := c.cartRepository.GetProductQuantiry(cart.PRODUCT_SIZE_ID)
+	if err != nil {
+		return err
+	}
+	if current_quantity < cart.QUANTITY {
+		return fmt.Errorf("product quantity in stock is not enough")
+	}
+	_, err = c.cartRepository.GetCartByUserIdProductSizeID(userId, cart.PRODUCT_SIZE_ID)
 	cartItem := domain.Cart{
 		USER_ID:         userId,
 		PRODUCT_SIZE_ID: cart.PRODUCT_SIZE_ID,
 		QUANTITY:        cart.QUANTITY,
 	}
+	// Product Quantity in Stock to check
 	if err == sql.ErrNoRows {
 		err := c.cartRepository.AddItemCart(cartItem)
 		if err != nil {

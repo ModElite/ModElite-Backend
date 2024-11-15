@@ -19,9 +19,38 @@ func NewCartRepository(db *sqlx.DB) domain.CartRepository {
 
 func (c *cartRepository) GetAll() (*[]domain.Cart, error) {
 	carts := make([]domain.Cart, 0)
-	err := c.db.Select(&carts, "SELECT * FROM cart")
+	err := c.db.Select(&carts, "SELECT * FROM cart ORDER BY created_at DESC")
 	if err != nil {
 		return nil, err
+	}
+
+	for i := range carts {
+		product := domain.ProductData{}
+		err := c.db.Get(&product, `
+			SELECT
+				product_size.quantity AS quantity,
+				"size"."size" AS "size",
+				product_option.label AS product_option,
+				product."name" AS product_name,
+				product.description AS product_description,
+				product.price AS product_price,
+				seller."name" AS seller,
+				product.image_url AS product_image 
+			FROM
+				product_size
+				INNER JOIN product_option ON product_size.product_option_id = product_option."id"
+				INNER JOIN product ON product_option.product_id = product."id"
+				INNER JOIN "size" ON product_size.size_id = "size"."id"
+				INNER JOIN seller ON product.seller_id = seller."id"
+			WHERE 
+				product_size."id" = $1
+			LIMIT 1;
+		`, carts[i].PRODUCT_SIZE_ID)
+		carts[i].PRODUCT = &product
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
 	}
 	return &carts, nil
 }
@@ -37,17 +66,20 @@ func (c *cartRepository) GetCartByUserId(userId string) (*[]domain.Cart, error) 
 		product := domain.ProductData{}
 		err := c.db.Get(&product, `
 			SELECT
-				product_size.quantity as quantity,
-				"size"."size" as size,
-				product_option.label as product_option,
-				product."name" as product_name,
-				product.description as product_description,
-				product.price as product_price
+				product_size.quantity AS quantity,
+				"size"."size" AS "size",
+				product_option.label AS product_option,
+				product."name" AS product_name,
+				product.description AS product_description,
+				product.price AS product_price,
+				seller."name" AS seller,
+				product.image_url AS product_image 
 			FROM
 				product_size
 				INNER JOIN product_option ON product_size.product_option_id = product_option."id"
 				INNER JOIN product ON product_option.product_id = product."id"
 				INNER JOIN "size" ON product_size.size_id = "size"."id"
+				INNER JOIN seller ON product.seller_id = seller."id"
 			WHERE 
 				product_size."id" = $1
 			LIMIT 1;
@@ -93,4 +125,14 @@ func (c *cartRepository) UpdateItemCart(userId string, productSizeId string, qua
 		return err
 	}
 	return nil
+}
+
+func (c *cartRepository) GetProductQuantiry(productSizeId string) (int, error) {
+	var quantity int
+	err := c.db.Get(&quantity, "SELECT quantity FROM product_size WHERE id = $1", productSizeId)
+	if err != nil {
+		return 0, err
+	}
+	return quantity, nil
+
 }

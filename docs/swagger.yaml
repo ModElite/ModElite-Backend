@@ -228,6 +228,8 @@ definitions:
     type: object
   domain.ProductData:
     properties:
+      product_image:
+        type: string
       productDescription:
         type: string
       productName:
@@ -238,6 +240,8 @@ definitions:
         type: integer
       quantity:
         type: integer
+      seller:
+        type: string
       size:
         type: string
     type: object

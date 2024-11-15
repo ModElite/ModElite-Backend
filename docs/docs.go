@@ -2352,8 +2352,14 @@ const docTemplate = `{
                 "productPrice": {
                     "type": "integer"
                 },
+                "product_image": {
+                    "type": "string"
+                },
                 "quantity": {
                     "type": "integer"
+                },
+                "seller": {
+                    "type": "string"
                 },
                 "size": {
                     "type": "string"
