@@ -1,15 +1,9 @@
 stages:
   - test
   - build
+  - deploy
 
 image: golang:1.23.1
-
-
-build:
-  stage: build
-  script:
-    - go mod download
-    - go build
 
 lint:
   stage: test
@@ -18,3 +12,32 @@ lint:
     - go vet
     - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.61.0
     - golangci-lint run
+
+build:
+  stage: build
+  needs:
+    - lint
+  dependencies:
+    - lint
+  script:
+    - go build
+
+deploy:
+  stage: deploy
+  needs:
+    - lint
+    - build
+  only:
+    - main
+  dependencies:
+    - build
+  script:
+    - apt-get update && apt-get install -y openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - ssh-keyscan $SSH_HOST > ~/.ssh/known_hosts
+    - echo "$ENV" > .env
+    - scp -r * .env $SSH_USER@$SSH_HOST:$DEPLOY_PATH
+    - ssh $SSH_USER@$SSH_HOST 'cd app/modelitebackend && docker compose --env-file .env up -d --build && docker system prune -f'
+    - echo 'SSH connection successful!'
