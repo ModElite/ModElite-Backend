@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 
+	"github.com/SSSBoOm/SE_PROJECT_BACKEND/docs"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/validator"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/controller"
@@ -65,6 +66,14 @@ func (s *FiberServer) Route() {
 		FilePath: "./docs/swagger.json",
 		Path:     "/docs/swagger",
 	}))
+
+	if s.config.APP_ENV == "PRODUCTION" {
+		docs.SwaggerInfo.Schemes = []string{"https"}
+		docs.SwaggerInfo.Host = "test.sssboom.xyz"
+	} else {
+		docs.SwaggerInfo.Schemes = []string{"http"}
+		docs.SwaggerInfo.Host = "localhost:8080"
+	}
 
 	app := s.app.Group("/api")
 

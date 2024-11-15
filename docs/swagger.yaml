@@ -687,7 +687,6 @@ definitions:
     - firstName
     - lastName
     type: object
-host: localhost:8080
 info:
   contact: {}
   description: This is a sample server celler server.
@@ -1883,8 +1882,6 @@ paths:
       summary: Search voucher by code
       tags:
       - Voucher
-schemes:
-- http
 securityDefinitions:
   ApiKeyAuth:
     in: header

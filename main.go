@@ -20,8 +20,6 @@ import (
 //	@version		1.0
 //	@description	This is a sample server celler server.
 
-// @schemes	http
-// @host		localhost:8080
 // @BasePath	/
 // @securityDefinitions.apikey 	ApiKeyAuth
 // @in 													header

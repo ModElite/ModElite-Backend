@@ -18,6 +18,7 @@ func GetEnv() (*domain.ConfigEnv, error) {
 		return nil, errors.New("error loading .env file")
 	}
 
+	APP_ENV := os.Getenv("APP_ENV")
 	BACKEND_PORT := os.Getenv("BACKEND_PORT")
 	DATABASE_URI := os.Getenv("DATABASE_URI")
 	GOOGLE_CLIENT_ID := os.Getenv("GOOGLE_CLIENT_ID")
@@ -26,6 +27,7 @@ func GetEnv() (*domain.ConfigEnv, error) {
 	FRONTEND_URL := os.Getenv("FRONTEND_URL")
 
 	config := &domain.ConfigEnv{
+		APP_ENV:              APP_ENV,
 		BACKEND_PORT:         BACKEND_PORT,
 		DATABASE_URI:         DATABASE_URI,
 		GOOGLE_CLIENT_ID:     GOOGLE_CLIENT_ID,
