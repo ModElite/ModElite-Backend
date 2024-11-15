@@ -38,7 +38,7 @@ func (s *FiberServer) Start() {
 	})
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:5173,http://localhost:3000,https://test.sssboom.xyz",
+		AllowOrigins:     "http://localhost:5173,http://localhost:3000,https://modelite.sssboom.xyz",
 		AllowHeaders:     "Origin,Content-Type,Accept,Content-Length,Accept-Language,Accept-Encoding,Connection,Access-Control-Allow-Origin",
 		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH",
 		AllowCredentials: true,
