@@ -3,11 +3,13 @@ package controller
 import (
 	"image"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
+	"github.com/chai2010/webp"
 	"github.com/disintegration/imaging"
 	"github.com/gofiber/fiber/v2"
 )
@@ -109,7 +111,12 @@ func (c *uploadController) UploadFile(ctx *fiber.Ctx) error {
 		})
 	}
 
-	img, _, err := image.Decode(src)
+	var img image.Image
+	if fileType == "image/webp" {
+		img, err = webp.Decode(src)
+	} else {
+		img, _, err = image.Decode(src)
+	}
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			MESSAGE: "Failed to decode image",
@@ -124,12 +131,29 @@ func (c *uploadController) UploadFile(ctx *fiber.Ctx) error {
 	sanitizedFileName := sanitizeFileName(file.Filename)
 	newFileName := timestamp + "_" + sanitizedFileName
 	dst := filepath.Join("uploads", newFileName)
-	err = imaging.Save(resizedImg, dst)
-	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
-			MESSAGE: "Failed to save image",
-			SUCCESS: false,
-		})
+
+	if fileType == "image/webp" {
+		outFile, err := os.Create(dst)
+		if err != nil {
+			return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+				MESSAGE: "Failed to save image",
+				SUCCESS: false,
+			})
+		}
+		defer outFile.Close()
+		if err := webp.Encode(outFile, resizedImg, &webp.Options{Lossless: false, Quality: 80}); err != nil {
+			return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+				MESSAGE: "Failed to encode WebP",
+				SUCCESS: false,
+			})
+		}
+	} else {
+		if err := imaging.Save(resizedImg, dst, imaging.JPEGQuality(85)); err != nil {
+			return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+				MESSAGE: "Failed to save image",
+				SUCCESS: false,
+			})
+		}
 	}
 
 	path := "/api/upload/" + newFileName
