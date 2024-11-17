@@ -215,6 +215,10 @@ definitions:
         items:
           $ref: '#/definitions/domain.ProductOption'
         type: array
+      seller:
+        $ref: '#/definitions/domain.Seller'
+      seller_name:
+        type: string
       sellerId:
         type: string
       status:

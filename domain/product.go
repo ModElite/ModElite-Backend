@@ -23,6 +23,8 @@ type Product struct {
 	IMAGE_URL      string           `json:"imageUrl" db:"image_url"`
 	PRODUCT_OPTION *[]ProductOption `json:"productOption" db:"product_option"`
 	TAGS           *[]Tag           `json:"tags" db:"-"`
+	SELLER         *Seller          `json:"seller,omitempty" db:"-"`
+	SELLER_NAME    *string          `json:"seller_name,omitempty" db:"seller_name"`
 	CREATED_AT     time.Time        `json:"createdAt" db:"created_at"`
 	UPDATED_AT     time.Time        `json:"updatedAt" db:"updated_at"`
 	DELETED_AT     *time.Time       `json:"deletedAt" db:"deleted_at"`
@@ -35,6 +37,7 @@ type ProductRow struct {
 	Description     string         `db:"description"`
 	Price           float64        `db:"price"`
 	Status          string         `db:"status"`
+	SellerName      string         `db:"seller_name"`
 	ImageURL        string         `db:"image_url"`
 	CreatedAt       time.Time      `db:"created_at"`
 	UpdatedAt       time.Time      `db:"updated_at"`

@@ -2453,7 +2453,13 @@ const docTemplate = `{
                         "$ref": "#/definitions/domain.ProductOption"
                     }
                 },
+                "seller": {
+                    "$ref": "#/definitions/domain.Seller"
+                },
                 "sellerId": {
+                    "type": "string"
+                },
+                "seller_name": {
                     "type": "string"
                 },
                 "status": {

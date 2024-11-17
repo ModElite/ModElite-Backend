@@ -32,7 +32,7 @@ func (fu *favoriteUsecase) GetByID(id string) (*domain.Favorite, error) {
 		return nil, err
 	}
 	return &domain.Favorite{
-		PRODUCT:    *product,
+		PRODUCT:    product,
 		PRODUCT_ID: favorite.PRODUCT_ID,
 	}, nil
 }
@@ -48,7 +48,7 @@ func (fu *favoriteUsecase) GetByUserID(id string) (*[]domain.Favorite, error) {
 		if err != nil {
 			return nil, err
 		}
-		(*favorites)[i].PRODUCT = *product
+		(*favorites)[i].PRODUCT = product
 	}
 	return favorites, nil
 }

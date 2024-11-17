@@ -123,11 +123,12 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*do
 		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
 				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at, po.deleted_at AS option_deleted_at,
 				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at, ps.deleted_at AS product_size_deleted_at,
-				s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at
+				s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at, se.name AS seller_name
 		FROM product p
 		LEFT JOIN product_option po ON po.product_id = p.id AND po.deleted_at ISNULL
 		LEFT JOIN product_size ps ON ps.product_option_id = po.id AND ps.deleted_at ISNULL
 		LEFT JOIN size s ON s.id = ps.size_id
+		INNER JOIN seller AS se ON "p".seller_id = se."id" 
 		WHERE p.id = $1 AND p.deleted_at ISNULL
 		ORDER BY po.id, ps.id
 	`
@@ -155,6 +156,7 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*do
 			product = &domain.Product{
 				ID:             row.ProductID,
 				SELLER_ID:      row.SellerID,
+				SELLER_NAME:    &row.SellerName,
 				NAME:           row.Name,
 				DESCRIPTION:    row.Description,
 				PRICE:          row.Price,

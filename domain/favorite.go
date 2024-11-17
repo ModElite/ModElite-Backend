@@ -5,7 +5,7 @@ import "time"
 type Favorite struct {
 	USER       *User     `json:"user,omitempty" db:"-"`
 	USER_ID    string    `json:"userId" db:"user_id"`
-	PRODUCT    Product   `json:"product" db:"-"`
+	PRODUCT    *Product  `json:"product,omitempty" db:"-"`
 	PRODUCT_ID string    `json:"productId" db:"product_id"`
 	CREATED_AT time.Time `json:"createdAt" db:"created_at"`
 	UPDATED_AT time.Time `json:"updatedAt" db:"updated_at"`
