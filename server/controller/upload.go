@@ -85,7 +85,11 @@ func (c *uploadController) UploadFile(ctx *fiber.Ctx) error {
 			"message": "Failed to read file",
 		})
 	}
-	src.Seek(0, 0)
+	if _, err := src.Seek(0, 0); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to seek file",
+		})
+	}
 
 	fileType := http.DetectContentType(buffer)
 	allowedTypes := map[string]bool{
