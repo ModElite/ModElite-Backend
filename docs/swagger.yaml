@@ -1829,6 +1829,31 @@ paths:
       summary: Upload file
       tags:
       - Upload
+  /api/upload/{filename}:
+    get:
+      description: Get an uploaded file by filename
+      parameters:
+      - description: Filename
+        in: path
+        name: filename
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get uploaded file
+      tags:
+      - Upload
   /api/user:
     patch:
       consumes:

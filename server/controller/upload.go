@@ -1,10 +1,14 @@
 package controller
 
 import (
+	"image"
+	"net/http"
 	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
+	"github.com/disintegration/imaging"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -26,6 +30,26 @@ func sanitizeFileName(fileName string) string {
 	return fileName
 }
 
+// @Summary Get uploaded file
+// @Description Get an uploaded file by filename
+// @Tags Upload
+// @Produce application/octet-stream
+// @Param filename path string true "Filename"
+// @Success 200 {file} file
+// @Failure 404 {object} map[string]string
+// @Router /api/upload/{filename} [get]
+func (c *uploadController) GetFile(ctx *fiber.Ctx) error {
+	filename := ctx.Params("filename")
+	if filename == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Filename is required",
+		})
+	}
+
+	filePath := filepath.Join("uploads", filename)
+	return ctx.SendFile(filePath)
+}
+
 // @Summary Upload file
 // @Description Upload a file
 // @Tags Upload
@@ -38,23 +62,71 @@ func sanitizeFileName(fileName string) string {
 func (c *uploadController) UploadFile(ctx *fiber.Ctx) error {
 	file, err := ctx.FormFile("file")
 	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Failed to get file",
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			MESSAGE: "Failed to get file",
+			SUCCESS: false,
 		})
 	}
 
+	// Open the uploaded file
+	src, err := file.Open()
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: "Failed to open file",
+			SUCCESS: false,
+		})
+	}
+	defer src.Close()
+
+	buffer := make([]byte, 512)
+	_, err = src.Read(buffer)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to read file",
+		})
+	}
+	src.Seek(0, 0)
+
+	fileType := http.DetectContentType(buffer)
+	allowedTypes := map[string]bool{
+		"image/jpeg": true,
+		"image/png":  true,
+		"image/webp": true,
+	}
+
+	if !allowedTypes[fileType] {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			MESSAGE: "File type not allowed",
+			SUCCESS: false,
+		})
+	}
+
+	img, _, err := image.Decode(src)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			MESSAGE: "Failed to decode image",
+			SUCCESS: false,
+		})
+	}
+
+	const maxWidth = 1920
+	const maxHeight = 1080
+	resizedImg := imaging.Fit(img, maxWidth, maxHeight, imaging.Lanczos)
 	timestamp := time.Now().Format("20060102150405")
 	sanitizedFileName := sanitizeFileName(file.Filename)
 	newFileName := timestamp + "_" + sanitizedFileName
 	dst := filepath.Join("uploads", newFileName)
-	if err := ctx.SaveFile(file, dst); err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Failed to save file",
+	err = imaging.Save(resizedImg, dst)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: "Failed to save image",
+			SUCCESS: false,
 		})
 	}
 
 	return ctx.JSON(fiber.Map{
-		"message": "File uploaded successfully",
+		"message": "Image uploaded and processed successfully",
 		"file":    dst,
 	})
+
 }

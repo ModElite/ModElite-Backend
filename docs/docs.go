@@ -1897,6 +1897,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/upload/{filename}": {
+            "get": {
+                "description": "Get an uploaded file by filename",
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "Upload"
+                ],
+                "summary": "Get uploaded file",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Filename",
+                        "name": "filename",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/user": {
             "patch": {
                 "security": [
