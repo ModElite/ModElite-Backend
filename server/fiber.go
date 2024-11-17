@@ -162,7 +162,7 @@ func (s *FiberServer) Route() {
 	cart.Get("/self", middlewareAuth, cartController.GetCartByUserId)
 	cart.Post("/", middlewareAuth, cartController.EditCart)
 
-	uploadController := controller.NewUploadController()
+	uploadController := controller.NewUploadController(s.config)
 	app.Get("/upload/:filename", uploadController.GetFile)
 	app.Post("/upload", uploadController.UploadFile)
 }

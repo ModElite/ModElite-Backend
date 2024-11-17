@@ -19,6 +19,7 @@ func GetEnv() (*domain.ConfigEnv, error) {
 	}
 
 	APP_ENV := os.Getenv("APP_ENV")
+	BACKEND_URL := os.Getenv("BACKEND_URL")
 	BACKEND_PORT := os.Getenv("BACKEND_PORT")
 	DATABASE_URI := os.Getenv("DATABASE_URI")
 	GOOGLE_CLIENT_ID := os.Getenv("GOOGLE_CLIENT_ID")
@@ -28,6 +29,7 @@ func GetEnv() (*domain.ConfigEnv, error) {
 
 	config := &domain.ConfigEnv{
 		APP_ENV:              APP_ENV,
+		BACKEND_URL:          BACKEND_URL,
 		BACKEND_PORT:         BACKEND_PORT,
 		DATABASE_URI:         DATABASE_URI,
 		GOOGLE_CLIENT_ID:     GOOGLE_CLIENT_ID,

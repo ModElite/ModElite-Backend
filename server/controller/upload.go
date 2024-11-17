@@ -12,10 +12,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type uploadController struct{}
+type uploadController struct {
+	cfg *domain.ConfigEnv
+}
 
-func NewUploadController() *uploadController {
-	return &uploadController{}
+func NewUploadController(cfg *domain.ConfigEnv) *uploadController {
+	return &uploadController{
+		cfg: cfg,
+	}
 }
 
 func sanitizeFileName(fileName string) string {
@@ -128,9 +132,15 @@ func (c *uploadController) UploadFile(ctx *fiber.Ctx) error {
 		})
 	}
 
+	path := "/api/upload/" + newFileName
+	url := c.cfg.BACKEND_URL + path
 	return ctx.JSON(fiber.Map{
 		"message": "Image uploaded and processed successfully",
-		"file":    dst,
+		"file":    newFileName,
+		"url":     url,
+		"path":    path,
+		"type":    fileType,
+		"size":    file.Size,
 	})
 
 }
