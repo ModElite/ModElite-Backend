@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8080:8080
+    volumes:
+      - ./uploads:/app/uploads
     env_file:
       - .env
     restart: on-failure

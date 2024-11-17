@@ -11,6 +11,9 @@ volumes
 tmp
 *.test
 
+# Upload file
+/uploads/*
+
 .docker
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
