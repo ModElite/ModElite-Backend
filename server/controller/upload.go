@@ -2,6 +2,8 @@ package controller
 
 import (
 	"image"
+	"image/jpeg"
+	"image/png"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -9,9 +11,9 @@ import (
 	"time"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
-	"github.com/chai2010/webp"
 	"github.com/disintegration/imaging"
 	"github.com/gofiber/fiber/v2"
+	"golang.org/x/image/webp"
 )
 
 type uploadController struct {
@@ -112,10 +114,15 @@ func (c *uploadController) UploadFile(ctx *fiber.Ctx) error {
 	}
 
 	var img image.Image
-	if fileType == "image/webp" {
-		img, err = webp.Decode(src)
-	} else {
+	switch fileType {
+	case "image/jpeg":
 		img, _, err = image.Decode(src)
+	case "image/png":
+		img, _, err = image.Decode(src)
+	case "image/webp":
+		img, err = webp.Decode(src)
+	default:
+		err = fiber.NewError(fiber.StatusBadRequest, "Unsupported image format")
 	}
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
@@ -131,29 +138,27 @@ func (c *uploadController) UploadFile(ctx *fiber.Ctx) error {
 	sanitizedFileName := sanitizeFileName(file.Filename)
 	newFileName := timestamp + "_" + sanitizedFileName
 	dst := filepath.Join("uploads", newFileName)
-
-	if fileType == "image/webp" {
-		outFile, err := os.Create(dst)
-		if err != nil {
+	switch fileType {
+	case "image/jpeg":
+		err = imaging.Save(resizedImg, dst, imaging.JPEGQuality(85))
+	case "image/png":
+		err = imaging.Save(resizedImg, dst, imaging.PNGCompressionLevel(png.BestCompression))
+	case "image/webp":
+		outFile, createErr := os.Create(dst)
+		if createErr != nil {
 			return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
-				MESSAGE: "Failed to save image",
+				MESSAGE: "Failed to create output file",
 				SUCCESS: false,
 			})
 		}
 		defer outFile.Close()
-		if err := webp.Encode(outFile, resizedImg, &webp.Options{Lossless: false, Quality: 80}); err != nil {
-			return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
-				MESSAGE: "Failed to encode WebP",
-				SUCCESS: false,
-			})
-		}
-	} else {
-		if err := imaging.Save(resizedImg, dst, imaging.JPEGQuality(85)); err != nil {
-			return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
-				MESSAGE: "Failed to save image",
-				SUCCESS: false,
-			})
-		}
+		err = jpeg.Encode(outFile, resizedImg, &jpeg.Options{Quality: 80})
+	}
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: "Failed to save image",
+			SUCCESS: false,
+		})
 	}
 
 	path := "/api/upload/" + newFileName
