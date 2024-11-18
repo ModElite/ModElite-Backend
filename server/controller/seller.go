@@ -64,6 +64,56 @@ func (c *sellerController) GetByOwner(ctx *fiber.Ctx) error {
 	})
 }
 
+// @Summary Check seller is owner by seller id
+// @Tags Seller
+// @Security ApiKeyAuth
+// @Produce json
+// @Param id path string true "Seller ID"
+// @Success 200 {object} domain.Response{data=domain.Seller}
+// @Failure 400 {object} domain.Response
+// @Failure 403 {object} domain.Response
+// @Failure 500 {object} domain.Response
+// @Router /api/seller/permission/{id} [get]
+func (c *sellerController) GetIsOwner(ctx *fiber.Ctx) error {
+	userId := ctx.Locals(constant.USER_ID).(string)
+	sellerId := ctx.Params("id", "")
+	if IsUUID := c.validator.ValidateUUID(sellerId); !IsUUID {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_BAD_REQUEST,
+		})
+	} else if sellerId == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_BAD_REQUEST,
+		})
+	}
+
+	seller, err := c.sellerUsecase.GetByID(sellerId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+	} else if seller == nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_NOT_FOUND,
+		})
+	} else if seller.OWNER_ID != userId {
+		return ctx.Status(fiber.StatusForbidden).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_PERMISSION_DENIED,
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+		SUCCESS: true,
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		DATA:    seller,
+	})
+}
+
 // @Summary Get seller by id
 // @Tags Seller
 // @Produce json
