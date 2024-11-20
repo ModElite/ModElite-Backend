@@ -2643,6 +2643,15 @@
         "domain.Seller": {
             "type": "object",
             "properties": {
+                "bankAccountName": {
+                    "type": "string"
+                },
+                "bankAccountNumber": {
+                    "type": "string"
+                },
+                "bankAccountProvider": {
+                    "type": "string"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -2952,12 +2961,24 @@
         "payload.CreateSellerDTO": {
             "type": "object",
             "required": [
+                "bankAccountName",
+                "bankAccountNumber",
+                "bankAccountProvider",
                 "description",
                 "location",
                 "logoUrl",
                 "name"
             ],
             "properties": {
+                "bankAccountName": {
+                    "type": "string"
+                },
+                "bankAccountNumber": {
+                    "type": "string"
+                },
+                "bankAccountProvider": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -3201,6 +3222,9 @@
         "payload.UpdateSellerDTO": {
             "type": "object",
             "required": [
+                "bankAccountName",
+                "bankAccountNumber",
+                "bankAccountProvider",
                 "description",
                 "id",
                 "location",
@@ -3208,6 +3232,15 @@
                 "name"
             ],
             "properties": {
+                "bankAccountName": {
+                    "type": "string"
+                },
+                "bankAccountNumber": {
+                    "type": "string"
+                },
+                "bankAccountProvider": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },

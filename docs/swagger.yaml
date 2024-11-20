@@ -303,6 +303,12 @@ definitions:
     type: object
   domain.Seller:
     properties:
+      bankAccountName:
+        type: string
+      bankAccountNumber:
+        type: string
+      bankAccountProvider:
+        type: string
       createdAt:
         type: string
       description:
@@ -511,6 +517,12 @@ definitions:
     type: object
   payload.CreateSellerDTO:
     properties:
+      bankAccountName:
+        type: string
+      bankAccountNumber:
+        type: string
+      bankAccountProvider:
+        type: string
       description:
         type: string
       location:
@@ -520,6 +532,9 @@ definitions:
       name:
         type: string
     required:
+    - bankAccountName
+    - bankAccountNumber
+    - bankAccountProvider
     - description
     - location
     - logoUrl
@@ -680,6 +695,12 @@ definitions:
     type: object
   payload.UpdateSellerDTO:
     properties:
+      bankAccountName:
+        type: string
+      bankAccountNumber:
+        type: string
+      bankAccountProvider:
+        type: string
       description:
         type: string
       id:
@@ -691,6 +712,9 @@ definitions:
       name:
         type: string
     required:
+    - bankAccountName
+    - bankAccountNumber
+    - bankAccountProvider
     - description
     - id
     - location

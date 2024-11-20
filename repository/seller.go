@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	"time"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/jmoiron/sqlx"
@@ -49,7 +48,11 @@ func (r *sellerRepository) GetByOwnerID(ownerID string) (*[]domain.Seller, error
 }
 
 func (r *sellerRepository) Create(seller *domain.Seller) error {
-	_, err := r.db.NamedExec("INSERT INTO seller (id, name, description, logo_url, location, owner_id, is_verify) VALUES (:id, :name, :description, :logo_url, :location, :owner_id, :is_verify)", seller)
+	_, err := r.db.NamedExec(`
+		INSERT INTO seller 
+			(id, name, description, logo_url, location, bank_account_name, bank_account_number, bank_account_provider, owner_id, is_verify)
+		VALUES
+			(:id, :name, :description, :logo_url, :location, :bank_account_name, :bank_account_number, :bank_account_provider, :owner_id, :is_verify)`, seller)
 	if err != nil {
 		return fmt.Errorf("error create seller: %v", err)
 	}
@@ -57,8 +60,22 @@ func (r *sellerRepository) Create(seller *domain.Seller) error {
 }
 
 func (r *sellerRepository) Update(seller *domain.Seller) error {
-	seller.UPDATED_AT = time.Now()
-	_, err := r.db.NamedExec("UPDATE seller SET name = :name, description = :description, logo_url = :logo_url, location = :location, owner_id = :owner_id, is_verify = :is_verify, updated_at = :updated_at WHERE id = :id", seller)
+	_, err := r.db.NamedExec(`
+		UPDATE
+			seller
+		SET 
+			name = :name,
+			description = :description,
+			logo_url = :logo_url,
+			location = :location,
+			bank_account_name = :bank_account_name,
+			bank_account_number = :bank_account_number,
+			bank_account_provider = :bank_account_provider,
+			owner_id = :owner_id,
+			is_verify = :is_verify,
+			updated_at = NOW()
+		WHERE
+			id = :id`, seller)
 	if err != nil {
 		return fmt.Errorf("error update seller: %v", err)
 	}

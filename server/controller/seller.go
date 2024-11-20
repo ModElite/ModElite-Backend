@@ -157,11 +157,14 @@ func (c *sellerController) Create(ctx *fiber.Ctx) error {
 
 	userId := ctx.Locals(constant.USER_ID).(string)
 	if err := c.sellerUsecase.Create(&domain.Seller{
-		NAME:        body.NAME,
-		DESCRIPTION: body.DESCRIPTION,
-		LOGO_URL:    body.LOGO_URL,
-		LOCATION:    body.LOCATION,
-		OWNER_ID:    userId,
+		NAME:                  body.NAME,
+		DESCRIPTION:           body.DESCRIPTION,
+		LOGO_URL:              body.LOGO_URL,
+		LOCATION:              body.LOCATION,
+		BANK_ACCOUNT_NAME:     body.BANK_ACCOUNT_NAME,
+		BANK_ACCOUNT_NUMBER:   body.BANK_ACCOUNT_NUMBER,
+		BANK_ACCOUNT_PROVIDER: body.BANK_ACCOUNT_PROVIDER,
+		OWNER_ID:              userId,
 	}); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			SUCCESS: false,
@@ -194,10 +197,13 @@ func (c *sellerController) Update(ctx *fiber.Ctx) error {
 
 	userId := ctx.Locals(constant.USER_ID).(string)
 	err := c.sellerUsecase.Update(body.ID, &domain.Seller{
-		NAME:        body.NAME,
-		DESCRIPTION: body.DESCRIPTION,
-		LOGO_URL:    body.LOGO_URL,
-		LOCATION:    body.LOCATION,
+		NAME:                  body.NAME,
+		DESCRIPTION:           body.DESCRIPTION,
+		LOGO_URL:              body.LOGO_URL,
+		LOCATION:              body.LOCATION,
+		BANK_ACCOUNT_NAME:     body.BANK_ACCOUNT_NAME,
+		BANK_ACCOUNT_NUMBER:   body.BANK_ACCOUNT_NUMBER,
+		BANK_ACCOUNT_PROVIDER: body.BANK_ACCOUNT_PROVIDER,
 	}, userId)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{

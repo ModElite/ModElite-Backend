@@ -50,13 +50,16 @@ func (u *sellerUsecase) GetByID(id string) (*domain.Seller, error) {
 
 func (u *sellerUsecase) Create(data *domain.Seller) error {
 	seller := &domain.Seller{
-		ID:          uuid.New().String(),
-		NAME:        data.NAME,
-		DESCRIPTION: data.DESCRIPTION,
-		LOGO_URL:    data.LOGO_URL,
-		LOCATION:    data.LOCATION,
-		OWNER_ID:    data.OWNER_ID,
-		IS_VERIFY:   false,
+		ID:                    uuid.New().String(),
+		NAME:                  data.NAME,
+		DESCRIPTION:           data.DESCRIPTION,
+		LOGO_URL:              data.LOGO_URL,
+		LOCATION:              data.LOCATION,
+		BANK_ACCOUNT_NAME:     data.BANK_ACCOUNT_NAME,
+		BANK_ACCOUNT_NUMBER:   data.BANK_ACCOUNT_NUMBER,
+		BANK_ACCOUNT_PROVIDER: data.BANK_ACCOUNT_PROVIDER,
+		OWNER_ID:              data.OWNER_ID,
+		IS_VERIFY:             false,
 	}
 
 	err := u.sellerRepo.Create(seller)
@@ -84,6 +87,9 @@ func (u *sellerUsecase) Update(id string, data *domain.Seller, userId string) er
 	seller.DESCRIPTION = data.DESCRIPTION
 	seller.LOGO_URL = data.LOGO_URL
 	seller.LOCATION = data.LOCATION
+	seller.BANK_ACCOUNT_NAME = data.BANK_ACCOUNT_NAME
+	seller.BANK_ACCOUNT_NUMBER = data.BANK_ACCOUNT_NUMBER
+	seller.BANK_ACCOUNT_PROVIDER = data.BANK_ACCOUNT_PROVIDER
 
 	if err = u.sellerRepo.Update(seller); err != nil {
 		return err

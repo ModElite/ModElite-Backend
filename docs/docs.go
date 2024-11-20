@@ -2650,6 +2650,15 @@ const docTemplate = `{
         "domain.Seller": {
             "type": "object",
             "properties": {
+                "bankAccountName": {
+                    "type": "string"
+                },
+                "bankAccountNumber": {
+                    "type": "string"
+                },
+                "bankAccountProvider": {
+                    "type": "string"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -2959,12 +2968,24 @@ const docTemplate = `{
         "payload.CreateSellerDTO": {
             "type": "object",
             "required": [
+                "bankAccountName",
+                "bankAccountNumber",
+                "bankAccountProvider",
                 "description",
                 "location",
                 "logoUrl",
                 "name"
             ],
             "properties": {
+                "bankAccountName": {
+                    "type": "string"
+                },
+                "bankAccountNumber": {
+                    "type": "string"
+                },
+                "bankAccountProvider": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -3208,6 +3229,9 @@ const docTemplate = `{
         "payload.UpdateSellerDTO": {
             "type": "object",
             "required": [
+                "bankAccountName",
+                "bankAccountNumber",
+                "bankAccountProvider",
                 "description",
                 "id",
                 "location",
@@ -3215,6 +3239,15 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
+                "bankAccountName": {
+                    "type": "string"
+                },
+                "bankAccountNumber": {
+                    "type": "string"
+                },
+                "bankAccountProvider": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
