@@ -41,8 +41,7 @@ func (r *orderRepository) GetSelfOrder(userID string) (*[]domain.Order, error) {
 		SELECT
 			order_product."id" AS "id", 
 			order_product.order_id AS order_id, 
-			order_product.product_size_id AS product_size_id, 
-			order_product.status AS status, 
+			order_product.product_size_id AS product_size_id,
 			order_product.quantity AS quantity, 
 			order_product.price AS price, 
 			order_product.created_at AS created_at, 
@@ -111,8 +110,8 @@ func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address stri
 	// INSERT INTO order_product (order_id, product_size_id, quantity, price, status) VALUES ($1, $2, $3, $4, $5);
 	for _, orderProduct := range *order {
 		orderProductId := uuid.New().String()
-		_, err = tx.Exec(`INSERT INTO order_product (id ,order_id, product_size_id, quantity, price, status) VALUES ($1, $2, $3, $4, $5, $6); `,
-			orderProductId, id, orderProduct.PRODUCT_SIZE_ID, orderProduct.QUANTITY, orderProduct.PRICE, domain.ORDER_PRODUCT_PENDING)
+		_, err = tx.Exec(`INSERT INTO order_product (id ,order_id, product_size_id, quantity, price) VALUES ($1, $2, $3, $4, $5); `,
+			orderProductId, id, orderProduct.PRODUCT_SIZE_ID, orderProduct.QUANTITY, orderProduct.PRICE)
 		if err != nil {
 			if err := tx.Rollback(); err != nil {
 				return err

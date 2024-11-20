@@ -2329,6 +2329,12 @@ const docTemplate = `{
                 "discount": {
                     "type": "number"
                 },
+                "expressProvider": {
+                    "type": "string"
+                },
+                "expressTrackingNumber": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -2346,6 +2352,15 @@ const docTemplate = `{
                 },
                 "productPrice": {
                     "type": "number"
+                },
+                "sellerPaymentProductAmount": {
+                    "type": "number"
+                },
+                "sellerPaymentShippingAmount": {
+                    "type": "number"
+                },
+                "sellerPaymentStatus": {
+                    "type": "boolean"
                 },
                 "shippingPrice": {
                     "type": "number"
@@ -2393,9 +2408,6 @@ const docTemplate = `{
                 },
                 "sellerId": {
                     "type": "string"
-                },
-                "status": {
-                    "$ref": "#/definitions/domain.OrderProductStatus"
                 },
                 "updatedAt": {
                     "type": "string"
@@ -2450,30 +2462,17 @@ const docTemplate = `{
                 "sellerName": {
                     "type": "string"
                 },
-                "status": {
-                    "$ref": "#/definitions/domain.OrderProductStatus"
-                },
                 "updatedAt": {
                     "type": "string"
                 }
             }
-        },
-        "domain.OrderProductStatus": {
-            "type": "string",
-            "enum": [
-                "PENDING",
-                "DELIVERY_ON_THE_WAY"
-            ],
-            "x-enum-varnames": [
-                "ORDER_PRODUCT_PENDING",
-                "ORDER_PRODUCT_DELIVERY_ON_THE_WAY"
-            ]
         },
         "domain.OrderStatusType": {
             "type": "string",
             "enum": [
                 "PENDING",
                 "PAYMENT_SUCCESS",
+                "DELIVERY_ON_THE_WAY",
                 "REFUND",
                 "END",
                 "CANCEL"
@@ -2481,6 +2480,7 @@ const docTemplate = `{
             "x-enum-varnames": [
                 "ORDER_PENDING",
                 "ORDER_PAYMENT_SUCCESS",
+                "ORDER_DELIVERY_ON_THE_WAY",
                 "ORDER_REFUND",
                 "ORDER_END",
                 "ORDER_CANCEL"
