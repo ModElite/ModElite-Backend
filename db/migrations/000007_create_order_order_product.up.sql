@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS "voucher" (
 DO $$ BEGIN BEGIN CREATE TYPE order_status AS ENUM (
   'PENDING',
   'PAYMENT_SUCCESS',
+  'DELIVERY_ON_THE_WAY',
   'REFUND',
   'END',
   'CANCEL'
@@ -25,6 +26,11 @@ CREATE TABLE IF NOT EXISTS "order" (
   id UUID PRIMARY KEY,
   user_id UUID NOT NULL,
   "status" order_status NOT NULL DEFAULT 'PENDING',
+  seller_payment_status BOOLEAN NOT NULL DEFAULT FALSE,
+  seller_payment_product_amount DOUBLE PRECISION NOT NULL DEFAULT 0,
+  seller_payment_shipping_amount DOUBLE PRECISION NOT NULL DEFAULT 0,
+  express_provider TEXT NULL,
+  express_tracking_number TEXT NULL,
   total_price DOUBLE PRECISION NOT NULL,
   product_price DOUBLE PRECISION NOT NULL,
   shipping_price DOUBLE PRECISION NOT NULL,
@@ -36,23 +42,13 @@ CREATE TABLE IF NOT EXISTS "order" (
   FOREIGN KEY (voucher_code) REFERENCES "voucher"(id),
   FOREIGN KEY (user_id) REFERENCES "users"(id)
 );
-DO $$ BEGIN BEGIN CREATE TYPE order_product_status AS ENUM (
-  'PENDING',
-  'DELIVERY_ON_THE_WAY',
-  'DELIVERED'
-);
-EXCEPTION
-WHEN duplicate_object THEN NULL;
-END;
-END;
-$$;
 CREATE TABLE IF NOT EXISTS "order_product" (
   id UUID PRIMARY KEY,
   order_id UUID NOT NULL,
   product_size_id UUID NOT NULL,
-  "status" order_product_status NOT NULL DEFAULT 'PENDING',
   quantity INT NOT NULL,
   price DOUBLE PRECISION NOT NULL,
+  shipping_price DOUBLE PRECISION NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (order_id) REFERENCES "order"(id),
