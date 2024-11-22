@@ -92,7 +92,11 @@ definitions:
         type: string
       expressTrackingNumber:
         type: string
+      firstName:
+        type: string
       id:
+        type: string
+      lastName:
         type: string
       orderProduct:
         items:
@@ -1280,6 +1284,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get self order detail
+      tags:
+      - Order
+  /api/order/seller/{seller_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get seller order
+      parameters:
+      - description: Seller ID
+        in: path
+        name: seller_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/domain.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/domain.Order'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get seller order
       tags:
       - Order
   /api/product:

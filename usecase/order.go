@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"fmt"
+
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 )
 
@@ -51,8 +53,16 @@ func (u *orderUsecase) GetSelfOrderDetail(orderID string, userID string) (*domai
 
 func (u *orderUsecase) GetSellerOrder(SellerID string, UserID string) (*[]domain.Order, error) {
 	// First Check if SellerID is the same as UserID
+	isSame, err := u.orderRepo.CheckSellerUserID(SellerID, UserID)
+	if err != nil {
+		return nil, fmt.Errorf("UserID or SellerID invalid")
+	}
+	if !isSame {
+		return nil, fmt.Errorf("UserID or SellerID invalid")
+	}
 	// Check Seller ID and UserID is the same
 	order, err := u.orderRepo.GetSellerOrder(SellerID)
+	// Add username to order data
 	if err != nil {
 		return nil, err
 	}

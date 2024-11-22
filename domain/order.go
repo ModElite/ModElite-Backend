@@ -19,6 +19,8 @@ type Order struct {
 	ORDER_PRODUCT_DATA             *[]OrderProductResponse `json:"orderProductData,omitempty" db:"-"`
 	USER                           *User                   `json:"user,omitempty" db:"-"`
 	USER_ID                        string                  `json:"userId" db:"user_id"`
+	FIRSTNAME                      string                  `json:"firstName,omitempty" db:"first_name"`
+	LASTNAME                       string                  `json:"lastName,omitempty" db:"last_name"`
 	STATUS                         OrderStatusType         `json:"status" db:"status"`
 	SELLER_PAYMENT_STATUS          bool                    `json:"sellerPaymentStatus" db:"seller_payment_status"`
 	SELLER_PAYMENT_PRODUCT_AMOUNT  float64                 `json:"sellerPaymentProductAmount" db:"seller_payment_product_amount"`
@@ -54,6 +56,7 @@ type OrderRepository interface {
 	CreateOrder(order *[]OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string) error
 	GetSelfOrderDetail(orderID string, userID string) (*Order, error)
 	GetSellerOrder(SellerID string) (*[]Order, error)
+	CheckSellerUserID(SellerID string, UserID string) (bool, error)
 }
 
 type OrderUsecase interface {

@@ -147,35 +147,42 @@ func (r *orderRepository) GetSelfOrderDetail(orderID string, userID string) (*do
 	return &order, nil
 }
 
+func (r *orderRepository) CheckSellerUserID(SellerID string, UserID string) (bool, error) {
+	var count int
+	err := r.db.Get(&count, `SELECT COUNT(*) FROM seller WHERE id = $1 AND owner_id = $2;`, SellerID, UserID)
+	if err != nil {
+		return false, err
+	}
+	if count == 0 {
+		return false, nil
+	}
+	return true, nil
+}
+
 func (r *orderRepository) GetSellerOrder(SellerID string) (*[]domain.Order, error) {
 	order := make([]domain.Order, 0)
 	err := r.db.Select(&order, `
 		SELECT
-			"order".*
+			"order".*,
+			users.first_name,
+			users.last_name 
 		FROM
 			"order"
+			INNER JOIN users ON "order".user_id = users."id" 
 		WHERE
 			"order"."id" IN (
-				SELECT
-			order_product.order_id
-		FROM
-			order_product
-			INNER JOIN
-			product_size
-			ON 
-				order_product.product_size_id = product_size."id"
-			INNER JOIN
-			product_option
-			ON 
-				product_size.product_option_id = product_option."id"
-			INNER JOIN
-			product
-			ON 
-				product_option.product_id = product."id"
-		WHERE
-			product.seller_id = $1
-		GROUP BY order_product.order_id
-	)`, SellerID)
+			SELECT
+				order_product.order_id 
+			FROM
+				order_product
+				INNER JOIN product_size ON order_product.product_size_id = product_size."id"
+				INNER JOIN product_option ON product_size.product_option_id = product_option."id"
+				INNER JOIN product ON product_option.product_id = product."id" 
+			WHERE
+				product.seller_id = $1 
+			GROUP BY
+			order_product.order_id 
+			)`, SellerID)
 	if err != nil {
 		return nil, err
 	}
@@ -186,7 +193,6 @@ func (r *orderRepository) GetSellerOrder(SellerID string) (*[]domain.Order, erro
 			order_product."id" AS "id", 
 			order_product.order_id AS order_id, 
 			order_product.product_size_id AS product_size_id, 
-			order_product.status AS status, 
 			order_product.quantity AS quantity, 
 			order_product.price AS price, 
 			order_product.created_at AS created_at, 
@@ -225,7 +231,6 @@ func (r *orderRepository) GetSellerOrder(SellerID string) (*[]domain.Order, erro
 		WHERE order_id = $1;
 	`, order[i].ID)
 		if err != nil {
-			fmt.Println(err)
 			return nil, err
 		}
 		order[i].ORDER_PRODUCT_DATA = &orderProducts

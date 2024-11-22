@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/constant"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/payload"
@@ -207,10 +205,8 @@ func (c *orderController) GetSelfOrderDetail(ctx *fiber.Ctx) error {
 func (c *orderController) GetSellerOrder(ctx *fiber.Ctx) error {
 	userID := ctx.Locals(constant.USER_ID).(string)
 	seller_id := ctx.Params("seller_id")
-	fmt.Println(seller_id)
 	orders, err := c.orderUsecase.GetSellerOrder(seller_id, userID)
 	if err != nil {
-		fmt.Println(err)
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
 			SUCCESS: false,
