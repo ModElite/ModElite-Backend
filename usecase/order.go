@@ -48,3 +48,13 @@ func (u *orderUsecase) GetProductDetail(productSizeID string, quantity int) (*do
 func (u *orderUsecase) GetSelfOrderDetail(orderID string, userID string) (*domain.Order, error) {
 	return u.orderRepo.GetSelfOrderDetail(orderID, userID)
 }
+
+func (u *orderUsecase) GetSellerOrder(SellerID string, UserID string) (*[]domain.Order, error) {
+	// First Check if SellerID is the same as UserID
+	// Check Seller ID and UserID is the same
+	order, err := u.orderRepo.GetSellerOrder(SellerID)
+	if err != nil {
+		return nil, err
+	}
+	return order, nil
+}

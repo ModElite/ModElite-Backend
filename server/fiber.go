@@ -144,6 +144,7 @@ func (s *FiberServer) Route() {
 	order.Get("/", orderController.GetAll)
 	order.Get("/self", middlewareAuth, orderController.GetSelfOrder)
 	order.Get("/self/:id", middlewareAuth, orderController.GetSelfOrderDetail)
+	order.Get("/seller/:seller_id", middlewareAuth, orderController.GetSellerOrder)
 	order.Post("/", middlewareAuth, orderController.CreateOrder)
 
 	voucher := app.Group("/voucher")

@@ -53,6 +53,7 @@ type OrderRepository interface {
 	GetSelfOrder(userID string) (*[]Order, error)
 	CreateOrder(order *[]OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string) error
 	GetSelfOrderDetail(orderID string, userID string) (*Order, error)
+	GetSellerOrder(SellerID string) (*[]Order, error)
 }
 
 type OrderUsecase interface {
@@ -61,4 +62,5 @@ type OrderUsecase interface {
 	CreateOrder(order *[]OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string) error
 	GetProductDetail(productSizeID string, quantity int) (*OrderProduct, error)
 	GetSelfOrderDetail(orderID string, userID string) (*Order, error)
+	GetSellerOrder(SellerID string, UserID string) (*[]Order, error)
 }

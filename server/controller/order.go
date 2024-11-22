@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"fmt"
+
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/constant"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/payload"
@@ -189,5 +191,34 @@ func (c *orderController) GetSelfOrderDetail(ctx *fiber.Ctx) error {
 		MESSAGE: constant.MESSAGE_SUCCESS,
 		SUCCESS: true,
 		DATA:    order,
+	})
+}
+
+// Swagger for get order api that only seller can access
+// @Summary Get seller order
+// @Description Get seller order
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param seller_id path string true "Seller ID"
+// @Success 200 {object} domain.Response{data=[]domain.Order}
+// @Router /api/order/seller/{seller_id} [get]
+func (c *orderController) GetSellerOrder(ctx *fiber.Ctx) error {
+	userID := ctx.Locals(constant.USER_ID).(string)
+	seller_id := ctx.Params("seller_id")
+	fmt.Println(seller_id)
+	orders, err := c.orderUsecase.GetSellerOrder(seller_id, userID)
+	if err != nil {
+		fmt.Println(err)
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
+		})
+	}
+	return ctx.JSON(domain.Response{
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		SUCCESS: true,
+		DATA:    orders,
 	})
 }
