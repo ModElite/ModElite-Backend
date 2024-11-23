@@ -52,6 +52,7 @@ func (r *orderRepository) GetSelfOrder(userID string) (*[]domain.Order, error) {
 			product."name" AS "name", 
 			product.description AS description, 
 			product.price AS product_price, 
+			product."image_url" AS "product_image_url", 
 			seller."name" AS seller_name, 
 			seller.logo_url AS seller_logo_url, 
 			seller."id" AS seller_id
@@ -203,6 +204,7 @@ func (r *orderRepository) GetSellerOrder(SellerID string) (*[]domain.Order, erro
 			product."name" AS "name", 
 			product.description AS description, 
 			product.price AS product_price, 
+			product."image_url" AS "product_image_url", 
 			seller."name" AS seller_name, 
 			seller.logo_url AS seller_logo_url, 
 			seller."id" AS seller_id

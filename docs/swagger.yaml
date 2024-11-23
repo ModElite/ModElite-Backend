@@ -160,6 +160,8 @@ definitions:
         type: number
       productDescription:
         type: string
+      productImageUrl:
+        type: string
       productName:
         type: string
       productOptionImageUrl:

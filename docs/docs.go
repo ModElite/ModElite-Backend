@@ -2490,6 +2490,9 @@ const docTemplate = `{
                 "productDescription": {
                     "type": "string"
                 },
+                "productImageUrl": {
+                    "type": "string"
+                },
                 "productName": {
                     "type": "string"
                 },

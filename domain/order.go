@@ -25,8 +25,8 @@ type Order struct {
 	SELLER_PAYMENT_STATUS          bool                    `json:"sellerPaymentStatus" db:"seller_payment_status"`
 	SELLER_PAYMENT_PRODUCT_AMOUNT  float64                 `json:"sellerPaymentProductAmount" db:"seller_payment_product_amount"`
 	SELLER_PAYMENT_SHIPPING_AMOUNT float64                 `json:"sellerPaymentShippingAmount" db:"seller_payment_shipping_amount"`
-	EXPRESS_PROVIDER               string                  `json:"expressProvider" db:"express_provider"`
-	EXPRESS_TRACKING_NUMBER        string                  `json:"expressTrackingNumber" db:"express_tracking_number"`
+	EXPRESS_PROVIDER               string                  `json:"expressProvider,omitempty" db:"express_provider"`
+	EXPRESS_TRACKING_NUMBER        string                  `json:"expressTrackingNumber,omitempty" db:"express_tracking_number"`
 	TOTAL_PRICE                    float64                 `json:"totalPrice" db:"total_price"`
 	PRODUCT_PRICE                  float64                 `json:"productPrice" db:"product_price"`
 	SHIPPING_PRICE                 float64                 `json:"shippingPrice" db:"shipping_price"`
@@ -48,6 +48,7 @@ type OrderProductResponse struct {
 	SELLER_NAME              string  `json:"sellerName" db:"seller_name"`
 	SELLER_LOGO_URL          string  `json:"sellerLogoUrl" db:"seller_logo_url"`
 	SELLER_ID                string  `json:"sellerId" db:"seller_id"`
+	PRODUCT_IMAGE_URL        string  `json:"productImageUrl" db:"product_image_url"`
 }
 
 type OrderRepository interface {
