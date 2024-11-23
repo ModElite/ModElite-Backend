@@ -154,6 +154,7 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 	return ctx.JSON(domain.Response{
 		MESSAGE: constant.MESSAGE_SUCCESS,
 		SUCCESS: true,
+		DATA:    "https://www.google.com", // Future Change to Paysolution URL
 	})
 }
 
