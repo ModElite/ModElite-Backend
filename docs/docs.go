@@ -1510,6 +1510,73 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/size": {
+            "get": {
+                "description": "Get all size",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Size"
+                ],
+                "summary": "Get all size",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/domain.Size"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create size",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Size"
+                ],
+                "summary": "Create size",
+                "parameters": [
+                    {
+                        "description": "Size body",
+                        "name": "size",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payload.SizeDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/tag": {
             "get": {
                 "description": "Get all tag",
@@ -2969,7 +3036,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "addressId": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "products": {
                     "type": "array",
@@ -3140,6 +3207,17 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "sizeId": {
+                    "type": "string"
+                }
+            }
+        },
+        "payload.SizeDTO": {
+            "type": "object",
+            "required": [
+                "size"
+            ],
+            "properties": {
+                "size": {
                     "type": "string"
                 }
             }

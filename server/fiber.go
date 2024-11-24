@@ -119,6 +119,11 @@ func (s *FiberServer) Route() {
 	product.Put("/:id", middlewareAuth, productController.Update)
 	product.Delete("/:id", middlewareAuth, productController.SoftDelete)
 
+	size := app.Group("/size")
+	sizeController := controller.NewSizeController(validator, s.usecase.SizeUsecase)
+	size.Get("/", sizeController.GetSize)
+	size.Post("/", middlewareAuth, middlewareAuthAdmin, sizeController.CreateSize)
+
 	favorite := app.Group("/favorite")
 	favoriteController := controller.NewFavoriteController(validator, s.usecase.FavoriteUsecase)
 	favorite.Get("/", middlewareAuth, favoriteController.GetByUserID)

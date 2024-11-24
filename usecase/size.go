@@ -1,6 +1,9 @@
 package usecase
 
-import "github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
+import (
+	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
+	"github.com/google/uuid"
+)
 
 type sizeUsecase struct {
 	sizeRepo domain.SizeRepository
@@ -21,7 +24,10 @@ func (su *sizeUsecase) GetByID(id string) (*domain.Size, error) {
 }
 
 func (su *sizeUsecase) Create(size *domain.Size) error {
-	return su.sizeRepo.Create(size)
+	return su.sizeRepo.Create(&domain.Size{
+		ID:   uuid.New().String(),
+		SIZE: size.SIZE,
+	})
 }
 
 func (su *sizeUsecase) Update(size *domain.Size) error {
