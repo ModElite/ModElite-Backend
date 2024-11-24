@@ -140,7 +140,7 @@ func (s *FiberServer) Route() {
 	tagGroup.Delete("/:id", middlewareAuth, middlewareAuthAdmin, tagController.DeleteTagGroup)
 
 	order := app.Group("/order")
-	orderController := controller.NewOrderController(validator, s.usecase.OrderUsecase, s.usecase.VoucherUsecase)
+	orderController := controller.NewOrderController(validator, s.usecase.OrderUsecase, s.usecase.VoucherUsecase, s.usecase.AddressUsecase)
 	order.Get("/", orderController.GetAll)
 	order.Get("/self", middlewareAuth, orderController.GetSelfOrder)
 	order.Get("/self/:id", middlewareAuth, orderController.GetSelfOrderDetail)

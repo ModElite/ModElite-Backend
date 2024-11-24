@@ -11,13 +11,20 @@ type orderController struct {
 	validator      domain.ValidatorUsecase
 	orderUsecase   domain.OrderUsecase
 	voucherUsecase domain.VoucherUsecase
+	addressUsecase domain.AddressUsecase
 }
 
-func NewOrderController(validator domain.ValidatorUsecase, orderUsecase domain.OrderUsecase, voucherUsecase domain.VoucherUsecase) *orderController {
+func NewOrderController(
+	validator domain.ValidatorUsecase,
+	orderUsecase domain.OrderUsecase,
+	voucherUsecase domain.VoucherUsecase,
+	addressUsecase domain.AddressUsecase,
+) *orderController {
 	return &orderController{
 		validator:      validator,
 		orderUsecase:   orderUsecase,
 		voucherUsecase: voucherUsecase,
+		addressUsecase: addressUsecase,
 	}
 }
 
@@ -141,9 +148,16 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 			}
 		}
 	}
+	
+	loadAddress, err := c.addressUsecase.AddressIdToString(payload.ADDRESS_ID)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
+		})
+	}
 
-	address := payload.ADDRESS_ID //FUTURE CHANGE TO STRING ADDRESS
-	err := c.orderUsecase.CreateOrder(&orderProdcts, address, &payload.VOUCHER_ID, payload.SHIPPING_PRICE, totalPrice, toDiscount, userID)
+	err = c.orderUsecase.CreateOrder(&orderProdcts, loadAddress, &payload.VOUCHER_ID, payload.SHIPPING_PRICE, totalPrice, toDiscount, userID)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,

@@ -85,7 +85,12 @@ func (a *addressUsecase) Delete(addressID int) error {
 	return a.addressRepo.Delete(addressID)
 }
 
-func (a *addressUsecase) AddressToString(address *domain.Address) string {
+func (a *addressUsecase) AddressIdToString(addressId int) (string, error) {
+	address, err := a.addressRepo.GetById(addressId)
+	if err != nil {
+		return "", err
+	}
+
 	return fmt.Sprintf("Name: %s %s Phone: %s Email: %s Address: %s %s %s %s %s",
 		address.FIRST_NAME,
 		address.LAST_NAME,
@@ -96,5 +101,5 @@ func (a *addressUsecase) AddressToString(address *domain.Address) string {
 		address.DISTRICT,
 		address.PROVINCE,
 		address.ZIP_CODE,
-	)
+	), nil
 }
