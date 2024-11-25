@@ -239,3 +239,11 @@ func (r *orderRepository) GetSellerOrder(SellerID string) (*[]domain.Order, erro
 	}
 	return &order, nil
 }
+
+func (r *orderRepository) UpdateOrderExpress(orderID string, expressProvider string, expressTrackingNumber string) error {
+	_, err := r.db.Exec(`UPDATE "order" SET express_provider = $1, express_tracking_number = $2, "status" = 'DELIVERY_ON_THE_WAY'  WHERE id = $3;`, expressProvider, expressTrackingNumber, orderID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

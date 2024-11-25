@@ -11,3 +11,8 @@ type OrderProductPayload struct {
 	PRODUCT_SIZE_ID string `json:"productSizeId" validate:"required"`
 	QUANTITY        int    `json:"quantity" validate:"required"`
 }
+
+type ExpressOrderUpdate struct {
+	EXPRESS_PROVIDER      string `json:"expressProvider" validate:"required"`
+	EXPRESS_TRACKING_CODE string `json:"expressTrackingCode" validate:"required"`
+}

@@ -51,15 +51,7 @@ func (u *orderUsecase) GetSelfOrderDetail(orderID string, userID string) (*domai
 	return u.orderRepo.GetSelfOrderDetail(orderID, userID)
 }
 
-func (u *orderUsecase) GetSellerOrder(SellerID string, UserID string) (*[]domain.Order, error) {
-	// First Check if SellerID is the same as UserID
-	isSame, err := u.orderRepo.CheckSellerUserID(SellerID, UserID)
-	if err != nil {
-		return nil, fmt.Errorf("UserID or SellerID invalid")
-	}
-	if !isSame {
-		return nil, fmt.Errorf("UserID or SellerID invalid")
-	}
+func (u *orderUsecase) GetSellerOrder(SellerID string) (*[]domain.Order, error) {
 	// Check Seller ID and UserID is the same
 	order, err := u.orderRepo.GetSellerOrder(SellerID)
 	// Add username to order data
@@ -67,4 +59,19 @@ func (u *orderUsecase) GetSellerOrder(SellerID string, UserID string) (*[]domain
 		return nil, err
 	}
 	return order, nil
+}
+
+func (u *orderUsecase) CheckSellerUserID(SellerID string, UserID string) error {
+	isSame, err := u.orderRepo.CheckSellerUserID(SellerID, UserID)
+	if err != nil {
+		return err
+	}
+	if !isSame {
+		return fmt.Errorf("UserID or SellerID invalid")
+	}
+	return nil
+}
+
+func (u *orderUsecase) UpdateOrderExpress(orderID string, expressProvider string, expressTrackingNumber string) error {
+	return u.orderRepo.UpdateOrderExpress(orderID, expressProvider, expressTrackingNumber)
 }

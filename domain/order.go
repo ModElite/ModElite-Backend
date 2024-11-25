@@ -58,6 +58,7 @@ type OrderRepository interface {
 	GetSelfOrderDetail(orderID string, userID string) (*Order, error)
 	GetSellerOrder(SellerID string) (*[]Order, error)
 	CheckSellerUserID(SellerID string, UserID string) (bool, error)
+	UpdateOrderExpress(orderID string, expressProvider string, expressTrackingNumber string) error
 }
 
 type OrderUsecase interface {
@@ -66,5 +67,7 @@ type OrderUsecase interface {
 	CreateOrder(order *[]OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string) error
 	GetProductDetail(productSizeID string, quantity int) (*OrderProduct, error)
 	GetSelfOrderDetail(orderID string, userID string) (*Order, error)
-	GetSellerOrder(SellerID string, UserID string) (*[]Order, error)
+	GetSellerOrder(SellerID string) (*[]Order, error)
+	UpdateOrderExpress(orderID string, expressProvider string, expressTrackingNumber string) error
+	CheckSellerUserID(SellerID string, UserID string) error
 }

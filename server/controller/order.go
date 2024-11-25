@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"fmt"
+
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/internal/constant"
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/server/payload"
@@ -220,7 +222,17 @@ func (c *orderController) GetSelfOrderDetail(ctx *fiber.Ctx) error {
 func (c *orderController) GetSellerOrder(ctx *fiber.Ctx) error {
 	userID := ctx.Locals(constant.USER_ID).(string)
 	seller_id := ctx.Params("seller_id")
-	orders, err := c.orderUsecase.GetSellerOrder(seller_id, userID)
+
+	// Check Seller ID and UserID is the same
+	err := c.orderUsecase.CheckSellerUserID(seller_id, userID)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			MESSAGE: err.Error(),
+			SUCCESS: false,
+		})
+	}
+
+	orders, err := c.orderUsecase.GetSellerOrder(seller_id)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
@@ -232,4 +244,40 @@ func (c *orderController) GetSellerOrder(ctx *fiber.Ctx) error {
 		SUCCESS: true,
 		DATA:    orders,
 	})
+}
+
+// Swagger for update order express api
+// @Summary Update order express
+// @Description Update order express
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param body body payload.ExpressOrderUpdate true "Express Order Update Payload"
+// @Param order_id path string true "Order ID"
+// @Success 200 {object} domain.Response
+// @Router /api/order/express/{order_id} [put]
+func (c *orderController) UpdateOrderExpress(ctx *fiber.Ctx) error {
+	var payload payload.ExpressOrderUpdate
+	orderId := ctx.Params("order_id")
+	fmt.Println(orderId)
+	if err := c.validator.ValidateBody(ctx, &payload); err != nil {
+		fmt.Println(err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INVALID_BODY,
+			SUCCESS: false,
+		})
+	}
+	err := c.orderUsecase.UpdateOrderExpress(orderId, payload.EXPRESS_PROVIDER, payload.EXPRESS_TRACKING_CODE)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
+		})
+	}
+	return ctx.JSON(domain.Response{
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		SUCCESS: true,
+	})
+
 }
