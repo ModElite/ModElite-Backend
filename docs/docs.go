@@ -1904,7 +1904,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/payload.TagGroupDTO"
+                            "$ref": "#/definitions/payload.CreateTagGroupDTO"
                         }
                     }
                 ],
@@ -1962,7 +1962,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/payload.TagGroupDTO"
+                            "$ref": "#/definitions/payload.UpdateTagGroupDTO"
                         }
                     }
                 ],
@@ -3128,6 +3128,38 @@ const docTemplate = `{
                 }
             }
         },
+        "payload.CreateTagDTO": {
+            "type": "object",
+            "required": [
+                "label"
+            ],
+            "properties": {
+                "label": {
+                    "type": "string"
+                }
+            }
+        },
+        "payload.CreateTagGroupDTO": {
+            "type": "object",
+            "required": [
+                "label",
+                "show"
+            ],
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "show": {
+                    "type": "boolean"
+                },
+                "tag": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/payload.CreateTagDTO"
+                    }
+                }
+            }
+        },
         "payload.CreateVoucherDTO": {
             "type": "object",
             "required": [
@@ -3234,27 +3266,6 @@ const docTemplate = `{
                 },
                 "tagGroupId": {
                     "type": "integer"
-                }
-            }
-        },
-        "payload.TagGroupDTO": {
-            "type": "object",
-            "required": [
-                "label",
-                "show"
-            ],
-            "properties": {
-                "label": {
-                    "type": "string"
-                },
-                "show": {
-                    "type": "boolean"
-                },
-                "tag": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/payload.TagDTO"
-                    }
                 }
             }
         },
@@ -3401,6 +3412,27 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "payload.UpdateTagGroupDTO": {
+            "type": "object",
+            "required": [
+                "label",
+                "show"
+            ],
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "show": {
+                    "type": "boolean"
+                },
+                "tag": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/payload.TagDTO"
+                    }
                 }
             }
         }

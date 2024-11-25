@@ -1,6 +1,16 @@
 package payload
 
-type TagGroupDTO struct {
+type CreateTagGroupDTO struct {
+	LABEL string   `json:"label" validate:"required"`
+	SHOW  *bool    `json:"show" validate:"required"`
+	TAG   []CreateTagDTO `json:"tag" validate:"omitempty"`
+}
+
+type CreateTagDTO struct {
+	LABEL        string `json:"label" validate:"required"`
+}
+
+type UpdateTagGroupDTO struct {
 	LABEL string   `json:"label" validate:"required"`
 	SHOW  *bool    `json:"show" validate:"required"`
 	TAG   []TagDTO `json:"tag" validate:"omitempty"`

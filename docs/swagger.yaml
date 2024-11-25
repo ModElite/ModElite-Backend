@@ -546,6 +546,27 @@ definitions:
     - logoUrl
     - name
     type: object
+  payload.CreateTagDTO:
+    properties:
+      label:
+        type: string
+    required:
+    - label
+    type: object
+  payload.CreateTagGroupDTO:
+    properties:
+      label:
+        type: string
+      show:
+        type: boolean
+      tag:
+        items:
+          $ref: '#/definitions/payload.CreateTagDTO'
+        type: array
+    required:
+    - label
+    - show
+    type: object
   payload.CreateVoucherDTO:
     properties:
       code:
@@ -619,20 +640,6 @@ definitions:
     required:
     - label
     - tagGroupId
-    type: object
-  payload.TagGroupDTO:
-    properties:
-      label:
-        type: string
-      show:
-        type: boolean
-      tag:
-        items:
-          $ref: '#/definitions/payload.TagDTO'
-        type: array
-    required:
-    - label
-    - show
     type: object
   payload.UpdateImageUserDTO:
     properties:
@@ -733,6 +740,20 @@ definitions:
     - location
     - logoUrl
     - name
+    type: object
+  payload.UpdateTagGroupDTO:
+    properties:
+      label:
+        type: string
+      show:
+        type: boolean
+      tag:
+        items:
+          $ref: '#/definitions/payload.TagDTO'
+        type: array
+    required:
+    - label
+    - show
     type: object
 info:
   contact: {}
@@ -1861,7 +1882,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/payload.TagGroupDTO'
+          $ref: '#/definitions/payload.CreateTagGroupDTO'
       produces:
       - application/json
       responses:
@@ -1928,7 +1949,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/payload.TagGroupDTO'
+          $ref: '#/definitions/payload.UpdateTagGroupDTO'
       produces:
       - application/json
       responses:

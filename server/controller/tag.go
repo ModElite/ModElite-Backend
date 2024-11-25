@@ -70,13 +70,13 @@ func (c *tagController) GetAllTagGroup(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param body body payload.TagGroupDTO true "Create Tag Group"
+// @Param body body payload.CreateTagGroupDTO true "Create Tag Group"
 // @Success 200 {object} domain.Response
 // @Failure 400 {object} domain.Response
 // @Failure 500 {object} domain.Response
 // @Router /api/tag_group [post]
 func (c *tagController) CreateTagGroup(ctx *fiber.Ctx) error {
-	var payload payload.TagGroupDTO
+	var payload payload.CreateTagGroupDTO
 	if err := c.validator.ValidateBody(ctx, &payload); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_BAD_REQUEST,
@@ -122,7 +122,7 @@ func (c *tagController) CreateTagGroup(ctx *fiber.Ctx) error {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param id path int true "Tag Group ID"
-// @Param body body payload.TagGroupDTO true "Update Tag Group"
+// @Param body body payload.UpdateTagGroupDTO true "Update Tag Group"
 // @Success 200 {object} domain.Response
 // @Failure 400 {object} domain.Response
 // @Failure 500 {object} domain.Response
@@ -136,7 +136,7 @@ func (c *tagController) UpdateTagGroup(ctx *fiber.Ctx) error {
 		})
 	}
 
-	var tagGroup payload.TagGroupDTO
+	var tagGroup payload.UpdateTagGroupDTO
 	if err := c.validator.ValidateBody(ctx, &tagGroup); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_BAD_REQUEST,
