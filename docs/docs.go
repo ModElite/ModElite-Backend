@@ -864,6 +864,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/order/express/{order_id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update order express",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Update order express",
+                "parameters": [
+                    {
+                        "description": "Express Order Update Payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payload.ExpressOrderUpdate"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order ID",
+                        "name": "order_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/order/self": {
             "get": {
                 "security": [
@@ -1069,8 +1115,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/domain.Response"
                         }
@@ -3203,6 +3249,21 @@ const docTemplate = `{
                 },
                 "quota": {
                     "type": "integer"
+                }
+            }
+        },
+        "payload.ExpressOrderUpdate": {
+            "type": "object",
+            "required": [
+                "expressProvider",
+                "expressTrackingCode"
+            ],
+            "properties": {
+                "expressProvider": {
+                    "type": "string"
+                },
+                "expressTrackingCode": {
+                    "type": "string"
                 }
             }
         },

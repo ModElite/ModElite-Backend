@@ -136,7 +136,7 @@ func (p *productController) GetByID(ctx *fiber.Ctx) error {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param body body payload.CreateProductDTO true "Product Body"
-// @Success 200 {object} domain.Response
+// @Success 201 {object} domain.Response
 // @Router /api/product [post]
 func (p *productController) Create(ctx *fiber.Ctx) error {
 	var body payload.CreateProductDTO
@@ -205,7 +205,7 @@ func (p *productController) Create(ctx *fiber.Ctx) error {
 		}
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
+	return ctx.Status(fiber.StatusCreated).JSON(domain.Response{
 		SUCCESS: true,
 		MESSAGE: constant.MESSAGE_SUCCESS,
 	})

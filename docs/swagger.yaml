@@ -594,6 +594,16 @@ definitions:
     - percentage
     - quota
     type: object
+  payload.ExpressOrderUpdate:
+    properties:
+      expressProvider:
+        type: string
+      expressTrackingCode:
+        type: string
+    required:
+    - expressProvider
+    - expressTrackingCode
+    type: object
   payload.OrderProductPayload:
     properties:
       productSizeId:
@@ -1272,6 +1282,35 @@ paths:
       summary: Create order
       tags:
       - Order
+  /api/order/express/{order_id}:
+    put:
+      consumes:
+      - application/json
+      description: Update order express
+      parameters:
+      - description: Express Order Update Payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.ExpressOrderUpdate'
+      - description: Order ID
+        in: path
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Update order express
+      tags:
+      - Order
   /api/order/self:
     get:
       consumes:
@@ -1386,8 +1425,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/domain.Response'
       security:
