@@ -180,6 +180,7 @@ func (p *productController) Create(ctx *fiber.Ctx) error {
 		SELLER_ID:      body.SELLER_ID,
 		NAME:           body.NAME,
 		DESCRIPTION:    body.DESCRIPTION,
+		FEATURE:        body.FEATURE,
 		PRICE:          body.PRICE,
 		IMAGE_URL:      body.IMAGE_URL,
 		PRODUCT_OPTION: &productOption,
@@ -224,7 +225,6 @@ func (p *productController) Create(ctx *fiber.Ctx) error {
 // @Failure 500 {object} domain.Response
 // @Router /api/product/{id} [put]
 func (p *productController) Update(ctx *fiber.Ctx) error {
-	// TODO: Implement Update product with options and sizes and tags
 	id := ctx.Params("id")
 	var body payload.UpdateProductDTO
 	if err := p.validator.ValidateBody(ctx, &body); err != nil || id == "" || !p.validator.ValidateUUID(id) {
@@ -291,6 +291,7 @@ func (p *productController) Update(ctx *fiber.Ctx) error {
 		ID:             id,
 		NAME:           body.NAME,
 		DESCRIPTION:    body.DESCRIPTION,
+		FEATURE:        body.FEATURE,
 		PRICE:          body.PRICE,
 		IMAGE_URL:      body.IMAGE_URL,
 		PRODUCT_OPTION: &productOption,

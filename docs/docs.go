@@ -3067,6 +3067,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "description",
+                "feature",
                 "imageUrl",
                 "name",
                 "price",
@@ -3075,6 +3076,9 @@ const docTemplate = `{
             ],
             "properties": {
                 "description": {
+                    "type": "string"
+                },
+                "feature": {
                     "type": "string"
                 },
                 "imageUrl": {
@@ -3314,12 +3318,16 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "description",
+                "feature",
                 "name",
                 "price",
                 "productOption"
             ],
             "properties": {
                 "description": {
+                    "type": "string"
+                },
+                "feature": {
                     "type": "string"
                 },
                 "imageUrl": {

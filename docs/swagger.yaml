@@ -498,6 +498,8 @@ definitions:
     properties:
       description:
         type: string
+      feature:
+        type: string
       imageUrl:
         type: string
       name:
@@ -517,6 +519,7 @@ definitions:
         type: array
     required:
     - description
+    - feature
     - imageUrl
     - name
     - price
@@ -667,6 +670,8 @@ definitions:
     properties:
       description:
         type: string
+      feature:
+        type: string
       imageUrl:
         type: string
       name:
@@ -684,6 +689,7 @@ definitions:
         type: array
     required:
     - description
+    - feature
     - name
     - price
     - productOption

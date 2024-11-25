@@ -3060,6 +3060,7 @@
             "type": "object",
             "required": [
                 "description",
+                "feature",
                 "imageUrl",
                 "name",
                 "price",
@@ -3068,6 +3069,9 @@
             ],
             "properties": {
                 "description": {
+                    "type": "string"
+                },
+                "feature": {
                     "type": "string"
                 },
                 "imageUrl": {
@@ -3307,12 +3311,16 @@
             "type": "object",
             "required": [
                 "description",
+                "feature",
                 "name",
                 "price",
                 "productOption"
             ],
             "properties": {
                 "description": {
+                    "type": "string"
+                },
+                "feature": {
                     "type": "string"
                 },
                 "imageUrl": {

@@ -4,6 +4,7 @@ type CreateProductDTO struct {
 	SELLER_ID      string              `json:"sellerId" validate:"required"`
 	NAME           string              `json:"name" validate:"required"`
 	DESCRIPTION    string              `json:"description" validate:"required"`
+	FEATURE        string              `json:"feature" validate:"required"`
 	PRICE          float64             `json:"price" validate:"required,min=0"`
 	IMAGE_URL      string              `json:"imageUrl" validate:"required"`
 	PRODUCT_OPTION *[]ProductOptionDTO `json:"productOption" validate:"required"`
@@ -24,6 +25,7 @@ type ProductSizeDTO struct {
 type UpdateProductDTO struct {
 	NAME           string                    `json:"name" validate:"required"`
 	DESCRIPTION    string                    `json:"description" validate:"required"`
+	FEATURE        string                    `json:"feature" validate:"required"`
 	PRICE          float64                   `json:"price" validate:"required,min=0"`
 	IMAGE_URL      string                    `json:"imageUrl" validate:"omitempty"`
 	PRODUCT_OPTION *[]UpdateProductOptionDTO `json:"productOption" validate:"required"`
