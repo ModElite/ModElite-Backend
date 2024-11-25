@@ -20,7 +20,7 @@ func NewProductRepository(db *sqlx.DB) domain.ProductRepository {
 
 func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Product, error) {
 	query := `
-		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
+		SELECT p.id, p.seller_id, p.name, p.description, p.feature, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
 				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at, po.deleted_at AS option_deleted_at,
 				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at, ps.deleted_at AS product_size_deleted_at,
 				s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at
@@ -56,6 +56,7 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Produc
 				SELLER_ID:      row.SellerID,
 				NAME:           row.Name,
 				DESCRIPTION:    row.Description,
+				FEATURE:        row.Feature,
 				PRICE:          row.Price,
 				STATUS:         row.Status,
 				IMAGE_URL:      row.ImageURL,
@@ -120,7 +121,7 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Produc
 
 func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*domain.Product, error) {
 	query := `
-		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
+		SELECT p.id, p.seller_id, p.name, p.description, p.feature, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
 				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at, po.deleted_at AS option_deleted_at,
 				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at, ps.deleted_at AS product_size_deleted_at,
 				s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at, se.name AS seller_name
@@ -159,6 +160,7 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*do
 				SELLER_NAME:    &row.SellerName,
 				NAME:           row.Name,
 				DESCRIPTION:    row.Description,
+				FEATURE:        row.Feature,
 				PRICE:          row.Price,
 				STATUS:         row.Status,
 				IMAGE_URL:      row.ImageURL,
@@ -218,7 +220,7 @@ func (r *productRepository) GetProductWithOptionsAndSizes(productID string) (*do
 
 func (r *productRepository) GetProductsBySeller(sellerID string) (*[]domain.Product, error) {
 	query := `
-		SELECT p.id, p.seller_id, p.name, p.description, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
+		SELECT p.id, p.seller_id, p.name, p.description, p.feature, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
 				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at, po.deleted_at AS option_deleted_at,
 				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at, ps.deleted_at AS product_size_deleted_at,
 				s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at
@@ -254,6 +256,7 @@ func (r *productRepository) GetProductsBySeller(sellerID string) (*[]domain.Prod
 				SELLER_ID:      row.SellerID,
 				NAME:           row.Name,
 				DESCRIPTION:    row.Description,
+				FEATURE:        row.Feature,
 				PRICE:          row.Price,
 				STATUS:         row.Status,
 				IMAGE_URL:      row.ImageURL,
@@ -351,7 +354,7 @@ func (r *productRepository) GetBySellerID(SellerID string) (*[]domain.Product, e
 }
 
 func (r *productRepository) Create(product *domain.Product) error {
-	_, err := r.db.NamedExec("INSERT INTO product (id, seller_id, name, description, price, image_url, status) VALUES (:id, :seller_id, :name, :description, :price, :image_url, :status)", product)
+	_, err := r.db.NamedExec("INSERT INTO product (id, seller_id, name, description, feature, price, image_url, status) VALUES (:id, :seller_id, :name, :description, :feature, :price, :image_url, :status)", product)
 	if err != nil {
 		return fmt.Errorf("error creating product: %w", err)
 	}
@@ -359,7 +362,7 @@ func (r *productRepository) Create(product *domain.Product) error {
 }
 
 func (r *productRepository) Update(product *domain.Product) error {
-	_, err := r.db.NamedExec("UPDATE product SET name = :name, description = :description, price = :price, image_url = :image_url, status = :status, updated_at = NOW() WHERE id = :id", product)
+	_, err := r.db.NamedExec("UPDATE product SET name = :name, description = :description, feature = :feature, price = :price, image_url = :image_url, status = :status, updated_at = NOW() WHERE id = :id", product)
 	if err != nil {
 		return fmt.Errorf("error updating product: %w", err)
 	}

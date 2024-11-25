@@ -18,6 +18,7 @@ type Product struct {
 	SELLER_ID      string           `json:"sellerId" db:"seller_id"`
 	NAME           string           `json:"name" db:"name"`
 	DESCRIPTION    string           `json:"description" db:"description"`
+	FEATURE        string           `json:"feature" db:"feature"`
 	PRICE          float64          `json:"price" db:"price"`
 	STATUS         string           `json:"status" db:"status"`
 	IMAGE_URL      string           `json:"imageUrl" db:"image_url"`
@@ -35,6 +36,7 @@ type ProductRow struct {
 	SellerID        string         `db:"seller_id"`
 	Name            string         `db:"name"`
 	Description     string         `db:"description"`
+	Feature         string         `db:"feature"`
 	Price           float64        `db:"price"`
 	Status          string         `db:"status"`
 	SellerName      string         `db:"seller_name"`

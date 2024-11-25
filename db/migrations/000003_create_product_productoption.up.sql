@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS "product" (
   seller_id UUID NOT NULL,
   name VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
+  feature TEXT NOT NULL,
   price DOUBLE PRECISION NOT NULL,
   "status" product_status NOT NULL DEFAULT 'ACTIVE',
   image_url TEXT NOT NULL,

@@ -2634,6 +2634,9 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
+                "feature": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
