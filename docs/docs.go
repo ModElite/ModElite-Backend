@@ -1590,6 +1590,14 @@ const docTemplate = `{
                     "Tag"
                 ],
                 "summary": "Get all tag",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Filter by group tag ID",
+                        "name": "tagGroupId",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

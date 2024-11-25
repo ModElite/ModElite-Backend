@@ -83,8 +83,31 @@ func (u *tagUsecase) DeleteTagGroup(id int) error {
 	return u.tagGroupRepo.Delete(id)
 }
 
-func (u *tagUsecase) GetAllTag() (*[]domain.Tag, error) {
-	return u.tagRepo.GetAll()
+func (u *tagUsecase) GetAllTag(optionalParams ...func(*domain.Tag) bool) (*[]domain.Tag, error) {
+	tags, err := u.tagRepo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(optionalParams) == 0 {
+		return tags, nil
+	}
+
+	filteredTags := make([]domain.Tag, 0)
+	for _, tag := range *tags {
+		include := true
+		for _, param := range optionalParams {
+			if !param(&tag) {
+				include = false
+				break
+			}
+		}
+		if include {
+			filteredTags = append(filteredTags, tag)
+		}
+	}
+
+	return &filteredTags, nil
 }
 
 func (u *tagUsecase) CreateTag(tag *domain.Tag) error {

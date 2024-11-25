@@ -1689,6 +1689,11 @@ paths:
       consumes:
       - application/json
       description: Get all tag
+      parameters:
+      - description: Filter by group tag ID
+        in: query
+        name: tagGroupId
+        type: integer
       produces:
       - application/json
       responses:

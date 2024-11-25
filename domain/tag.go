@@ -36,7 +36,7 @@ type TagUsecase interface {
 	CreateTagGroup(TagGroup *TagGroup) error
 	UpdateTagGroup(TagGroup *TagGroup) error
 	DeleteTagGroup(id int) error
-	GetAllTag() (*[]Tag, error)
+	GetAllTag(optionalParams ...func(*Tag) bool) (*[]Tag, error)
 	GetTagByID(id int) (*Tag, error)
 	CreateTag(tag *Tag) error
 	UpdateTag(tag *Tag) error

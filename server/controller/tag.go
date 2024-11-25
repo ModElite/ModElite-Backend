@@ -201,11 +201,23 @@ func (c *tagController) DeleteTagGroup(ctx *fiber.Ctx) error {
 // @Tags Tag
 // @Accept json
 // @Produce json
+// @Param tagGroupId query int false "Filter by group tag ID"
 // @Success 200 {object} domain.Response{data=[]domain.Tag}
 // @Failure 500 {object} domain.Response
 // @Router /api/tag [get]
 func (c *tagController) GetAllTag(ctx *fiber.Ctx) error {
 	tags, err := c.tagUseCase.GetAllTag()
+	tagGroupId, _ := strconv.Atoi(ctx.Query("tagGroupId"))
+
+	if tagGroupId > 0 {
+		filteredTags := make([]domain.Tag, 0)
+		for _, tag := range *tags {
+			if tag.TAG_GRUOP_ID == tagGroupId {
+				filteredTags = append(filteredTags, tag)
+			}
+		}
+		tags = &filteredTags
+	}
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
