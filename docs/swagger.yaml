@@ -1824,7 +1824,7 @@ paths:
       summary: Update tag
       tags:
       - Tag
-  /api/tag/group:
+  /api/tag_group:
     get:
       consumes:
       - application/json
@@ -1882,7 +1882,7 @@ paths:
       summary: Create tag group
       tags:
       - TagGroup
-  /api/tag/group/{id}:
+  /api/tag_group/{id}:
     delete:
       consumes:
       - application/json

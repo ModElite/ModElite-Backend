@@ -137,7 +137,7 @@ func (s *FiberServer) Route() {
 	tag.Post("/", middlewareAuth, middlewareAuthAdmin, tagController.CreateTag)
 	tag.Put("/:id", middlewareAuth, middlewareAuthAdmin, tagController.UpdateTag)
 	tag.Delete("/:id", middlewareAuth, middlewareAuthAdmin, tagController.DeleteTag)
-	tagGroup := tag.Group("/group")
+	tagGroup := app.Group("/tag_group")
 	tagGroup.Get("/", tagController.GetAllTagGroup)
 	tagGroup.Get("/:id", tagController.GetTag)
 	tagGroup.Post("/", middlewareAuth, middlewareAuthAdmin, tagController.CreateTagGroup)

@@ -32,7 +32,7 @@ func NewTagController(
 // @Produce json
 // @Param withTags query bool false "withTag"
 // @Success 200 {object} domain.Response{data=[]domain.TagGroup}
-// @Router /api/tag/group [get]
+// @Router /api/tag_group [get]
 func (c *tagController) GetAllTagGroup(ctx *fiber.Ctx) error {
 	withTags, err := strconv.ParseBool(ctx.Query("withTags", "false"))
 	if err != nil {
@@ -74,7 +74,7 @@ func (c *tagController) GetAllTagGroup(ctx *fiber.Ctx) error {
 // @Success 200 {object} domain.Response
 // @Failure 400 {object} domain.Response
 // @Failure 500 {object} domain.Response
-// @Router /api/tag/group [post]
+// @Router /api/tag_group [post]
 func (c *tagController) CreateTagGroup(ctx *fiber.Ctx) error {
 	var payload payload.TagGroupDTO
 	if err := c.validator.ValidateBody(ctx, &payload); err != nil {
@@ -126,7 +126,7 @@ func (c *tagController) CreateTagGroup(ctx *fiber.Ctx) error {
 // @Success 200 {object} domain.Response
 // @Failure 400 {object} domain.Response
 // @Failure 500 {object} domain.Response
-// @Router /api/tag/group/{id} [put]
+// @Router /api/tag_group/{id} [put]
 func (c *tagController) UpdateTagGroup(ctx *fiber.Ctx) error {
 	id, err := strconv.ParseInt(ctx.Params("id"), 10, 64)
 	if err != nil || id < 0 {
@@ -172,7 +172,7 @@ func (c *tagController) UpdateTagGroup(ctx *fiber.Ctx) error {
 // @Success 200 {object} domain.Response
 // @Failure 400 {object} domain.Response
 // @Failure 500 {object} domain.Response
-// @Router /api/tag/group/{id} [delete]
+// @Router /api/tag_group/{id} [delete]
 func (c *tagController) DeleteTagGroup(ctx *fiber.Ctx) error {
 	id, err := strconv.ParseInt(ctx.Params("id"), 10, 64)
 	if err != nil || id < 0 {
