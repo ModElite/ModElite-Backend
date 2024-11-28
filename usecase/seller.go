@@ -48,6 +48,14 @@ func (u *sellerUsecase) GetByID(id string) (*domain.Seller, error) {
 	return seller, nil
 }
 
+func (u *sellerUsecase) GetDashboard(sellerID string) (*domain.SellerDashboard, error) {
+	dashboard, err := u.sellerRepo.GetDashboard(sellerID)
+	if err != nil {
+		return nil, err
+	}
+	return dashboard, nil
+}
+
 func (u *sellerUsecase) Create(data *domain.Seller) error {
 	seller := &domain.Seller{
 		ID:                    uuid.New().String(),

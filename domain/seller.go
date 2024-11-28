@@ -19,10 +19,18 @@ type Seller struct {
 	CREATED_AT            time.Time            `json:"createdAt" db:"created_at"`
 }
 
+type SellerDashboard struct {
+	TOTAL_ORDER              float64 `json:"totalOrder" db:"total_order"`
+	TOTAL_ORDER_USER         float64 `json:"totalOrderUser" db:"total_order_user"`
+	TOTAL_ORDER_AMOUNT       float64 `json:"totalOrderAmount" db:"total_order_amount"`
+	TOTAL_ORDER_PRODUCT_UNIT float64 `json:"totalOrderProductUnit" db:"total_order_product_unit"`
+}
+
 type SellerRepository interface {
 	GetAll() (*[]Seller, error)
 	GetByID(id string) (*Seller, error)
 	GetByOwnerID(ownerID string) (*[]Seller, error)
+	GetDashboard(sellerID string) (*SellerDashboard, error)
 	Create(seller *Seller) error
 	Update(seller *Seller) error
 	Delete(id string) error
@@ -32,6 +40,7 @@ type SellerUsecase interface {
 	GetAll() (*[]Seller, error)
 	GetByOwner(userId string) (*[]Seller, error)
 	GetByID(id string) (*Seller, error)
+	GetDashboard(sellerID string) (*SellerDashboard, error)
 	Create(seller *Seller) error
 	Update(id string, data *Seller, userId string) error
 }

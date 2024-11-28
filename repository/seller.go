@@ -47,6 +47,44 @@ func (r *sellerRepository) GetByOwnerID(ownerID string) (*[]domain.Seller, error
 	return &sellers, nil
 }
 
+func (r *sellerRepository) GetDashboard(sellerID string) (*domain.SellerDashboard, error) {
+	var dashboard domain.SellerDashboard
+	err := r.db.Get(&dashboard, `
+		SELECT 
+			COUNT(DISTINCT o.id) AS total_order,
+			COUNT(DISTINCT u.id) AS total_order_user,
+			SUM(o.product_price + o.shipping_price) AS total_order_amount,
+			SUM(op.quantity) AS total_order_product_unit
+		FROM 
+			"order" o
+		INNER JOIN 
+			users u ON o.user_id = u.id
+		INNER JOIN 
+			order_product op ON o.id = op.order_id
+		WHERE 
+			o.id IN (
+					SELECT 
+							op_sub.order_id
+					FROM 
+							order_product op_sub
+					INNER JOIN 
+							product_size ps ON op_sub.product_size_id = ps.id
+					INNER JOIN 
+							product_option po ON ps.product_option_id = po.id
+					INNER JOIN 
+							product p ON po.product_id = p.id
+					WHERE 
+							p.seller_id = $1
+					GROUP BY 
+							op_sub.order_id
+			);`, sellerID)
+	if err != nil {
+		return nil, fmt.Errorf("error get seller dashboard: %v", err)
+	}
+
+	return &dashboard, nil
+}
+
 func (r *sellerRepository) Create(seller *domain.Seller) error {
 	_, err := r.db.NamedExec(`
 		INSERT INTO seller 

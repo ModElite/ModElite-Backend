@@ -342,6 +342,17 @@ definitions:
       updateAt:
         type: string
     type: object
+  domain.SellerDashboard:
+    properties:
+      totalOrder:
+        type: number
+      totalOrderAmount:
+        type: number
+      totalOrderProductUnit:
+        type: number
+      totalOrderUser:
+        type: number
+    type: object
   domain.SellerTransaction:
     properties:
       bankAccountName:
@@ -1688,6 +1699,43 @@ paths:
                   $ref: '#/definitions/domain.Seller'
               type: object
       summary: Get seller by id
+      tags:
+      - Seller
+  /api/seller/dashboard/{id}:
+    get:
+      parameters:
+      - description: Seller ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/domain.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/domain.SellerDashboard'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get dashboard by seller id
       tags:
       - Seller
   /api/seller/owner:

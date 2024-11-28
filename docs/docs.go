@@ -1414,6 +1414,69 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/seller/dashboard/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Seller"
+                ],
+                "summary": "Get dashboard by seller id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Seller ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/domain.SellerDashboard"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/seller/owner": {
             "get": {
                 "security": [
@@ -2879,6 +2942,23 @@ const docTemplate = `{
                 },
                 "updateAt": {
                     "type": "string"
+                }
+            }
+        },
+        "domain.SellerDashboard": {
+            "type": "object",
+            "properties": {
+                "totalOrder": {
+                    "type": "number"
+                },
+                "totalOrderAmount": {
+                    "type": "number"
+                },
+                "totalOrderProductUnit": {
+                    "type": "number"
+                },
+                "totalOrderUser": {
+                    "type": "number"
                 }
             }
         },
