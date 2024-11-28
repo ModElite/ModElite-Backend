@@ -2868,6 +2868,9 @@ const docTemplate = `{
                 "ownerId": {
                     "type": "string"
                 },
+                "phone": {
+                    "type": "string"
+                },
                 "updateAt": {
                     "type": "string"
                 }
@@ -3163,7 +3166,8 @@ const docTemplate = `{
                 "description",
                 "location",
                 "logoUrl",
-                "name"
+                "name",
+                "phone"
             ],
             "properties": {
                 "bankAccountName": {
@@ -3185,6 +3189,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 }
             }
@@ -3466,7 +3473,8 @@ const docTemplate = `{
                 "id",
                 "location",
                 "logoUrl",
-                "name"
+                "name",
+                "phone"
             ],
             "properties": {
                 "bankAccountName": {
@@ -3491,6 +3499,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 }
             }

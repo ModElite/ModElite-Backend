@@ -11,6 +11,7 @@ type Seller struct {
 	BANK_ACCOUNT_NAME     string    `json:"bankAccountName" db:"bank_account_name"`
 	BANK_ACCOUNT_NUMBER   string    `json:"bankAccountNumber" db:"bank_account_number"`
 	BANK_ACCOUNT_PROVIDER string    `json:"bankAccountProvider" db:"bank_account_provider"`
+	PHONE                 string    `json:"phone" db:"phone"`
 	OWNER_ID              string    `json:"ownerId" db:"owner_id"`
 	IS_VERIFY             bool      `json:"isVerify" db:"is_verify"`
 	UPDATED_AT            time.Time `json:"updateAt" db:"updated_at"`

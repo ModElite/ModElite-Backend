@@ -50,9 +50,9 @@ func (r *sellerRepository) GetByOwnerID(ownerID string) (*[]domain.Seller, error
 func (r *sellerRepository) Create(seller *domain.Seller) error {
 	_, err := r.db.NamedExec(`
 		INSERT INTO seller 
-			(id, name, description, logo_url, location, bank_account_name, bank_account_number, bank_account_provider, owner_id, is_verify)
+			(id, name, description, logo_url, location, bank_account_name, bank_account_number, bank_account_provider, phone, owner_id, is_verify)
 		VALUES
-			(:id, :name, :description, :logo_url, :location, :bank_account_name, :bank_account_number, :bank_account_provider, :owner_id, :is_verify)`, seller)
+			(:id, :name, :description, :logo_url, :location, :bank_account_name, :bank_account_number, :bank_account_provider, :phone, :owner_id, :is_verify)`, seller)
 	if err != nil {
 		return fmt.Errorf("error create seller: %v", err)
 	}
@@ -71,6 +71,7 @@ func (r *sellerRepository) Update(seller *domain.Seller) error {
 			bank_account_name = :bank_account_name,
 			bank_account_number = :bank_account_number,
 			bank_account_provider = :bank_account_provider,
+			phone = :phone,
 			owner_id = :owner_id,
 			is_verify = :is_verify,
 			updated_at = NOW()

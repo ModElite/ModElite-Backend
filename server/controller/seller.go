@@ -164,6 +164,7 @@ func (c *sellerController) Create(ctx *fiber.Ctx) error {
 		BANK_ACCOUNT_NAME:     body.BANK_ACCOUNT_NAME,
 		BANK_ACCOUNT_NUMBER:   body.BANK_ACCOUNT_NUMBER,
 		BANK_ACCOUNT_PROVIDER: body.BANK_ACCOUNT_PROVIDER,
+		PHONE:                 body.PHONE,
 		OWNER_ID:              userId,
 	}); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
@@ -204,6 +205,7 @@ func (c *sellerController) Update(ctx *fiber.Ctx) error {
 		BANK_ACCOUNT_NAME:     body.BANK_ACCOUNT_NAME,
 		BANK_ACCOUNT_NUMBER:   body.BANK_ACCOUNT_NUMBER,
 		BANK_ACCOUNT_PROVIDER: body.BANK_ACCOUNT_PROVIDER,
+		PHONE:                 body.PHONE,
 	}, userId)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{

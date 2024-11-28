@@ -2861,6 +2861,9 @@
                 "ownerId": {
                     "type": "string"
                 },
+                "phone": {
+                    "type": "string"
+                },
                 "updateAt": {
                     "type": "string"
                 }
@@ -3156,7 +3159,8 @@
                 "description",
                 "location",
                 "logoUrl",
-                "name"
+                "name",
+                "phone"
             ],
             "properties": {
                 "bankAccountName": {
@@ -3178,6 +3182,9 @@
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 }
             }
@@ -3459,7 +3466,8 @@
                 "id",
                 "location",
                 "logoUrl",
-                "name"
+                "name",
+                "phone"
             ],
             "properties": {
                 "bankAccountName": {
@@ -3484,6 +3492,9 @@
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 }
             }

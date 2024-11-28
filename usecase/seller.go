@@ -58,6 +58,7 @@ func (u *sellerUsecase) Create(data *domain.Seller) error {
 		BANK_ACCOUNT_NAME:     data.BANK_ACCOUNT_NAME,
 		BANK_ACCOUNT_NUMBER:   data.BANK_ACCOUNT_NUMBER,
 		BANK_ACCOUNT_PROVIDER: data.BANK_ACCOUNT_PROVIDER,
+		PHONE:                 data.PHONE,
 		OWNER_ID:              data.OWNER_ID,
 		IS_VERIFY:             false,
 	}
@@ -90,6 +91,7 @@ func (u *sellerUsecase) Update(id string, data *domain.Seller, userId string) er
 	seller.BANK_ACCOUNT_NAME = data.BANK_ACCOUNT_NAME
 	seller.BANK_ACCOUNT_NUMBER = data.BANK_ACCOUNT_NUMBER
 	seller.BANK_ACCOUNT_PROVIDER = data.BANK_ACCOUNT_PROVIDER
+	seller.PHONE = data.PHONE
 
 	if err = u.sellerRepo.Update(seller); err != nil {
 		return err

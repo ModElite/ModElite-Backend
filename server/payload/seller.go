@@ -8,6 +8,7 @@ type CreateSellerDTO struct {
 	BANK_ACCOUNT_NAME     string `json:"bankAccountName" validate:"required"`
 	BANK_ACCOUNT_NUMBER   string `json:"bankAccountNumber" validate:"required"`
 	BANK_ACCOUNT_PROVIDER string `json:"bankAccountProvider" validate:"required"`
+	PHONE                 string `json:"phone" validate:"required"`
 }
 
 type UpdateSellerDTO struct {

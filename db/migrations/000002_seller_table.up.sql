@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS "seller" (
   bank_account_name TEXT NOT NULL,
   bank_account_number TEXT NOT NULL,
   bank_account_provider TEXT NOT NULL,
+  phone VARCHAR(16) NOT NULL,
   owner_id UUID NOT NULL,
   is_verify BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
