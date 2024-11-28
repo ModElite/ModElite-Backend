@@ -185,6 +185,13 @@ definitions:
       updatedAt:
         type: string
     type: object
+  domain.OrderSizeDashboard:
+    properties:
+      quantity:
+        type: number
+      size:
+        type: string
+    type: object
   domain.OrderStatusType:
     enum:
     - PENDING
@@ -237,6 +244,13 @@ definitions:
         type: array
       updatedAt:
         type: string
+    type: object
+  domain.ProductDashboard:
+    properties:
+      productName:
+        type: string
+      quantity:
+        type: number
     type: object
   domain.ProductData:
     properties:
@@ -344,6 +358,14 @@ definitions:
     type: object
   domain.SellerDashboard:
     properties:
+      orderSizeDashboard:
+        items:
+          $ref: '#/definitions/domain.OrderSizeDashboard'
+        type: array
+      productDashboard:
+        items:
+          $ref: '#/definitions/domain.ProductDashboard'
+        type: array
       totalOrder:
         type: number
       totalOrderAmount:

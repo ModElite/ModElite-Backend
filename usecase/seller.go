@@ -53,6 +53,16 @@ func (u *sellerUsecase) GetDashboard(sellerID string) (*domain.SellerDashboard, 
 	if err != nil {
 		return nil, err
 	}
+	productDashboard, err := u.sellerRepo.GetDashboardProductBySellerId(sellerID)
+	if err != nil {
+		return nil, err
+	}
+	dashboard.PRODUCT_DASHBOARD = productDashboard
+	orderSizeDashboard, err := u.sellerRepo.GetDashboardSizeBySellerId(sellerID)
+	if err != nil {
+		return nil, err
+	}
+	dashboard.ORDER_SIZE_DASHBOARD = orderSizeDashboard
 	return dashboard, nil
 }
 

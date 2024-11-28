@@ -20,10 +20,12 @@ type Seller struct {
 }
 
 type SellerDashboard struct {
-	TOTAL_ORDER              float64 `json:"totalOrder" db:"total_order"`
-	TOTAL_ORDER_USER         float64 `json:"totalOrderUser" db:"total_order_user"`
-	TOTAL_ORDER_AMOUNT       float64 `json:"totalOrderAmount" db:"total_order_amount"`
-	TOTAL_ORDER_PRODUCT_UNIT float64 `json:"totalOrderProductUnit" db:"total_order_product_unit"`
+	TOTAL_ORDER              float64               `json:"totalOrder" db:"total_order"`
+	TOTAL_ORDER_USER         float64               `json:"totalOrderUser" db:"total_order_user"`
+	TOTAL_ORDER_AMOUNT       float64               `json:"totalOrderAmount" db:"total_order_amount"`
+	TOTAL_ORDER_PRODUCT_UNIT float64               `json:"totalOrderProductUnit" db:"total_order_product_unit"`
+	PRODUCT_DASHBOARD        *[]ProductDashboard   `json:"productDashboard,omitempty" db:"-"`
+	ORDER_SIZE_DASHBOARD     *[]OrderSizeDashboard `json:"orderSizeDashboard,omitempty" db:"-"`
 }
 
 type SellerRepository interface {
@@ -31,6 +33,8 @@ type SellerRepository interface {
 	GetByID(id string) (*Seller, error)
 	GetByOwnerID(ownerID string) (*[]Seller, error)
 	GetDashboard(sellerID string) (*SellerDashboard, error)
+	GetDashboardProductBySellerId(sellerID string) (*[]ProductDashboard, error)
+	GetDashboardSizeBySellerId(sellerID string) (*[]OrderSizeDashboard, error)
 	Create(seller *Seller) error
 	Update(seller *Seller) error
 	Delete(id string) error

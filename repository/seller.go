@@ -85,6 +85,64 @@ func (r *sellerRepository) GetDashboard(sellerID string) (*domain.SellerDashboar
 	return &dashboard, nil
 }
 
+func (r *sellerRepository) GetDashboardProductBySellerId(sellerID string) (*[]domain.ProductDashboard, error) {
+	dashboards := make([]domain.ProductDashboard, 0)
+	err := r.db.Select(&dashboards, `
+		SELECT 
+			p.name AS product_name,
+			SUM(op.quantity) AS quantity
+		FROM
+			order_product op
+		JOIN 
+			product_size ps ON op.product_size_id = ps.id
+		join 
+			product_option po on po.id = ps.product_option_id 
+		JOIN 
+			product p ON po.product_id = p.id
+		WHERE 
+			p.seller_id = $1
+		GROUP BY 
+			p.id, p."name"
+		ORDER BY 
+			quantity DESC;
+	`, sellerID)
+	if err != nil {
+		return nil, fmt.Errorf("error get seller dashboard product: %v", err)
+	}
+
+	return &dashboards, nil
+}
+
+func (r *sellerRepository) GetDashboardSizeBySellerId(sellerID string) (*[]domain.OrderSizeDashboard, error) {
+	dashboards := make([]domain.OrderSizeDashboard, 0)
+	err := r.db.Select(&dashboards, `
+		SELECT 
+			s."size" AS size,
+			SUM(op.quantity) AS quantity
+		FROM 
+			order_product op 
+		JOIN 
+			product_size ps ON op.product_size_id = ps.id 
+		JOIN 
+			size s ON ps.size_id = s.id 
+		JOIN
+			product_option po ON po.id = ps.product_option_id 
+		JOIN
+			product p ON p.id = po.product_id 
+		WHERE
+			p.seller_id = $1
+		GROUP by
+			s."size" 
+		ORDER BY 
+			quantity DESC;
+	`, sellerID)
+	if err != nil {
+		return nil, fmt.Errorf("error get seller dashboard product: %v", err)
+	}
+
+	return &dashboards, nil
+}
+
 func (r *sellerRepository) Create(seller *domain.Seller) error {
 	_, err := r.db.NamedExec(`
 		INSERT INTO seller 

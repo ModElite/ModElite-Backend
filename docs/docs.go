@@ -2712,6 +2712,17 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.OrderSizeDashboard": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "number"
+                },
+                "size": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.OrderStatusType": {
             "type": "string",
             "enum": [
@@ -2784,6 +2795,17 @@ const docTemplate = `{
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "domain.ProductDashboard": {
+            "type": "object",
+            "properties": {
+                "productName": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "number"
                 }
             }
         },
@@ -2948,6 +2970,18 @@ const docTemplate = `{
         "domain.SellerDashboard": {
             "type": "object",
             "properties": {
+                "orderSizeDashboard": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.OrderSizeDashboard"
+                    }
+                },
+                "productDashboard": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.ProductDashboard"
+                    }
+                },
                 "totalOrder": {
                     "type": "number"
                 },

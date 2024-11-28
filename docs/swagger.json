@@ -2705,6 +2705,17 @@
                 }
             }
         },
+        "domain.OrderSizeDashboard": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "number"
+                },
+                "size": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.OrderStatusType": {
             "type": "string",
             "enum": [
@@ -2777,6 +2788,17 @@
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "domain.ProductDashboard": {
+            "type": "object",
+            "properties": {
+                "productName": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "number"
                 }
             }
         },
@@ -2941,6 +2963,18 @@
         "domain.SellerDashboard": {
             "type": "object",
             "properties": {
+                "orderSizeDashboard": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.OrderSizeDashboard"
+                    }
+                },
+                "productDashboard": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.ProductDashboard"
+                    }
+                },
                 "totalOrder": {
                     "type": "number"
                 },

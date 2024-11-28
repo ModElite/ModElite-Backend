@@ -61,6 +61,16 @@ type ProductRow struct {
 	SizeUpdatedAt   sql.NullTime   `db:"size_updated_at"`
 }
 
+type ProductDashboard struct {
+	PRODUCT_NAME string  `json:"productName" db:"product_name"`
+	QUANTITY     float64 `json:"quantity" db:"quantity"`
+}
+
+type OrderSizeDashboard struct {
+	SIZE     string  `json:"size" db:"size"`
+	QUANTITY float64 `json:"quantity" db:"quantity"`
+}
+
 type ProductPriceQuantity struct {
 	Price    float64 `json:"price" db:"price"`
 	Quantity int     `json:"quantity" db:"quantity"`
