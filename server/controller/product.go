@@ -38,7 +38,8 @@ func NewProductController(
 // @Tags Product
 // @Produce json
 // @Success 200 {object} domain.Response{data=[]domain.Product}
-// @Router /api/product [get]
+// @Param body body payload.FilterDTO true "Filter Body"
+// @Router /api/product [post]
 func (p *productController) GetAllProductWithOptionsAndSizes(ctx *fiber.Ctx) error {
 	// show all params
 	var filter payload.FilterDTO
