@@ -62,22 +62,23 @@ func initRepository(
 	db *sqlx.DB,
 ) *domain.Repository {
 	return &domain.Repository{
-		AddressRepository:       repository.NewAddressRepository(db),
-		UserRepository:          repository.NewUserRepository(db),
-		SessionRepository:       repository.NewSessionRepository(db),
-		SellerRepository:        repository.NewSellerRepository(db),
-		ProductRepository:       repository.NewProductRepository(db),
-		ProductOptionRepository: repository.NewProductOptionRepository(db),
-		ProductSizeRepository:   repository.NewProductSizeRepository(db),
-		SizeRepository:          repository.NewSizeRepository(db),
-		FavoriteRepository:      repository.NewFavoriteRepository(db),
-		TagRepository:           repository.NewTagRepository(db),
-		TagGroupRepository:      repository.NewTagGroupRepository(db),
-		ProductTagRepository:    repository.NewProductTagRepository(db),
-		OrderRepository:         repository.NewOrderRepository(db),
-		VoucherRepository:       repository.NewVoucherRepository(db),
-		GeoLocationRepository:   repository.NewGeoLocationRepository(db),
-		CartRepository:          repository.NewCartRepository(db),
+		AddressRepository:           repository.NewAddressRepository(db),
+		UserRepository:              repository.NewUserRepository(db),
+		SessionRepository:           repository.NewSessionRepository(db),
+		SellerRepository:            repository.NewSellerRepository(db),
+		SellerTransactionRepository: repository.NewSellerTransactionRepository(db),
+		ProductRepository:           repository.NewProductRepository(db),
+		ProductOptionRepository:     repository.NewProductOptionRepository(db),
+		ProductSizeRepository:       repository.NewProductSizeRepository(db),
+		SizeRepository:              repository.NewSizeRepository(db),
+		FavoriteRepository:          repository.NewFavoriteRepository(db),
+		TagRepository:               repository.NewTagRepository(db),
+		TagGroupRepository:          repository.NewTagGroupRepository(db),
+		ProductTagRepository:        repository.NewProductTagRepository(db),
+		OrderRepository:             repository.NewOrderRepository(db),
+		VoucherRepository:           repository.NewVoucherRepository(db),
+		GeoLocationRepository:       repository.NewGeoLocationRepository(db),
+		CartRepository:              repository.NewCartRepository(db),
 	}
 }
 
@@ -91,6 +92,7 @@ func initUseCase(
 	sessionUsecase := usecase.NewSessionUsecase(repo.SessionRepository)
 	authUsecase := usecase.NewAuthUsecase(googleUsecase, userUsecase, sessionUsecase)
 	sellerUsecase := usecase.NewSellerUsecase(repo.SellerRepository, userUsecase)
+	sellerTransactionUsecase := usecase.NewSellerTransactionUsecase(repo.SellerTransactionRepository)
 	productOptionUsecase := usecase.NewProductOptionUsecase(repo.ProductOptionRepository, repo.ProductSizeRepository)
 	productSizeUsecase := usecase.NewProductSizeUsecase(repo.ProductSizeRepository)
 	sizeUsecase := usecase.NewSizeUsecase(repo.SizeRepository)
@@ -102,21 +104,22 @@ func initUseCase(
 	geoLocationUsecase := usecase.NewGeoLocationUseCase(repo.GeoLocationRepository)
 	cartUsecase := usecase.NewCartUsecase(repo.CartRepository)
 	return &domain.Usecase{
-		AddressUsecase:       addressUsecase,
-		AuthUsecase:          authUsecase,
-		GoogleUsecase:        googleUsecase,
-		UserUsecase:          userUsecase,
-		SessionUsecase:       sessionUsecase,
-		SellerUsecase:        sellerUsecase,
-		ProductUsecase:       productUsecase,
-		ProductOptionUsecase: productOptionUsecase,
-		ProductSizeUsecase:   productSizeUsecase,
-		SizeUsecase:          sizeUsecase,
-		FavoriteUsecase:      favoriteUsecase,
-		TagUsecase:           tagUsecase,
-		OrderUsecase:         orderUsecase,
-		VoucherUsecase:       vocherUsecase,
-		GeoLocationUsecase:   geoLocationUsecase,
-		CartUsecase:          cartUsecase,
+		AddressUsecase:           addressUsecase,
+		AuthUsecase:              authUsecase,
+		GoogleUsecase:            googleUsecase,
+		UserUsecase:              userUsecase,
+		SessionUsecase:           sessionUsecase,
+		SellerUsecase:            sellerUsecase,
+		SellerTransactionUsecase: sellerTransactionUsecase,
+		ProductUsecase:           productUsecase,
+		ProductOptionUsecase:     productOptionUsecase,
+		ProductSizeUsecase:       productSizeUsecase,
+		SizeUsecase:              sizeUsecase,
+		FavoriteUsecase:          favoriteUsecase,
+		TagUsecase:               tagUsecase,
+		OrderUsecase:             orderUsecase,
+		VoucherUsecase:           vocherUsecase,
+		GeoLocationUsecase:       geoLocationUsecase,
+		CartUsecase:              cartUsecase,
 	}
 }

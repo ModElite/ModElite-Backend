@@ -8,14 +8,16 @@ import (
 )
 
 type sellerController struct {
-	validator     domain.ValidatorUsecase
-	sellerUsecase domain.SellerUsecase
+	validator                domain.ValidatorUsecase
+	sellerUsecase            domain.SellerUsecase
+	sellerTransactionUsecase domain.SellerTransactionUsecase
 }
 
-func NewSellerController(validator domain.ValidatorUsecase, sellerUsecase domain.SellerUsecase) *sellerController {
+func NewSellerController(validator domain.ValidatorUsecase, sellerUsecase domain.SellerUsecase, sellerTransactionUsecase domain.SellerTransactionUsecase) *sellerController {
 	return &sellerController{
-		validator:     validator,
-		sellerUsecase: sellerUsecase,
+		validator:                validator,
+		sellerUsecase:            sellerUsecase,
+		sellerTransactionUsecase: sellerTransactionUsecase,
 	}
 }
 
@@ -106,6 +108,17 @@ func (c *sellerController) GetIsOwner(ctx *fiber.Ctx) error {
 			MESSAGE: constant.MESSAGE_PERMISSION_DENIED,
 		})
 	}
+
+	sellerTransaction, err := c.sellerTransactionUsecase.GetBySellerId(sellerId)
+	if err != nil {
+		println(err.Error())
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+	}
+
+	seller.SELLER_TRANSACTION = sellerTransaction
 
 	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
 		SUCCESS: true,

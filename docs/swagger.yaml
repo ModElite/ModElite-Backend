@@ -335,7 +335,51 @@ definitions:
         type: string
       phone:
         type: string
+      sellerTransaction:
+        items:
+          $ref: '#/definitions/domain.SellerTransaction'
+        type: array
       updateAt:
+        type: string
+    type: object
+  domain.SellerTransaction:
+    properties:
+      bankAccountName:
+        type: string
+      bankAccountNumber:
+        type: string
+      bankAccountProvider:
+        type: string
+      bankTransactionAmount:
+        type: number
+      bankTransactionDatetime:
+        type: string
+      bankTransactionFee:
+        type: number
+      bankTransactionId:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      sellerId:
+        type: string
+      sellerTransactionOrder:
+        items:
+          $ref: '#/definitions/domain.SellerTransactionOrder'
+        type: array
+      updatedAt:
+        type: string
+    type: object
+  domain.SellerTransactionOrder:
+    properties:
+      createdAt:
+        type: string
+      orderId:
+        type: string
+      sellerTransactionId:
+        type: string
+      updatedAt:
         type: string
     type: object
   domain.Size:

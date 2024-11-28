@@ -2871,7 +2871,74 @@ const docTemplate = `{
                 "phone": {
                     "type": "string"
                 },
+                "sellerTransaction": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.SellerTransaction"
+                    }
+                },
                 "updateAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.SellerTransaction": {
+            "type": "object",
+            "properties": {
+                "bankAccountName": {
+                    "type": "string"
+                },
+                "bankAccountNumber": {
+                    "type": "string"
+                },
+                "bankAccountProvider": {
+                    "type": "string"
+                },
+                "bankTransactionAmount": {
+                    "type": "number"
+                },
+                "bankTransactionDatetime": {
+                    "type": "string"
+                },
+                "bankTransactionFee": {
+                    "type": "number"
+                },
+                "bankTransactionId": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "sellerId": {
+                    "type": "string"
+                },
+                "sellerTransactionOrder": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.SellerTransactionOrder"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.SellerTransactionOrder": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "orderId": {
+                    "type": "string"
+                },
+                "sellerTransactionId": {
+                    "type": "string"
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }
