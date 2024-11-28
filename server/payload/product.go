@@ -44,3 +44,11 @@ type UpdateProductSizeDTO struct {
 	SIZE_ID  string `json:"sizeId" validate:"omitempty"`
 	QUANTITY int    `json:"quantity" validate:"required"`
 }
+
+type FilterDTO struct {
+	Filter []FilterTagsDTO `json:"filter"`
+}
+type FilterTagsDTO struct {
+	Name  string   `json:"name"`
+	Value []string `json:"value"`
+}

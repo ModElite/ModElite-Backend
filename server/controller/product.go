@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
@@ -39,7 +40,30 @@ func NewProductController(
 // @Success 200 {object} domain.Response{data=[]domain.Product}
 // @Router /api/product [get]
 func (p *productController) GetAllProductWithOptionsAndSizes(ctx *fiber.Ctx) error {
-	products, err := p.productUseCase.GetAllProductWithOptionsAndSizes()
+	// show all params
+	var filter payload.FilterDTO
+	// validator by c.validator.ValidateJSON
+	if err := p.validator.ValidateBody(ctx, &filter); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(&domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INVALID_BODY,
+		})
+	}
+
+	for _, f := range filter.Filter {
+		fmt.Println(f.Name, f.Value)
+	}
+
+	// make to FilterTag in domain
+	filterDomain := make([]domain.FilterTag, 0)
+	for _, f := range filter.Filter {
+		filterDomain = append(filterDomain, domain.FilterTag{
+			Name:  f.Name,
+			Value: f.Value,
+		})
+	}
+
+	products, err := p.productUseCase.GetAllProductWithOptionsAndSizes(&filterDomain)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(&domain.Response{
 			SUCCESS: false,

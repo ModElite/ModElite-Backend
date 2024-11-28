@@ -77,8 +77,13 @@ type ProductPriceQuantity struct {
 	SellerID string  `json:"sellerId" db:"seller_id"`
 }
 
+type FilterTag struct {
+	Name  string   `json:"name"`
+	Value []string `json:"value"`
+}
+
 type ProductRepository interface {
-	GetAllProductWithOptionsAndSizes() (*[]Product, error)
+	GetAllProductWithOptionsAndSizes(filter *[]FilterTag) (*[]Product, error)
 	GetProductWithOptionsAndSizes(productId string) (*Product, error)
 	GetProductsBySeller(sellerID string) (*[]Product, error)
 	GetAll() (*[]Product, error)
@@ -94,7 +99,7 @@ type ProductRepository interface {
 type ProductUsecase interface {
 	CheckPermissionCanModifyProduct(ownerID string, productID string) (bool, error)
 	GetAll() (*[]Product, error)
-	GetAllProductWithOptionsAndSizes() (*[]Product, error)
+	GetAllProductWithOptionsAndSizes(filter *[]FilterTag) (*[]Product, error)
 	GetProductWithOptionsAndSizes(productId string) (*Product, error)
 	GetProductsBySeller(sellerID string) (*[]Product, error)
 	GetByID(id string) (*Product, error)

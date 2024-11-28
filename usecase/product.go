@@ -64,8 +64,8 @@ func (u *productUsecase) GetAll() (*[]domain.Product, error) {
 	return products, nil
 }
 
-func (u *productUsecase) GetAllProductWithOptionsAndSizes() (*[]domain.Product, error) {
-	products, err := u.productRepo.GetAllProductWithOptionsAndSizes()
+func (u *productUsecase) GetAllProductWithOptionsAndSizes(filter *[]domain.FilterTag) (*[]domain.Product, error) {
+	products, err := u.productRepo.GetAllProductWithOptionsAndSizes(filter)
 	if err != nil {
 		return nil, fmt.Errorf("error product getall: %w", err)
 	}

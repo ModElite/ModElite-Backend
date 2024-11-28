@@ -18,8 +18,84 @@ func NewProductRepository(db *sqlx.DB) domain.ProductRepository {
 	}
 }
 
-func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Product, error) {
-	query := `
+func (r *productRepository) GetAllProductWithOptionsAndSizes(filter *[]domain.FilterTag) (*[]domain.Product, error) {
+	// if had filter
+	// if filter tag length > 0
+
+	var rowsData []domain.ProductRow
+
+	if len(*filter) > 0 {
+		product_label := make([]string, 0)
+		category_label := make([]string, 0)
+		for _, tag := range *filter {
+			category_label = append(category_label, tag.Name)
+			product_label = append(product_label, tag.Value...)
+		}
+		// join product to string for query
+		// join category to string for query
+		product_query := ""
+		category_query := ""
+		for i, v := range product_label {
+			if i == 0 {
+				product_query = fmt.Sprintf("'%s'", v)
+			} else {
+				product_query = fmt.Sprintf("%s, '%s'", product_query, v)
+			}
+		}
+		for i, v := range category_label {
+			if i == 0 {
+				category_query = fmt.Sprintf("'%s'", v)
+			} else {
+				category_query = fmt.Sprintf("%s, '%s'", category_query, v)
+			}
+		}
+
+		query := `
+		SELECT p.id, p.seller_id, p.name, p.description, p.feature, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
+				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at, po.deleted_at AS option_deleted_at,
+				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at, ps.deleted_at AS product_size_deleted_at,
+				s.id AS size_id, s.size, s.created_at AS size_created_at, s.updated_at AS size_updated_at
+		FROM product p
+		LEFT JOIN product_option po ON po.product_id = p.id AND po.deleted_at ISNULL
+		LEFT JOIN product_size ps ON ps.product_option_id = po.id AND ps.deleted_at ISNULL
+		LEFT JOIN size s ON s.id = ps.size_id
+		WHERE p.deleted_at ISNULL
+		AND p.id IN 
+		(
+			SELECT
+				product_tag.product_id
+			FROM
+				tag
+				INNER JOIN
+				tag_group
+				ON
+					tag.tag_group_id = tag_group."id"
+				INNER JOIN
+				product_tag
+				ON
+					tag."id" = product_tag.tag_id
+			WHERE
+				tag.label IN ($1) AND
+				tag_group.label IN ($2)
+			GROUP BY
+				product_tag.product_id
+			HAVING COUNT(DISTINCT tag.id) = ?
+		)
+		ORDER BY p.id, po.id, ps.id`
+		// print query with product_query and category_query
+		query, args, err := sqlx.In(query, product_label, category_label)
+		if err != nil {
+			return nil, fmt.Errorf("error preparing query: %w", err)
+		}
+		query = r.db.Rebind(query)
+		err = r.db.Select(&rowsData, query, args...)
+
+		if err != nil {
+			fmt.Println(err)
+			return nil, fmt.Errorf("error getting products with options and sizes: %w", err)
+		}
+	} else {
+		query := `
 		SELECT p.id, p.seller_id, p.name, p.description, p.feature, p.price, p.status, p.image_url, p.created_at, p.updated_at, p.deleted_at,
 				po.id AS option_id, po.label, po.image_url AS option_image_url, po.created_at AS option_created_at, po.updated_at AS option_updated_at, po.deleted_at AS option_deleted_at,
 				ps.id AS product_size_id, ps.quantity, ps.created_at AS product_size_created_at, ps.updated_at AS product_size_updated_at, ps.deleted_at AS product_size_deleted_at,
@@ -31,20 +107,10 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes() (*[]domain.Produc
 		WHERE p.deleted_at ISNULL
 		ORDER BY p.id, po.id, ps.id
 	`
-
-	rows, err := r.db.Queryx(query)
-	if err != nil {
-		return nil, fmt.Errorf("error getting product with options and sizes: %w", err)
-	}
-	defer rows.Close()
-
-	var rowsData []domain.ProductRow
-	for rows.Next() {
-		var row domain.ProductRow
-		if err := rows.StructScan(&row); err != nil {
-			return nil, err
+		err := r.db.Select(&rowsData, query)
+		if err != nil {
+			return nil, fmt.Errorf("error getting products with options and sizes: %w", err)
 		}
-		rowsData = append(rowsData, row)
 	}
 
 	productsMap := make(map[string]*domain.Product)
