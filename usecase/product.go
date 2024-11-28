@@ -10,6 +10,7 @@ import (
 
 type productUsecase struct {
 	productRepo          domain.ProductRepository
+	productTagRepo       domain.ProductTagRepository
 	productOptionUsecase domain.ProductOptionUsecase
 	productSizeUsecase   domain.ProductSizeUsecase
 	tagUsecase           domain.TagUsecase
@@ -19,6 +20,7 @@ type productUsecase struct {
 
 func NewProductUsecase(
 	productRepo domain.ProductRepository,
+	productTagRepo domain.ProductTagRepository,
 	productOptionUsecase domain.ProductOptionUsecase,
 	productSizeUsecase domain.ProductSizeUsecase,
 	tagUsecase domain.TagUsecase,
@@ -27,6 +29,7 @@ func NewProductUsecase(
 ) domain.ProductUsecase {
 	return &productUsecase{
 		productRepo:          productRepo,
+		productTagRepo:       productTagRepo,
 		productOptionUsecase: productOptionUsecase,
 		productSizeUsecase:   productSizeUsecase,
 		tagUsecase:           tagUsecase,
@@ -70,12 +73,19 @@ func (u *productUsecase) GetAllProductWithOptionsAndSizes(filter *[]domain.Filte
 		return nil, fmt.Errorf("error product getall: %w", err)
 	}
 
+	productTags, err := u.productTagRepo.GetAllJoinTag()
+	if err != nil {
+		return nil, fmt.Errorf("error product tag getall: %w", err)
+	}
+
 	for i, product := range *products {
-		productTags, err := u.tagUsecase.GetTagByProductID(product.ID)
-		if err != nil {
-			return nil, fmt.Errorf("error product getall: %w", err)
+		var tags []domain.Tag
+		for _, productTag := range *productTags {
+			if productTag.PRODUCT_ID == product.ID {
+				tags = append(tags, *productTag.TAG)
+			}
 		}
-		(*products)[i].TAGS = productTags
+		(*products)[i].TAGS = &tags
 	}
 
 	return products, nil

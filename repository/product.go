@@ -21,7 +21,6 @@ func NewProductRepository(db *sqlx.DB) domain.ProductRepository {
 func (r *productRepository) GetAllProductWithOptionsAndSizes(filter *[]domain.FilterTag) (*[]domain.Product, error) {
 	// if had filter
 	// if filter tag length > 0
-
 	var rowsData []domain.ProductRow
 
 	if len(*filter) > 0 {
@@ -30,24 +29,6 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes(filter *[]domain.Fi
 		for _, tag := range *filter {
 			category_label = append(category_label, tag.Name)
 			product_label = append(product_label, tag.Value...)
-		}
-		// join product to string for query
-		// join category to string for query
-		product_query := ""
-		category_query := ""
-		for i, v := range product_label {
-			if i == 0 {
-				product_query = fmt.Sprintf("'%s'", v)
-			} else {
-				product_query = fmt.Sprintf("%s, '%s'", product_query, v)
-			}
-		}
-		for i, v := range category_label {
-			if i == 0 {
-				category_query = fmt.Sprintf("'%s'", v)
-			} else {
-				category_query = fmt.Sprintf("%s, '%s'", category_query, v)
-			}
 		}
 
 		query := `
@@ -75,16 +56,16 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes(filter *[]domain.Fi
 				ON
 					tag."id" = product_tag.tag_id
 			WHERE
-				tag.label IN ($1) AND
-				tag_group.label IN ($2)
+				tag.label IN (?) AND
+				tag_group.label IN (?)
 			GROUP BY
 				product_tag.product_id
-			HAVING COUNT(DISTINCT tag.id) = ?
+			HAVING COUNT(DISTINCT tag_group.id) = ?
 		)
 		ORDER BY p.id, po.id, ps.id`
-		// print query with product_query and category_query
-		query, args, err := sqlx.In(query, product_label, category_label)
+		query, args, err := sqlx.In(query, product_label, category_label, len(category_label))
 		if err != nil {
+			fmt.Println(err)
 			return nil, fmt.Errorf("error preparing query: %w", err)
 		}
 		query = r.db.Rebind(query)
@@ -109,6 +90,7 @@ func (r *productRepository) GetAllProductWithOptionsAndSizes(filter *[]domain.Fi
 	`
 		err := r.db.Select(&rowsData, query)
 		if err != nil {
+			fmt.Println(err)
 			return nil, fmt.Errorf("error getting products with options and sizes: %w", err)
 		}
 	}

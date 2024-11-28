@@ -27,6 +27,33 @@ func (r *productTagRepository) GetAll() (*[]domain.ProductTag, error) {
 	return &productTags, nil
 }
 
+func (r *productTagRepository) GetAllJoinTag() (*[]domain.ProductTag, error) {
+	productTags := make([]domain.ProductTagJoinTagRow, 0)
+	query := `
+		SELECT pt.product_id AS product_id, pt.tag_id AS tag_id, t.label AS tag_label, t.image_url AS tag_image_url
+		FROM product_tag pt
+		JOIN tag t ON pt.tag_id = t.id
+	`
+	err := r.db.Select(&productTags, query)
+	if err != nil {
+		return nil, fmt.Errorf("error while getting all product tags with join: %w", err)
+	}
+	result := make([]domain.ProductTag, 0)
+	for _, pt := range productTags {
+		TAG := &domain.Tag{
+			ID:        pt.TagID,
+			LABEL:     pt.TagLabel,
+			IMAGE_URL: pt.TagImageURL,
+		}
+		result = append(result, domain.ProductTag{
+			PRODUCT_ID: pt.ProductID,
+			TAG_ID:     pt.TagID,
+			TAG:        TAG,
+		})
+	}
+	return &result, nil
+}
+
 func (r *productTagRepository) GetByProductID(productID string) (*[]domain.ProductTag, error) {
 	productTags := make([]domain.ProductTag, 0)
 	err := r.db.Select(&productTags, "SELECT * FROM product_tag WHERE product_id = $1", productID)

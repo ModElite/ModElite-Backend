@@ -44,14 +44,11 @@ func (p *productController) GetAllProductWithOptionsAndSizes(ctx *fiber.Ctx) err
 	var filter payload.FilterDTO
 	// validator by c.validator.ValidateJSON
 	if err := p.validator.ValidateBody(ctx, &filter); err != nil {
+		fmt.Println(err)
 		return ctx.Status(fiber.StatusBadRequest).JSON(&domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_INVALID_BODY,
 		})
-	}
-
-	for _, f := range filter.Filter {
-		fmt.Println(f.Name, f.Value)
 	}
 
 	// make to FilterTag in domain
@@ -65,12 +62,12 @@ func (p *productController) GetAllProductWithOptionsAndSizes(ctx *fiber.Ctx) err
 
 	products, err := p.productUseCase.GetAllProductWithOptionsAndSizes(&filterDomain)
 	if err != nil {
+		fmt.Println(err)
 		return ctx.Status(fiber.StatusInternalServerError).JSON(&domain.Response{
 			SUCCESS: false,
 			MESSAGE: err.Error(),
 		})
 	}
-
 	return ctx.Status(fiber.StatusOK).JSON(&domain.Response{
 		SUCCESS: true,
 		MESSAGE: constant.MESSAGE_SUCCESS,
