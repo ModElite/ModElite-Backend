@@ -364,6 +364,8 @@ definitions:
     properties:
       id:
         type: integer
+      imageUrl:
+        type: string
       label:
         type: string
       tagGroupId:
@@ -558,6 +560,8 @@ definitions:
     type: object
   payload.CreateTagDTO:
     properties:
+      imageUrl:
+        type: string
       label:
         type: string
     required:
@@ -653,6 +657,8 @@ definitions:
     type: object
   payload.TagDTO:
     properties:
+      imageUrl:
+        type: string
       label:
         type: string
       tagGroupId:

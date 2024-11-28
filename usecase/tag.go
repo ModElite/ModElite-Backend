@@ -66,6 +66,7 @@ func (u *tagUsecase) CreateTagGroup(TagGroup *domain.TagGroup) error {
 		for _, item := range *TagGroup.TAG {
 			if _, err = u.tagRepo.Create(&domain.Tag{
 				LABEL:        item.LABEL,
+				IMAGE_URL:    item.IMAGE_URL,
 				TAG_GRUOP_ID: *id,
 			}); err != nil {
 				return err

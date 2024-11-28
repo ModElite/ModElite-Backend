@@ -94,14 +94,14 @@ func (c *tagController) CreateTagGroup(ctx *fiber.Ctx) error {
 		tag := make([]domain.Tag, 0)
 		for _, t := range payload.TAG {
 			tag = append(tag, domain.Tag{
-				LABEL: t.LABEL,
+				LABEL:     t.LABEL,
+				IMAGE_URL: t.IMAGE_URL,
 			})
 		}
 		tagGroup.TAG = &tag
 	}
 
 	if err := c.tagUseCase.CreateTagGroup(tagGroup); err != nil {
-		print(err.Error())
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
 			SUCCESS: false,
@@ -297,6 +297,7 @@ func (c *tagController) CreateTag(ctx *fiber.Ctx) error {
 	if err := c.tagUseCase.CreateTag(&domain.Tag{
 		TAG_GRUOP_ID: tag.TAG_GROUP_ID,
 		LABEL:        tag.LABEL,
+		IMAGE_URL:    tag.IMAGE_URL,
 	}); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,

@@ -2916,6 +2916,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "imageUrl": {
+                    "type": "string"
+                },
                 "label": {
                     "type": "string"
                 },
@@ -3202,6 +3205,9 @@ const docTemplate = `{
                 "label"
             ],
             "properties": {
+                "imageUrl": {
+                    "type": "string"
+                },
                 "label": {
                     "type": "string"
                 }
@@ -3344,6 +3350,9 @@ const docTemplate = `{
                 "tagGroupId"
             ],
             "properties": {
+                "imageUrl": {
+                    "type": "string"
+                },
                 "label": {
                     "type": "string"
                 },

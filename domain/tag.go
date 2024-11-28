@@ -19,6 +19,7 @@ type Tag struct {
 	ID           int    `json:"id" db:"id"`
 	TAG_GRUOP_ID int    `json:"tagGroupId" db:"tag_group_id"`
 	LABEL        string `json:"label" db:"label"`
+	IMAGE_URL    string `json:"imageUrl" db:"image_url"`
 }
 
 type TagRepository interface {

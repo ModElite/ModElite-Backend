@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS "tag" (
   id SERIAL PRIMARY KEY,
   tag_group_id SERIAL NOT NULL,
   label VARCHAR(255) NOT NULL,
+  image_url TEXT NOT NULL,
   FOREIGN KEY (tag_group_id) REFERENCES tag_group(id) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS "product_tag" (

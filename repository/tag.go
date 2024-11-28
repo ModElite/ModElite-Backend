@@ -50,8 +50,8 @@ func (r *tagRepository) GetByTagGroupID(tagGroupID int) (*[]domain.Tag, error) {
 func (r *tagRepository) Create(tag *domain.Tag) (*int, error) {
 	tx := r.db.MustBegin()
 	var lastInsertID int
-	query := `INSERT INTO tag (label, tag_group_id) VALUES ($1, $2) RETURNING id`
-	err := tx.QueryRowx(query, tag.LABEL, tag.TAG_GRUOP_ID).Scan(&lastInsertID)
+	query := `INSERT INTO tag (label, tag_group_id, image_url) VALUES ($1, $2, $3) RETURNING id`
+	err := tx.QueryRowx(query, tag.LABEL, tag.TAG_GRUOP_ID, tag.IMAGE_URL).Scan(&lastInsertID)
 	if err != nil {
 		if err := tx.Rollback(); err != nil {
 			return nil, fmt.Errorf("error rollback create tag: %w", err)
@@ -66,7 +66,7 @@ func (r *tagRepository) Create(tag *domain.Tag) (*int, error) {
 }
 
 func (r *tagRepository) Update(tag *domain.Tag) error {
-	_, err := r.db.NamedExec("UPDATE tag SET label = :label, tag_group_id = :tag_group_id WHERE id = :id", tag)
+	_, err := r.db.NamedExec("UPDATE tag SET label = :label, tag_group_id = :tag_group_id, image_url = :image_url WHERE id = :id", tag)
 	if err != nil {
 		return fmt.Errorf("error update tag: %w", err)
 	}
