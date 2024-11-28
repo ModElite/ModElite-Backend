@@ -111,7 +111,6 @@ func (c *sellerController) GetIsOwner(ctx *fiber.Ctx) error {
 
 	sellerTransaction, err := c.sellerTransactionUsecase.GetBySellerId(sellerId)
 	if err != nil {
-		println(err.Error())
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			SUCCESS: false,
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
@@ -134,15 +133,24 @@ func (c *sellerController) GetIsOwner(ctx *fiber.Ctx) error {
 // @Success 200 {object} domain.Response{data=domain.Seller}
 // @Router /api/seller/{id} [get]
 func (c *sellerController) GetByID(ctx *fiber.Ctx) error {
-	id := ctx.Params("id")
+	sellerId := ctx.Params("id")
 
-	seller, err := c.sellerUsecase.GetByID(id)
+	seller, err := c.sellerUsecase.GetByID(sellerId)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
 			SUCCESS: false,
 			MESSAGE: err.Error(),
 		})
 	}
+
+	sellerTransaction, err := c.sellerTransactionUsecase.GetBySellerId(sellerId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			SUCCESS: false,
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+		})
+	}
+	seller.SELLER_TRANSACTION = sellerTransaction
 
 	return ctx.Status(fiber.StatusOK).JSON(domain.Response{
 		SUCCESS: true,
