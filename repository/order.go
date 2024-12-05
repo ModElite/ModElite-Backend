@@ -87,10 +87,10 @@ func (r *orderRepository) GetSelfOrder(userID string) (*[]domain.Order, error) {
 	return &order, nil
 }
 
-func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string, firstName string, lastName string, email string, phone string) error {
+func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string, firstName string, lastName string, email string, phone string) (string, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	id := uuid.New().String()
@@ -102,9 +102,9 @@ func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address stri
 		id, userId, domain.ORDER_PENDING, totalPrice+shipping_price, totalPrice, shipping_price, toDiscount, voucherId, address, firstName, lastName, email, phone)
 	if err != nil {
 		if err := tx.Rollback(); err != nil {
-			return err
+			return "", err
 		}
-		return err
+		return "", err
 	}
 	// INSERT INTO order_product (order_id, product_size_id, quantity, price, status) VALUES ($1, $2, $3, $4, $5);
 	for _, orderProduct := range *order {
@@ -113,19 +113,19 @@ func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address stri
 			orderProductId, id, orderProduct.PRODUCT_SIZE_ID, orderProduct.QUANTITY, orderProduct.PRICE)
 		if err != nil {
 			if err := tx.Rollback(); err != nil {
-				return err
+				return "", err
 			}
-			return err
+			return "", err
 		}
 		_, err = tx.Exec(`UPDATE product_size SET quantity = quantity - $1 WHERE id = $2;`, orderProduct.QUANTITY, orderProduct.PRODUCT_SIZE_ID)
 		if err != nil {
 			if err := tx.Rollback(); err != nil {
-				return err
+				return "", err
 			}
-			return err
+			return "", err
 		}
 	}
-	return tx.Commit()
+	return id, tx.Commit()
 }
 
 func (r *orderRepository) GetSelfOrderDetail(orderID string, userID string) (*domain.Order, error) {

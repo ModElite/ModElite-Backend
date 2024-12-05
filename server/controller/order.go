@@ -62,6 +62,7 @@ func (c *orderController) GetAll(ctx *fiber.Ctx) error {
 // @Produce json
 // @Security ApiKeyAuth
 // @Success 200 {object} domain.Response{data=[]domain.Order}
+// @Failure 500 {object} domain.Response
 // @Router /api/order/self [get]
 func (c *orderController) GetSelfOrder(ctx *fiber.Ctx) error {
 	userID := ctx.Locals(constant.USER_ID).(string)
@@ -160,7 +161,7 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 		})
 	}
 
-	err = c.orderUsecase.CreateOrder(&orderProdcts, loadAddress, &payload.VOUCHER_ID, payload.SHIPPING_PRICE, totalPrice, toDiscount, userID, firstName, lastName, email, phone)
+	id, err := c.orderUsecase.CreateOrder(&orderProdcts, loadAddress, &payload.VOUCHER_ID, payload.SHIPPING_PRICE, totalPrice, toDiscount, userID, firstName, lastName, email, phone)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
@@ -171,7 +172,7 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusCreated).JSON(domain.Response{
 		MESSAGE: constant.MESSAGE_SUCCESS,
 		SUCCESS: true,
-		DATA:    "https://www.google.com", // Future Change to Paysolution URL
+		DATA:    id, // Future Change to Paysolution URL
 	})
 }
 
