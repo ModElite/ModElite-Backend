@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/SSSBoOm/SE_PROJECT_BACKEND/domain"
 	"github.com/google/uuid"
@@ -81,7 +80,6 @@ func (r *orderRepository) GetSelfOrder(userID string) (*[]domain.Order, error) {
 		WHERE order_id = $1;
 	`, order[i].ID)
 		if err != nil {
-			fmt.Println(err)
 			return nil, err
 		}
 		order[i].ORDER_PRODUCT_DATA = &orderProducts
@@ -139,12 +137,55 @@ func (r *orderRepository) GetSelfOrderDetail(orderID string, userID string) (*do
 	if err != nil {
 		return nil, err
 	}
-	orderProducts := make([]domain.OrderProduct, 0)
-	err = r.db.Select(&orderProducts, `SELECT * FROM order_product WHERE order_id = $1;`, orderID)
+	orderProducts := make([]domain.OrderProductResponse, 0)
+	err = r.db.Select(&orderProducts, `
+		SELECT
+			order_product."id" AS "id", 
+			order_product.order_id AS order_id, 
+			order_product.product_size_id AS product_size_id,
+			order_product.quantity AS quantity, 
+			order_product.price AS price, 
+			order_product.created_at AS created_at, 
+			order_product.updated_at AS updated_at, 
+			"size"."size" AS "size", 
+			product_option.label AS label, 
+			product_option.image_url AS image_url, 
+			product."name" AS "name", 
+			product.description AS description, 
+			product.price AS product_price, 
+			product."image_url" AS "product_image_url", 
+			seller."name" AS seller_name, 
+			seller.logo_url AS seller_logo_url, 
+			seller."id" AS seller_id
+		FROM
+			order_product
+			INNER JOIN
+			product_size
+			ON 
+				order_product.product_size_id = product_size."id"
+			INNER JOIN
+			product_option
+			ON 
+				product_size.product_option_id = product_option."id"
+			INNER JOIN
+			product
+			ON 
+				product_option.product_id = product."id"
+			INNER JOIN
+			"size"
+			ON 
+				product_size.size_id = "size"."id"
+			INNER JOIN
+			seller
+			ON 
+				product.seller_id = seller."id"
+		WHERE order_id = $1;
+	`, order.ID)
 	if err != nil {
 		return nil, err
 	}
-	order.ORDER_PRODUCT = &orderProducts
+	order.ORDER_PRODUCT_DATA = &orderProducts
+
 	return &order, nil
 }
 
