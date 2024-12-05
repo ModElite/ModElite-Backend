@@ -88,7 +88,8 @@ func (c *orderController) GetSelfOrder(ctx *fiber.Ctx) error {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param body body payload.CreateOrderPayload true "Create Order Payload"
-// @Success 200 {object} domain.Response
+// @Success 201 {object} domain.Response
+// @Failure 400 {object} domain.Response
 // @Router /api/order [post]
 func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 	var payload payload.CreateOrderPayload
@@ -167,7 +168,7 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.JSON(domain.Response{
+	return ctx.Status(fiber.StatusCreated).JSON(domain.Response{
 		MESSAGE: constant.MESSAGE_SUCCESS,
 		SUCCESS: true,
 		DATA:    "https://www.google.com", // Future Change to Paysolution URL
