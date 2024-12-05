@@ -78,12 +78,17 @@ func (c *cartController) GetCartByUserId(ctx *fiber.Ctx) error {
 // @Security ApiKeyAuth
 // @Param body body payload.AddCartDTO true "Add cart"
 // @Success 200 {object} domain.Response{data=[]domain.Cart}
+// @Failure 400 {object} domain.Response
+// @Failure 500 {object} domain.Response
 // @Router /api/cart [post]
 func (c *cartController) EditCart(ctx *fiber.Ctx) error {
 	userID := ctx.Locals(constant.USER_ID).(string)
 	var addCardData payload.AddCartDTO
 	if err := c.validator.ValidateBody(ctx, &addCardData); err != nil {
-		return err
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_BAD_REQUEST,
+			SUCCESS: false,
+		})
 	}
 
 	editCart := domain.EditCart{

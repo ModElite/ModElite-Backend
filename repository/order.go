@@ -100,7 +100,7 @@ func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address stri
 		voucherId = nil
 	}
 
-	_, err = tx.Exec(`INSERT INTO "order" (id, user_id, status, total_price, product_price, shipping_price, discount, voucher_code, address, first_name, last_name, email, phone) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);`,
+	_, err = tx.Exec(`INSERT INTO "order" (id, user_id, status, total_price, product_price, shipping_price, discount, voucher_code, address, first_name, last_name, email, phone, express_provider, express_tracking_number) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, '', '');`,
 		id, userId, domain.ORDER_PENDING, totalPrice+shipping_price, totalPrice, shipping_price, toDiscount, voucherId, address, firstName, lastName, email, phone)
 	if err != nil {
 		if err := tx.Rollback(); err != nil {

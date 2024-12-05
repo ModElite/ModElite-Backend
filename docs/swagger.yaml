@@ -1162,6 +1162,14 @@ paths:
                     $ref: '#/definitions/domain.Cart'
                   type: array
               type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.Response'
       security:
       - ApiKeyAuth: []
       summary: Add cart
