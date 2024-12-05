@@ -690,6 +690,22 @@ definitions:
     - expressProvider
     - expressTrackingCode
     type: object
+  payload.FilterDTO:
+    properties:
+      filter:
+        items:
+          $ref: '#/definitions/payload.FilterTagsDTO'
+        type: array
+    type: object
+  payload.FilterTagsDTO:
+    properties:
+      name:
+        type: string
+      value:
+        items:
+          type: string
+        type: array
+    type: object
   payload.OrderProductPayload:
     properties:
       productSizeId:
@@ -1485,7 +1501,14 @@ paths:
       tags:
       - Order
   /api/product:
-    get:
+    post:
+      parameters:
+      - description: Filter Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.FilterDTO'
       produces:
       - application/json
       responses:
@@ -1501,28 +1524,6 @@ paths:
                   type: array
               type: object
       summary: Get all products
-      tags:
-      - Product
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Product Body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/payload.CreateProductDTO'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/domain.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Create product
       tags:
       - Product
   /api/product/{id}:
@@ -1610,6 +1611,29 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Update product
+      tags:
+      - Product
+  /api/product/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product Body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/payload.CreateProductDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create product
       tags:
       - Product
   /api/product/seller/{id}:

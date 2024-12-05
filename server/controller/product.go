@@ -159,7 +159,7 @@ func (p *productController) GetByID(ctx *fiber.Ctx) error {
 // @Security ApiKeyAuth
 // @Param body body payload.CreateProductDTO true "Product Body"
 // @Success 201 {object} domain.Response
-// @Router /api/product [post]
+// @Router /api/product/create [post]
 func (p *productController) Create(ctx *fiber.Ctx) error {
 	var body payload.CreateProductDTO
 	if err := p.validator.ValidateBody(ctx, &body); err != nil {

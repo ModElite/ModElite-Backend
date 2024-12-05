@@ -116,7 +116,7 @@ func (s *FiberServer) Route() {
 	product.Post("/", productController.GetAllProductWithOptionsAndSizes)
 	product.Get("/seller/:id", productController.GetBySellerID)
 	product.Get("/:id", productController.GetByID)
-	product.Post("/", middlewareAuth, productController.Create)
+	product.Post("/create", middlewareAuth, productController.Create)
 	product.Put("/:id", middlewareAuth, productController.Update)
 	product.Delete("/:id", middlewareAuth, productController.SoftDelete)
 

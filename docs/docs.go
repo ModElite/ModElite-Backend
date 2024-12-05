@@ -1055,7 +1055,7 @@ const docTemplate = `{
             }
         },
         "/api/product": {
-            "get": {
+            "post": {
                 "produces": [
                     "application/json"
                 ],
@@ -1063,6 +1063,17 @@ const docTemplate = `{
                     "Product"
                 ],
                 "summary": "Get all products",
+                "parameters": [
+                    {
+                        "description": "Filter Body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payload.FilterDTO"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1086,7 +1097,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/api/product/create": {
             "post": {
                 "security": [
                     {
@@ -3458,6 +3471,31 @@ const docTemplate = `{
                 },
                 "expressTrackingCode": {
                     "type": "string"
+                }
+            }
+        },
+        "payload.FilterDTO": {
+            "type": "object",
+            "properties": {
+                "filter": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/payload.FilterTagsDTO"
+                    }
+                }
+            }
+        },
+        "payload.FilterTagsDTO": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
