@@ -285,3 +285,11 @@ func (r *orderRepository) UpdateOrderExpress(orderID string, expressProvider str
 	}
 	return nil
 }
+
+func (r *orderRepository) FakePayment(orderID string) error {
+	_, err := r.db.Exec(`UPDATE "order" SET status = 'PAYMENT_SUCCESS' WHERE id = $1;`, orderID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -75,3 +75,7 @@ func (u *orderUsecase) CheckSellerUserID(SellerID string, UserID string) error {
 func (u *orderUsecase) UpdateOrderExpress(orderID string, expressProvider string, expressTrackingNumber string) error {
 	return u.orderRepo.UpdateOrderExpress(orderID, expressProvider, expressTrackingNumber)
 }
+
+func (u *orderUsecase) FakePayment(orderID string) error {
+	return u.orderRepo.FakePayment(orderID)
+}

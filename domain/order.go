@@ -61,6 +61,7 @@ type OrderRepository interface {
 	GetSellerOrder(SellerID string) (*[]Order, error)
 	CheckSellerUserID(SellerID string, UserID string) (bool, error)
 	UpdateOrderExpress(orderID string, expressProvider string, expressTrackingNumber string) error
+	FakePayment(orderID string) error
 }
 
 type OrderUsecase interface {
@@ -72,4 +73,5 @@ type OrderUsecase interface {
 	GetSellerOrder(SellerID string) (*[]Order, error)
 	UpdateOrderExpress(orderID string, expressProvider string, expressTrackingNumber string) error
 	CheckSellerUserID(SellerID string, UserID string) error
+	FakePayment(orderID string) error
 }

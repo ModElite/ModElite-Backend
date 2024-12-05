@@ -281,5 +281,30 @@ func (c *orderController) UpdateOrderExpress(ctx *fiber.Ctx) error {
 		MESSAGE: constant.MESSAGE_SUCCESS,
 		SUCCESS: true,
 	})
+}
 
+// @Summary Fake Payment
+// @Description Fake Payment
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param order_id path string true "Order ID"
+// @Success 200 {object} domain.Response
+// @Router /api/order/fake_payment/{order_id} [post]
+func (c *orderController) FakePayment(ctx *fiber.Ctx) error {
+	orderId := ctx.Params("order_id")
+
+	err := c.orderUsecase.FakePayment(orderId)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
+		})
+	}
+
+	return ctx.JSON(domain.Response{
+		MESSAGE: constant.MESSAGE_SUCCESS,
+		SUCCESS: true,
+	})
 }

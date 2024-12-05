@@ -1434,6 +1434,29 @@ paths:
       summary: Update order express
       tags:
       - Order
+  /api/order/fake_payment/{order_id}:
+    post:
+      consumes:
+      - application/json
+      description: Fake Payment
+      parameters:
+      - description: Order ID
+        in: path
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Fake Payment
+      tags:
+      - Order
   /api/order/self:
     get:
       consumes:
