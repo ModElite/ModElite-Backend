@@ -164,7 +164,7 @@ func (r *orderRepository) GetSellerOrder(SellerID string) (*[]domain.Order, erro
 	order := make([]domain.Order, 0)
 	err := r.db.Select(&order, `
 		SELECT
-			"order".*,
+			"order".*
 		FROM
 			"order"
 		WHERE
