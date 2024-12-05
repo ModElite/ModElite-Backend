@@ -288,7 +288,6 @@ func (c *orderController) UpdateOrderExpress(ctx *fiber.Ctx) error {
 // @Tags Order
 // @Accept json
 // @Produce json
-// @Security ApiKeyAuth
 // @Param order_id path string true "Order ID"
 // @Success 201 {object} domain.Response
 // @Failure 500 {object} domain.Response

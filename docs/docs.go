@@ -930,11 +930,6 @@ const docTemplate = `{
         },
         "/api/order/fake_payment/{order_id}": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Fake Payment",
                 "consumes": [
                     "application/json"
