@@ -85,21 +85,11 @@ func (a *addressUsecase) Delete(addressID int) error {
 	return a.addressRepo.Delete(addressID)
 }
 
-func (a *addressUsecase) AddressIdToString(addressId int) (string, error) {
-	address, err := a.addressRepo.GetById(addressId)
+func (a *addressUsecase) AddressIdToString(addressId int) (first_name string, last_name string, email string, phone string, address string, err error) {
+	loadAddress, err := a.addressRepo.GetById(addressId)
 	if err != nil {
-		return "", err
+		return "", "", "", "", "", err
 	}
 
-	return fmt.Sprintf("Name: %s %s Phone: %s Email: %s Address: %s %s %s %s %s",
-		address.FIRST_NAME,
-		address.LAST_NAME,
-		address.EMAIL,
-		address.PHONE,
-		address.ADDRESS,
-		address.SUB_DISTRICT,
-		address.DISTRICT,
-		address.PROVINCE,
-		address.ZIP_CODE,
-	), nil
+	return loadAddress.FIRST_NAME, loadAddress.LAST_NAME, loadAddress.EMAIL, loadAddress.PHONE, fmt.Sprintf("%s %s %s %s %s", loadAddress.ADDRESS, loadAddress.SUB_DISTRICT, loadAddress.DISTRICT, loadAddress.PROVINCE, loadAddress.ZIP_CODE), nil
 }

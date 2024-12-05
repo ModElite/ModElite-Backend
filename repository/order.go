@@ -89,7 +89,7 @@ func (r *orderRepository) GetSelfOrder(userID string) (*[]domain.Order, error) {
 	return &order, nil
 }
 
-func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string) error {
+func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string, firstName string, lastName string, email string, phone string) error {
 	tx, err := r.db.Begin()
 	if err != nil {
 		return err
@@ -100,8 +100,8 @@ func (r *orderRepository) CreateOrder(order *[]domain.OrderProduct, address stri
 		voucherId = nil
 	}
 
-	_, err = tx.Exec(`INSERT INTO "order" (id, user_id, status, total_price, product_price, shipping_price, discount, voucher_code, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`,
-		id, userId, domain.ORDER_PENDING, totalPrice+shipping_price, totalPrice, shipping_price, toDiscount, voucherId, address)
+	_, err = tx.Exec(`INSERT INTO "order" (id, user_id, status, total_price, product_price, shipping_price, discount, voucher_code, address, first_name, last_name, email, phone) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);`,
+		id, userId, domain.ORDER_PENDING, totalPrice+shipping_price, totalPrice, shipping_price, toDiscount, voucherId, address, firstName, lastName, email, phone)
 	if err != nil {
 		if err := tx.Rollback(); err != nil {
 			return err
@@ -165,11 +165,8 @@ func (r *orderRepository) GetSellerOrder(SellerID string) (*[]domain.Order, erro
 	err := r.db.Select(&order, `
 		SELECT
 			"order".*,
-			users.first_name,
-			users.last_name 
 		FROM
 			"order"
-			INNER JOIN users ON "order".user_id = users."id" 
 		WHERE
 			"order"."id" IN (
 			SELECT

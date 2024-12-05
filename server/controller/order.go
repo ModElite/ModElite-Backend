@@ -150,8 +150,8 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 			}
 		}
 	}
-	
-	loadAddress, err := c.addressUsecase.AddressIdToString(payload.ADDRESS_ID)
+
+	firstName, lastName, email, phone, loadAddress, err := c.addressUsecase.AddressIdToString(payload.ADDRESS_ID)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
@@ -159,7 +159,7 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 		})
 	}
 
-	err = c.orderUsecase.CreateOrder(&orderProdcts, loadAddress, &payload.VOUCHER_ID, payload.SHIPPING_PRICE, totalPrice, toDiscount, userID)
+	err = c.orderUsecase.CreateOrder(&orderProdcts, loadAddress, &payload.VOUCHER_ID, payload.SHIPPING_PRICE, totalPrice, toDiscount, userID, firstName, lastName, email, phone)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
 			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,

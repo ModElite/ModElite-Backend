@@ -88,6 +88,8 @@ definitions:
         type: string
       discount:
         type: number
+      email:
+        type: string
       expressProvider:
         type: string
       expressTrackingNumber:
@@ -106,6 +108,8 @@ definitions:
         items:
           $ref: '#/definitions/domain.OrderProductResponse'
         type: array
+      phone:
+        type: string
       productPrice:
         type: number
       sellerPaymentProductAmount:

@@ -2578,6 +2578,9 @@ const docTemplate = `{
                 "discount": {
                     "type": "number"
                 },
+                "email": {
+                    "type": "string"
+                },
                 "expressProvider": {
                     "type": "string"
                 },
@@ -2604,6 +2607,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/domain.OrderProductResponse"
                     }
+                },
+                "phone": {
+                    "type": "string"
                 },
                 "productPrice": {
                     "type": "number"

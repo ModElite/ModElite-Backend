@@ -27,8 +27,8 @@ func (u *orderUsecase) GetSelfOrder(userID string) (*[]domain.Order, error) {
 }
 
 // c.orderUsecase.CreateOrder(&orderProdcts, address, payload.VOUCHER_ID, totalPrice, toDiscount, userID)
-func (u *orderUsecase) CreateOrder(order *[]domain.OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string) error {
-	return u.orderRepo.CreateOrder(order, address, voucherId, shipping_price, totalPrice, toDiscount, userId)
+func (u *orderUsecase) CreateOrder(order *[]domain.OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string, firstName string, lastName string, email string, phone string) error {
+	return u.orderRepo.CreateOrder(order, address, voucherId, shipping_price, totalPrice, toDiscount, userId, firstName, lastName, email, phone)
 }
 
 func (u *orderUsecase) GetProductDetail(productSizeID string, quantity int) (*domain.OrderProduct, error) {

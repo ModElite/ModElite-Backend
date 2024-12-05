@@ -21,6 +21,8 @@ type Order struct {
 	USER_ID                        string                  `json:"userId" db:"user_id"`
 	FIRSTNAME                      string                  `json:"firstName,omitempty" db:"first_name"`
 	LASTNAME                       string                  `json:"lastName,omitempty" db:"last_name"`
+	EMAIL                          string                  `json:"email,omitempty" db:"email"`
+	PHONE                          string                  `json:"phone,omitempty" db:"phone"`
 	STATUS                         OrderStatusType         `json:"status" db:"status"`
 	SELLER_PAYMENT_STATUS          bool                    `json:"sellerPaymentStatus" db:"seller_payment_status"`
 	SELLER_PAYMENT_PRODUCT_AMOUNT  float64                 `json:"sellerPaymentProductAmount" db:"seller_payment_product_amount"`
@@ -54,7 +56,7 @@ type OrderProductResponse struct {
 type OrderRepository interface {
 	GetAll() (*[]Order, error)
 	GetSelfOrder(userID string) (*[]Order, error)
-	CreateOrder(order *[]OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string) error
+	CreateOrder(order *[]OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string, firstName string, lastName string, email string, phone string) error
 	GetSelfOrderDetail(orderID string, userID string) (*Order, error)
 	GetSellerOrder(SellerID string) (*[]Order, error)
 	CheckSellerUserID(SellerID string, UserID string) (bool, error)
@@ -64,7 +66,7 @@ type OrderRepository interface {
 type OrderUsecase interface {
 	GetAll() (*[]Order, error)
 	GetSelfOrder(userID string) (*[]Order, error)
-	CreateOrder(order *[]OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string) error
+	CreateOrder(order *[]OrderProduct, address string, voucherId *string, shipping_price float64, totalPrice float64, toDiscount float64, userId string, firstName string, lastName string, email string, phone string) error
 	GetProductDetail(productSizeID string, quantity int) (*OrderProduct, error)
 	GetSelfOrderDetail(orderID string, userID string) (*Order, error)
 	GetSellerOrder(SellerID string) (*[]Order, error)
