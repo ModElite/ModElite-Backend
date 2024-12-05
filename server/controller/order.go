@@ -290,7 +290,8 @@ func (c *orderController) UpdateOrderExpress(ctx *fiber.Ctx) error {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param order_id path string true "Order ID"
-// @Success 200 {object} domain.Response
+// @Success 201 {object} domain.Response
+// @Failure 500 {object} domain.Response
 // @Router /api/order/fake_payment/{order_id} [post]
 func (c *orderController) FakePayment(ctx *fiber.Ctx) error {
 	orderId := ctx.Params("order_id")
@@ -303,7 +304,7 @@ func (c *orderController) FakePayment(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.JSON(domain.Response{
+	return ctx.Status(fiber.StatusCreated).JSON(domain.Response{
 		MESSAGE: constant.MESSAGE_SUCCESS,
 		SUCCESS: true,
 	})
