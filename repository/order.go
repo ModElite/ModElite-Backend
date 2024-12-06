@@ -298,8 +298,8 @@ func (r *orderRepository) GetOrderPaymentDetail(orderID string) (*domain.OrderPa
 	var data domain.OrderPaymentResponse
 	err := r.db.Get(&data, `
 		SELECT
-			order."id" AS order_id,
-			order.total_price AS total_price,
+			id AS "order_id",
+			total_price as "amount"
 		FROM
 			"order"
 		WHERE
