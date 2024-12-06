@@ -293,3 +293,21 @@ func (r *orderRepository) FakePayment(orderID string) error {
 	}
 	return nil
 }
+
+func (r *orderRepository) GetOrderPaymentDetail(orderID string) (*domain.OrderPaymentResponse, error) {
+	var data domain.OrderPaymentResponse
+	err := r.db.Get(&data, `
+		SELECT
+			order."id" AS order_id,
+			order.total_price AS total_price,
+		FROM
+			"order"
+		WHERE
+			id = $1;
+	`, orderID)
+
+	if err != nil {
+		return nil, err
+	}
+	return &data, nil
+}

@@ -870,7 +870,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/domain.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/domain.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/domain.OrderPaymentResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "400": {
@@ -2704,6 +2716,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "voucherCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.OrderPaymentResponse": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "orderId": {
                     "type": "string"
                 }
             }

@@ -39,6 +39,11 @@ type Order struct {
 	UPDATED_AT                     time.Time               `json:"updatedAt" db:"updated_at"`
 }
 
+type OrderPaymentResponse struct {
+	ORDER_ID string  `json:"orderId"`
+	AMOUNT   float64 `json:"amount"`
+}
+
 type OrderProductResponse struct {
 	OrderProduct
 	PRODUCT_OPTION_LABEL     string  `json:"productOptionLabel" db:"label"`
@@ -62,6 +67,7 @@ type OrderRepository interface {
 	CheckSellerUserID(SellerID string, UserID string) (bool, error)
 	UpdateOrderExpress(orderID string, expressProvider string, expressTrackingNumber string) error
 	FakePayment(orderID string) error
+	GetOrderPaymentDetail(orderID string) (*OrderPaymentResponse, error)
 }
 
 type OrderUsecase interface {
@@ -74,4 +80,5 @@ type OrderUsecase interface {
 	UpdateOrderExpress(orderID string, expressProvider string, expressTrackingNumber string) error
 	CheckSellerUserID(SellerID string, UserID string) error
 	FakePayment(orderID string) error
+	GetOrderPaymentDetail(orderID string) (*OrderPaymentResponse, error)
 }

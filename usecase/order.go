@@ -79,3 +79,7 @@ func (u *orderUsecase) UpdateOrderExpress(orderID string, expressProvider string
 func (u *orderUsecase) FakePayment(orderID string) error {
 	return u.orderRepo.FakePayment(orderID)
 }
+
+func (u *orderUsecase) GetOrderPaymentDetail(orderID string) (*domain.OrderPaymentResponse, error) {
+	return u.orderRepo.GetOrderPaymentDetail(orderID)
+}

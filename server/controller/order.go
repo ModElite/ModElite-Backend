@@ -89,7 +89,7 @@ func (c *orderController) GetSelfOrder(ctx *fiber.Ctx) error {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param body body payload.CreateOrderPayload true "Create Order Payload"
-// @Success 201 {object} domain.Response
+// @Success 201 {object} domain.Response{data=domain.OrderPaymentResponse}
 // @Failure 400 {object} domain.Response
 // @Router /api/order [post]
 func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
@@ -169,10 +169,18 @@ func (c *orderController) CreateOrder(ctx *fiber.Ctx) error {
 		})
 	}
 
+	OrderPaymentDetail, err := c.orderUsecase.GetOrderPaymentDetail(id)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(domain.Response{
+			MESSAGE: constant.MESSAGE_INTERNAL_SERVER_ERROR,
+			SUCCESS: false,
+		})
+	}
+
 	return ctx.Status(fiber.StatusCreated).JSON(domain.Response{
 		MESSAGE: constant.MESSAGE_SUCCESS,
 		SUCCESS: true,
-		DATA:    id, // Future Change to Paysolution URL
+		DATA:    OrderPaymentDetail, // Future Change to Paysolution URL
 	})
 }
 
