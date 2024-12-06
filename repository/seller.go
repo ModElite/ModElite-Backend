@@ -51,10 +51,10 @@ func (r *sellerRepository) GetDashboard(sellerID string) (*domain.SellerDashboar
 	var dashboard domain.SellerDashboard
 	err := r.db.Get(&dashboard, `
 		SELECT 
-			COUNT(DISTINCT o.id) AS total_order,
-			COUNT(DISTINCT u.id) AS total_order_user,
-			SUM(o.product_price + o.shipping_price) AS total_order_amount,
-			SUM(op.quantity) AS total_order_product_unit
+			COALESCE(COUNT(DISTINCT o.id), 0) AS total_order,
+    	COALESCE(COUNT(DISTINCT u.id), 0) AS total_order_user,
+    	COALESCE(SUM(o.product_price + o.shipping_price), 0) AS total_order_amount,
+    	COALESCE(SUM(op.quantity), 0) AS total_order_product_unit
 		FROM 
 			"order" o
 		INNER JOIN 
